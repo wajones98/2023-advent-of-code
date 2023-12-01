@@ -3,7 +3,9 @@ fn main() {
 }
 
 fn process_document(lines: Vec<String>) -> u64 {
-    0
+    lines
+        .into_iter()
+        .fold(0, |total, line| total + extract_digits(line))
 }
 
 fn extract_digits(text: String) -> u64 {
