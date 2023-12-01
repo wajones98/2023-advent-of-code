@@ -2,6 +2,10 @@ fn main() {
     println!("Hello, world!");
 }
 
+fn process_document(lines: Vec<String>) -> u64 {
+    0
+}
+
 fn extract_digits(text: String) -> u64 {
     let mut first_digit: String = String::from("");
     let mut second_digit: String = String::from("");
@@ -29,7 +33,7 @@ fn extract_digits(text: String) -> u64 {
 
 #[cfg(test)]
 mod tests {
-    use crate::extract_digits;
+    use crate::{extract_digits, process_document};
 
     struct Test {
         input: String,
@@ -75,5 +79,16 @@ mod tests {
     }
 
     #[test]
-    fn correctly_sums_digits() {}
+    fn correctly_calculates_total() {
+        let input = vec![
+            String::from("1abc2"),
+            String::from("pqr3stu8vwx"),
+            String::from("a1b2c3d4e5f"),
+            String::from("treb7uchet"),
+        ];
+
+        let output = 142;
+
+        assert_eq!(process_document(input), output);
+    }
 }
