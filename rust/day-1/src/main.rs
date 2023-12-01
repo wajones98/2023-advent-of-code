@@ -51,7 +51,14 @@ mod tests {
     }
 
     #[test]
-    fn finds_two_digits_when_multiple_present() {}
+    fn finds_two_digits_when_multiple_present() {
+        let test = Test {
+            input: String::from("a1b2c3d4e5f"),
+            output: 15,
+        };
+
+        assert_eq!(extract_digits(test.input), test.output);
+    }
 
     #[test]
     fn finds_two_digits_when_single_digit() {}
