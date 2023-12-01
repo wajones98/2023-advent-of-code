@@ -61,7 +61,14 @@ mod tests {
     }
 
     #[test]
-    fn finds_two_digits_when_single_digit() {}
+    fn finds_two_digits_when_single_digit() {
+        let test = Test {
+            input: String::from("treb7uchet"),
+            output: 77,
+        };
+
+        assert_eq!(extract_digits(test.input), test.output);
+    }
 
     #[test]
     fn correctly_sums_digits() {}
