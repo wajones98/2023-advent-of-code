@@ -29,41 +29,28 @@ fn process_document(lines: Vec<String>) -> u64 {
 }
 
 fn extract_digits(text: String) -> u64 {
-    let mut first_digit: String = String::from("");
-    let mut second_digit: String = String::from("");
     let mut current_string: String = String::from("");
+    let mut digits: Vec<String> = vec![];
 
     for c in text.chars() {
-        current_string = format!("{}{}", current_string, c);
         match c.to_digit(10) {
             Some(_) => {
-                if first_digit == "" {
-                    first_digit = c.to_string();
-                } else {
-                    second_digit = c.to_string();
-                }
+                digits.push(c.to_string());
             }
-            None => {
-                for (i, word) in DIGIT_WORDS.iter().enumerate() {
-                    let digit = (i + 1).to_string();
-                    if current_string.contains(word) {
-                        if first_digit == "" {
-                            first_digit = digit;
-                        } else {
-                            second_digit = digit;
-                            current_string = current_string[1..].to_string();
-                        }
-                    }
-                }
+            None => {}
+        }
+
+        current_string = current_string + &c.to_string();
+        for (i, word) in DIGIT_WORDS.iter().enumerate() {
+            if current_string.contains(word) {
+                let result = (i + 1).to_string();
+                current_string = current_string.replace(&word[..&word.len() - 1], &result);
+                digits.push(result);
             }
-        };
+        }
     }
 
-    if second_digit == String::from("") {
-        second_digit = first_digit.to_string();
-    }
-
-    let result = format!("{first_digit}{second_digit}");
+    let result = format!("{}{}", digits[0], digits[digits.len() - 1]);
     result.parse().expect("Expected result to be integer")
 }
 
