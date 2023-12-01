@@ -5,7 +5,7 @@ use std::{
 };
 
 fn main() {
-    let lines = lines_from_file("input.txt");
+    let lines = lines_from_file("./input.txt");
     let result = process_document(lines);
     println!("{}", result)
 }
