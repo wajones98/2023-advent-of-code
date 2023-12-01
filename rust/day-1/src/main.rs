@@ -1,5 +1,21 @@
+use std::{
+    fs::File,
+    io::{prelude::*, BufReader},
+    path::Path,
+};
+
 fn main() {
-    println!("Hello, world!");
+    let lines = lines_from_file("input.txt");
+    let result = process_document(lines);
+    println!("{}", result)
+}
+
+fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
+    let file = File::open(filename).expect("File doesn't exist");
+    let buf = BufReader::new(file);
+    buf.lines()
+        .map(|l| l.expect("Failed to parse line"))
+        .collect()
 }
 
 fn process_document(lines: Vec<String>) -> u64 {
