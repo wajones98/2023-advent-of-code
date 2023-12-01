@@ -59,8 +59,6 @@ fn extract_digits(text: String) -> u64 {
         };
     }
 
-    println!("{} : {} : {}", current_string, first_digit, second_digit);
-
     if second_digit == String::from("") {
         second_digit = first_digit.to_string();
     }
