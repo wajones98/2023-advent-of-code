@@ -97,6 +97,44 @@ mod tests {
     }
 
     #[test]
+    fn should_correctly_find_digits_as_words() {
+        let tests = vec![
+            Test {
+                input: String::from("two1nine"),
+                output: 29,
+            },
+            Test {
+                input: String::from("eightwothree"),
+                output: 83,
+            },
+            Test {
+                input: String::from("abcone2threexyz"),
+                output: 13,
+            },
+            Test {
+                input: String::from("xtwone3four"),
+                output: 24,
+            },
+            Test {
+                input: String::from("4nineeightseven2"),
+                output: 42,
+            },
+            Test {
+                input: String::from("zoneight234"),
+                output: 14,
+            },
+            Test {
+                input: String::from("7pqrstsixteen"),
+                output: 76,
+            },
+        ];
+
+        for test in tests {
+            assert_eq!(extract_digits(test.input), test.output);
+        }
+    }
+
+    #[test]
     fn correctly_calculates_total() {
         let input = vec![
             String::from("1abc2"),
