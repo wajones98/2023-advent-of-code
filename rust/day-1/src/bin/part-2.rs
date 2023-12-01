@@ -4,6 +4,10 @@ use std::{
     path::Path,
 };
 
+const DIGIT_WORDS: [&str; 9] = [
+    "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+];
+
 fn main() {
     let lines = lines_from_file("./input.txt");
     let result = process_document(lines);
@@ -27,8 +31,10 @@ fn process_document(lines: Vec<String>) -> u64 {
 fn extract_digits(text: String) -> u64 {
     let mut first_digit: String = String::from("");
     let mut second_digit: String = String::from("");
+    let mut current_string: String = String::from("");
 
     for c in text.chars() {
+        current_string = format!("{}{}", current_string, c);
         match c.to_digit(10) {
             Some(_) => {
                 if first_digit == "" {
@@ -37,9 +43,23 @@ fn extract_digits(text: String) -> u64 {
                     second_digit = c.to_string();
                 }
             }
-            None => {}
+            None => {
+                for (i, word) in DIGIT_WORDS.iter().enumerate() {
+                    let digit = (i + 1).to_string();
+                    if current_string.contains(word) {
+                        if first_digit == "" {
+                            first_digit = digit;
+                        } else {
+                            second_digit = digit;
+                            current_string = current_string[1..].to_string();
+                        }
+                    }
+                }
+            }
         };
     }
+
+    println!("{} : {} : {}", current_string, first_digit, second_digit);
 
     if second_digit == String::from("") {
         second_digit = first_digit.to_string();
