@@ -59,7 +59,7 @@ mod tests {
     }
 
     #[test]
-    fn finds_two_digits() {
+    fn should_find_correct_digits() {
         let tests = vec![
             Test {
                 input: String::from("1abc2"),
@@ -69,36 +69,14 @@ mod tests {
                 input: String::from("pqr3stu8vwx"),
                 output: 38,
             },
-        ];
-
-        for test in tests {
-            assert_eq!(extract_digits(test.input), test.output);
-        }
-    }
-
-    #[test]
-    fn finds_two_digits_when_multiple_present() {
-        let test = Test {
-            input: String::from("a1b2c3d4e5f"),
-            output: 15,
-        };
-
-        assert_eq!(extract_digits(test.input), test.output);
-    }
-
-    #[test]
-    fn finds_two_digits_when_single_digit() {
-        let test = Test {
-            input: String::from("treb7uchet"),
-            output: 77,
-        };
-
-        assert_eq!(extract_digits(test.input), test.output);
-    }
-
-    #[test]
-    fn should_correctly_find_digits_as_words() {
-        let tests = vec![
+            Test {
+                input: String::from("a1b2c3d4e5f"),
+                output: 15,
+            },
+            Test {
+                input: String::from("treb7uchet"),
+                output: 77,
+            },
             Test {
                 input: String::from("two1nine"),
                 output: 29,
