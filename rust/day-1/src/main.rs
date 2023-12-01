@@ -3,7 +3,24 @@ fn main() {
 }
 
 fn extract_digits(text: String) -> u64 {
-    0
+    let mut first_digit: String = String::from("");
+    let mut second_digit: String = String::from("");
+
+    for c in text.chars() {
+        match c.to_digit(10) {
+            Some(_) => {
+                if first_digit == "" {
+                    first_digit = c.to_string();
+                } else {
+                    second_digit = c.to_string();
+                }
+            }
+            None => {}
+        };
+    }
+
+    let result = format!("{first_digit}{second_digit}");
+    result.parse().expect("Expected result to be integer")
 }
 
 #[cfg(test)]
