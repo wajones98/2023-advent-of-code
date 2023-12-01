@@ -19,6 +19,10 @@ fn extract_digits(text: String) -> u64 {
         };
     }
 
+    if second_digit == String::from("") {
+        second_digit = first_digit.to_string();
+    }
+
     let result = format!("{first_digit}{second_digit}");
     result.parse().expect("Expected result to be integer")
 }
