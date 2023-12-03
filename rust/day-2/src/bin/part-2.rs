@@ -62,11 +62,25 @@ impl Game {
 }
 
 fn get_minimum_set(sets: &Vec<Set>) -> Set {
-    Set {
+    sets.into_iter().fold(Set {
         red: 0,
         green: 0,
         blue: 0,
-    } 
+    }, |mut minimum_set, set| {
+        if set.red > minimum_set.red {
+            minimum_set.red = set.red;
+        }
+
+        if set.green > minimum_set.green {
+            minimum_set.green = set.green;
+        }
+        
+        if set.blue > minimum_set.blue {
+            minimum_set.blue = set.blue;
+        }
+
+        minimum_set
+    }) 
 }
 
 fn main() {
