@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 fn main() {
     println!("Hello, world!");
 }
@@ -30,20 +32,35 @@ fn new_schematic(lines: Vec<&str>) -> Schematic {
 }
 
 fn valid_numbers(schematic: Schematic) -> Vec<u32> {
-    let symbols: Vec<&PointType> = schematic.iter().map(|line| {
+    let points_with_symbols: Vec<&Point> = schematic.iter().map(|line| {
         line.iter().filter(|point| -> bool {
             match &point.point_type {
                 PointType::Symbol(point_type) => point_type != ".",
                 PointType::Digit(_) => false,
             }
-        }).map(|point| &point.point_type)
+        })
     }).flatten().collect();
-    
-    for ele in symbols {
-        println!("{:?}", ele);
+   
+    let mut numbers: Vec<u32> = vec![]; 
+
+    for point in points_with_symbols {
+        let mut x_left_coord = point.x;
+        let mut left_point: &Point = point;
+        let mut left_number: String = "".to_string();
+
+        while x_left_coord > 0 && left_point.point_type != PointType::Symbol(".".to_string()) {
+            x_left_coord = left_point.x - 1;
+
+            left_point = &schematic[left_point.y][x_left_coord];   
+            if let PointType::Digit(digit) = left_point.point_type {
+                left_number = format!("{}{}", digit, left_number);
+            }
+        }
+        let left_number: u32 = left_number.parse::<u32>().expect("Expected valid u32");
+        numbers.push(left_number);
     }
 
-    vec![]
+    numbers 
 }
 
 fn parse_schematic_line(y: usize, line: &str) -> Vec<Point> {
@@ -145,15 +162,15 @@ mod tests {
         
         let expected = vec![617];
         let result = valid_numbers(schematic); 
-        // assert_eq!(expected, result);
+        assert_eq!(expected, result);
     }
     
-    #[test]
-    fn should_detect_number_y_adjacent() {}
-    
-    #[test]
-    fn should_detect_number_diagonally() {}
-
-    #[test]
-    fn should_calculate_total() {}
+    // #[test]
+    // fn should_detect_number_y_adjacent() {}
+    // 
+    // #[test]
+    // fn should_detect_number_diagonally() {}
+    //
+    // #[test]
+    // fn should_calculate_total() {}
 }
