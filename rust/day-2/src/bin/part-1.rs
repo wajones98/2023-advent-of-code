@@ -64,7 +64,7 @@ fn main() {
     println!("Hello world!");
 }
 
-fn validate_set(expected_set: Set, revealed_sets: Vec<Set>) -> bool {
+fn validate_sets(expected_set: Set, revealed_sets: Vec<Set>) -> bool {
     revealed_sets.into_iter().fold(false, |_, set| {
         set.red <= expected_set.red && set.green <= expected_set.green && set.blue <= expected_set.blue 
     })
