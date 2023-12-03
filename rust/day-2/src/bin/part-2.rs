@@ -180,6 +180,14 @@ mod tests {
         let mut total = 0;        
         let games = lines.into_iter().map(|line| {
             Game::parse_string(line)
-        });  
+        }); 
+
+        for game in games {
+            let minimum_set = get_minimum_set(&game.sets_revealed); 
+            let power = get_power(&minimum_set);
+            total = total + power;
+        }
+        let expected = 2286;
+        assert_eq!(expected, total);
     }
 }
