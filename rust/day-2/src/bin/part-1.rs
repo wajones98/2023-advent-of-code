@@ -65,14 +65,17 @@ fn main() {
 }
 
 fn validate_sets(expected_set: Set, revealed_sets: Vec<Set>) -> bool {
-    revealed_sets.into_iter().fold(false, |_, set| {
+    revealed_sets.into_iter().fold(true, |valid, set| {
+        if !valid {
+            return false
+        } 
         set.red <= expected_set.red && set.green <= expected_set.green && set.blue <= expected_set.blue 
     })
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{Set, validate_set};
+    use crate::{Set, validate_sets};
     
     const VALID_SET: Set = Set {
         red: 12,
@@ -125,6 +128,34 @@ mod tests {
             }
         ];
          
-        assert_eq!(true, validate_set(VALID_SET, sets))
+        assert_eq!(true, validate_sets(VALID_SET, sets))
+    }
+    
+    #[test]
+    fn should_correctly_determine_invalid_set() {
+        let sets = vec![
+            Set {
+                red: 25,
+                green: 0,
+                blue: 3,
+            },
+            Set {
+                red: 1,
+                green: 2,
+                blue: 6,
+            },
+            Set {
+                red: 0,
+                green: 2,
+                blue: 0,
+            }
+        ];
+         
+        assert_eq!(false, validate_sets(VALID_SET, sets))
+    }
+
+    #[test]
+    fn should_correctly_total_valid_sets() {
+
     }
 }
