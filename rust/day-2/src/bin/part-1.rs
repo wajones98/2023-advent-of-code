@@ -1,3 +1,5 @@
+use std::{fs::File, io::{BufReader, BufRead}, path::Path};
+
 #[derive(PartialEq, Debug)]
 struct Set {
     red: u32,
@@ -61,10 +63,36 @@ impl Game {
 }
 
 fn main() {
-    println!("Hello world!");
+    let valid_set: Set = Set {
+        red: 12,
+        green: 13,
+        blue: 14,
+    }; 
+    let lines = lines_from_file("./input.txt");
+    let mut total = 0;
+    
+    let games = lines.into_iter().map(|line| {
+        Game::parse_string(&line)
+    });  
+
+    for game in games {
+        let valid = validate_sets(&valid_set, game.sets_revealed);
+        if valid {
+            total = total + game.id;
+        }
+    }
+    println!("{}", total)
 }
 
-fn validate_sets(expected_set: Set, revealed_sets: Vec<Set>) -> bool {
+fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
+    let file = File::open(filename).expect("File doesn't exist");
+    let buf = BufReader::new(file);
+    buf.lines()
+        .map(|l| l.expect("Failed to parse line"))
+        .collect()
+}
+
+fn validate_sets(expected_set: &Set, revealed_sets: Vec<Set>) -> bool {
     revealed_sets.into_iter().fold(true, |valid, set| {
         if !valid {
             return false
@@ -128,7 +156,7 @@ mod tests {
             }
         ];
          
-        assert_eq!(true, validate_sets(VALID_SET, sets))
+        assert_eq!(true, validate_sets(&VALID_SET, sets))
     }
     
     #[test]
@@ -151,7 +179,7 @@ mod tests {
             }
         ];
          
-        assert_eq!(false, validate_sets(VALID_SET, sets))
+        assert_eq!(false, validate_sets(&VALID_SET, sets))
     }
 
     #[test]
@@ -169,7 +197,7 @@ mod tests {
         });  
 
         for game in games {
-            let valid = validate_sets(VALID_SET, game.sets_revealed);
+            let valid = validate_sets(&VALID_SET, game.sets_revealed);
             if valid {
                 total = total + game.id;
             }
