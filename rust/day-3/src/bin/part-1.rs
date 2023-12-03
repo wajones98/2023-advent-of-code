@@ -56,8 +56,28 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
                 left_number = format!("{}{}", digit, left_number);
             }
         }
-        let left_number: u32 = left_number.parse::<u32>().expect("Expected valid u32");
-        numbers.push(left_number);
+        if left_number != "".to_string() {
+            let left_number: u32 = left_number.parse::<u32>().expect("Expected valid u32");
+            numbers.push(left_number);
+        }
+
+        let mut x_right_coord = point.x;
+        let mut right_point: &Point = point;
+        let mut right_number: String = "".to_string();
+
+        while x_right_coord < schematic[right_point.y].len() && right_point.point_type != PointType::Symbol(".".to_string()) {
+            x_right_coord = right_point.x + 1;
+
+            right_point = &schematic[right_point.y][x_right_coord];   
+            if let PointType::Digit(digit) = right_point.point_type {
+                right_number = format!("{}{}", right_number, digit);
+            }
+        }
+
+        if right_number != "".to_string() {
+            let right_number: u32 = right_number.parse::<u32>().expect("Expected valid u32");
+            numbers.push(right_number);
+        }
     }
 
     numbers 
@@ -156,7 +176,7 @@ mod tests {
     }
 
     #[test]
-    fn should_detect_number_x_adjacent() {
+    fn should_detect_number_x_adjacent_left() {
         let line = "617*......";
         let schematic = vec![parse_schematic_line(0, line)];
         
@@ -164,7 +184,28 @@ mod tests {
         let result = valid_numbers(schematic); 
         assert_eq!(expected, result);
     }
-    
+
+    #[test]
+    fn should_detect_number_x_adjacent_right() {
+        let line = "...*12....";
+        let schematic = vec![parse_schematic_line(0, line)];
+        
+        let expected = vec![12];
+        let result = valid_numbers(schematic); 
+        assert_eq!(expected, result);
+    }
+   
+    #[test]
+    fn should_detect_number_x_adjacent_multiple() {
+        let line = "...*12.6*.";
+        let schematic = vec![parse_schematic_line(0, line)];
+        
+        let expected = vec![12, 6];
+        let result = valid_numbers(schematic); 
+        assert_eq!(expected, result);
+    }
+
+
     // #[test]
     // fn should_detect_number_y_adjacent() {}
     // 
