@@ -20,8 +20,7 @@ impl Game {
             sets_revealed
         } 
     }
-    
-    //TODO: Parse game line from input
+
     fn parse_string(line: &str) -> Self {
 
         let mut game_and_sets = line.split(":");
@@ -62,6 +61,10 @@ impl Game {
     }
 }
 
+fn get_minimum_cubes(sets: Vec<&Set>) -> Set {
+    
+}
+
 fn main() {
     let valid_set: Set = Set {
         red: 12,
@@ -75,12 +78,6 @@ fn main() {
         Game::parse_string(&line)
     });  
 
-    for game in games {
-        let valid = validate_sets(&valid_set, game.sets_revealed);
-        if valid {
-            total = total + game.id;
-        }
-    }
     println!("{}", total)
 }
 
@@ -92,25 +89,10 @@ fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
         .collect()
 }
 
-fn validate_sets(expected_set: &Set, revealed_sets: Vec<Set>) -> bool {
-    revealed_sets.into_iter().fold(true, |valid, set| {
-        if !valid {
-            return false
-        } 
-        set.red <= expected_set.red && set.green <= expected_set.green && set.blue <= expected_set.blue 
-    })
-}
-
 #[cfg(test)]
 mod tests {
-    use crate::{Set, validate_sets, Game};
+    use crate::{Set, Game};
     
-    const VALID_SET: Set = Set {
-        red: 12,
-        green: 13,
-        blue: 14,
-    }; 
-
     #[test]
     fn should_parse_line() {
         let line = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green";
@@ -137,52 +119,6 @@ mod tests {
     }
 
     #[test]
-    fn should_correctly_determine_valid_set() {
-        let sets = vec![
-            Set {
-                red: 4,
-                green: 0,
-                blue: 3,
-            },
-            Set {
-                red: 1,
-                green: 2,
-                blue: 6,
-            },
-            Set {
-                red: 0,
-                green: 2,
-                blue: 0,
-            }
-        ];
-         
-        assert_eq!(true, validate_sets(&VALID_SET, sets))
-    }
-    
-    #[test]
-    fn should_correctly_determine_invalid_set() {
-        let sets = vec![
-            Set {
-                red: 25,
-                green: 0,
-                blue: 3,
-            },
-            Set {
-                red: 1,
-                green: 2,
-                blue: 6,
-            },
-            Set {
-                red: 0,
-                green: 2,
-                blue: 0,
-            }
-        ];
-         
-        assert_eq!(false, validate_sets(&VALID_SET, sets))
-    }
-
-    #[test]
     fn should_correctly_total_valid_sets() {
         let lines = vec![
             "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
@@ -195,14 +131,5 @@ mod tests {
         let games = lines.into_iter().map(|line| {
             Game::parse_string(line)
         });  
-
-        for game in games {
-            let valid = validate_sets(&VALID_SET, game.sets_revealed);
-            if valid {
-                total = total + game.id;
-            }
-        }
-
-        assert_eq!(8, total);
     }
 }
