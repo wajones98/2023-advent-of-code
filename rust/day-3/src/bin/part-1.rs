@@ -10,8 +10,8 @@ enum PointType {
 
 #[derive(Debug, PartialEq)]
 struct Point {
-    x: u32,
-    y: u32,
+    x: usize,
+    y: usize,
     point_type: PointType,
 }
 
@@ -29,8 +29,19 @@ fn new_schematic(lines: Vec<&str>) -> Schematic {
     ] 
 }
 
-fn parse_schematic_line(line: &str) -> Vec<Point> {
-    vec![]
+fn parse_schematic_line(y: usize, line: &str) -> Vec<Point> {
+    line.chars().enumerate().map(|(x, c)| {
+        let point_type: PointType = match c.to_digit(10) {
+            Some(digit) => PointType::Digit(digit),
+            None => PointType::Symbol(c.to_string()),
+        };
+        
+        Point {
+            x,
+            y,
+            point_type,
+        }
+    }).collect() 
 }
 
 #[cfg(test)]
@@ -58,55 +69,55 @@ mod tests {
                 Point {
                     x: 0,
                     y: 0,
-                    point_type: PointType::Symbol("4".to_string())
+                    point_type: PointType::Digit(4)
                 },
                 Point {
-                    x: 0,
+                    x: 1,
                     y: 0,
-                    point_type: PointType::Symbol("6".to_string())
+                    point_type: PointType::Digit(6)
                 },
                 Point {
-                    x: 0,
+                    x: 2,
                     y: 0,
-                    point_type: PointType::Symbol("7".to_string())
+                    point_type: PointType::Digit(7)
                 },
                 Point {
-                    x: 0,
-                    y: 0,
-                    point_type: PointType::Symbol(".".to_string())
-                },
-                Point {
-                    x: 0,
+                    x: 3,
                     y: 0,
                     point_type: PointType::Symbol(".".to_string())
                 },
                 Point {
-                    x: 0,
-                    y: 0,
-                    point_type: PointType::Symbol("1".to_string())
-                },
-                Point {
-                    x: 0,
-                    y: 0,
-                    point_type: PointType::Symbol("1".to_string())
-                },
-                Point {
-                    x: 0,
-                    y: 0,
-                    point_type: PointType::Symbol("4".to_string())
-                },
-                Point {
-                    x: 0,
+                    x: 4,
                     y: 0,
                     point_type: PointType::Symbol(".".to_string())
                 },
                 Point {
-                    x: 0,
+                    x: 5,
+                    y: 0,
+                    point_type: PointType::Digit(1)
+                },
+                Point {
+                    x: 6,
+                    y: 0,
+                    point_type: PointType::Digit(1)
+                },
+                Point {
+                    x: 7,
+                    y: 0,
+                    point_type: PointType::Digit(4)
+                },
+                Point {
+                    x: 8,
+                    y: 0,
+                    point_type: PointType::Symbol(".".to_string())
+                },
+                Point {
+                    x: 9,
                     y: 0,
                     point_type: PointType::Symbol(".".to_string())
                 },
             ];
-        let result = parse_schematic_line(line);
+        let result = parse_schematic_line(0, line);
         assert_eq!(expected, result);
     }
     
