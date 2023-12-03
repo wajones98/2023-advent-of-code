@@ -61,16 +61,15 @@ impl Game {
     }
 }
 
-fn get_minimum_cubes(sets: Vec<&Set>) -> Set {
-    
+fn get_minimum_set(sets: &Vec<Set>) -> Set {
+    Set {
+        red: 0,
+        green: 0,
+        blue: 0,
+    } 
 }
 
 fn main() {
-    let valid_set: Set = Set {
-        red: 12,
-        green: 13,
-        blue: 14,
-    }; 
     let lines = lines_from_file("./input.txt");
     let mut total = 0;
     
@@ -91,7 +90,7 @@ fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Set, Game};
+    use crate::{Set, Game, get_minimum_set};
     
     #[test]
     fn should_parse_line() {
@@ -116,6 +115,37 @@ mod tests {
         let output = crate::Game::parse_string(line);
 
         assert_eq!(expected_output, output);
+    }
+
+    #[test]
+    fn should_get_minimum_set() {
+        let test_sets = vec![
+            Set {
+                red: 4,
+                green: 0,
+                blue: 3,
+            },
+            Set {
+                red: 1,
+                green: 2,
+                blue: 6,
+            },
+            Set {
+                red: 0,
+                green: 2,
+                blue: 0,
+            }
+        ];
+    
+        let expected = Set {
+            red: 4,
+            green: 2,
+            blue: 6,
+        };
+
+        let result = get_minimum_set(&test_sets); 
+    
+        assert_eq!(expected, result);
     }
 
     #[test]
