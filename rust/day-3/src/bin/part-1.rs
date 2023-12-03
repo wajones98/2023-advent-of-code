@@ -2,6 +2,31 @@ fn main() {
     println!("Hello, world!");
 }
 
+enum PointType {
+    Symbol(String),
+    Digit(u32),
+}
+
+struct Point {
+    x: u32,
+    y: u32,
+    point_type: PointType,
+}
+
+type Schematic = Vec<Vec<Point>>;
+
+fn new_schematic(lines: Vec<&str>) -> Schematic {
+    vec![
+        vec![
+            Point{
+                x: 0,
+                y: 0,
+                point_type: PointType::Symbol(".".to_string()), 
+            }
+        ]
+    ] 
+}
+
 #[cfg(test)]
 mod tests {
     const TEST_ENGINE_SCHEMATIC: [&str; 10] = [
