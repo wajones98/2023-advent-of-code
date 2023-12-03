@@ -83,6 +83,10 @@ fn get_minimum_set(sets: &Vec<Set>) -> Set {
     }) 
 }
 
+fn get_power(set: &Set) -> u32 {
+    set.red * set.green * set.blue
+}
+
 fn main() {
     let lines = lines_from_file("./input.txt");
     let mut total = 0;
@@ -104,7 +108,7 @@ fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Set, Game, get_minimum_set};
+    use crate::{Set, Game, get_minimum_set, get_power};
     
     #[test]
     fn should_parse_line() {
@@ -158,8 +162,10 @@ mod tests {
         };
 
         let result = get_minimum_set(&test_sets); 
-    
         assert_eq!(expected, result);
+
+        let result = get_power(&result);  
+        assert_eq!(48, result);
     }
 
     #[test]
