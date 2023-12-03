@@ -29,6 +29,10 @@ fn new_schematic(lines: Vec<&str>) -> Schematic {
     ] 
 }
 
+fn valid_numbers(schematic: &Schematic) -> Vec<u32> {
+    vec![]
+}
+
 fn parse_schematic_line(y: usize, line: &str) -> Vec<Point> {
     line.chars().enumerate().map(|(x, c)| {
         let point_type: PointType = match c.to_digit(10) {
@@ -46,7 +50,7 @@ fn parse_schematic_line(y: usize, line: &str) -> Vec<Point> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Schematic, new_schematic, parse_schematic_line, Point, PointType};
+    use crate::{Schematic, new_schematic, parse_schematic_line, Point, PointType, valid_numbers};
 
     const TEST_ENGINE_SCHEMATIC: [&str; 10] = [
         "467..114..",
@@ -122,7 +126,14 @@ mod tests {
     }
 
     #[test]
-    fn should_detect_number_x_adjacent() {}
+    fn should_detect_number_x_adjacent() {
+        let line = "617*......";
+        let schematic_line = vec![parse_schematic_line(0, line)];
+        
+        let expected = vec![617];
+        let result = valid_numbers(&schematic_line); 
+        assert_eq!(expected, result);
+    }
     
     #[test]
     fn should_detect_number_y_adjacent() {}
