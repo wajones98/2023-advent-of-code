@@ -1,5 +1,5 @@
 #[derive(PartialEq, Debug)]
-struct RevealedSet {
+struct Set {
     red: u32,
     green: u32,
     blue: u32,
@@ -8,11 +8,11 @@ struct RevealedSet {
 #[derive(PartialEq, Debug)]
 struct Game {
     id: u32,
-    sets_revealed: Vec<RevealedSet>
+    sets_revealed: Vec<Set>
 }
 
 impl Game {
-    fn new(id: u32, sets_revealed: Vec<RevealedSet>) -> Self {
+    fn new(id: u32, sets_revealed: Vec<Set>) -> Self {
        Game {
             id,
             sets_revealed
@@ -33,7 +33,7 @@ impl Game {
         let sets = match game_and_sets.next() {
             Some(sets) => {
                 sets.split(";").map(|revealed_set| {
-                    let mut output = RevealedSet{
+                    let mut output = Set{
                         red: 0,
                         green: 0,
                         blue: 0,
@@ -64,25 +64,37 @@ fn main() {
     println!("Hello world!");
 }
 
+fn validate_set(expected_set: Set, revealed_sets: Vec<Set>) -> bool {
+    revealed_sets.into_iter().fold(false, |_, set| {
+        set.red <= expected_set.red && set.green <= expected_set.green && set.blue <= expected_set.blue 
+    })
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::RevealedSet;
+    use crate::{Set, validate_set};
+    
+    const VALID_SET: Set = Set {
+        red: 12,
+        green: 13,
+        blue: 14,
+    }; 
 
     #[test]
     fn should_parse_line() {
         let line = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green";
         let expected_output = crate::Game::new(1, vec![
-            RevealedSet {
+            Set {
                 red: 4,
                 green: 0,
                 blue: 3,
             },
-            RevealedSet {
+            Set {
                 red: 1,
                 green: 2,
                 blue: 6,
             },
-            RevealedSet {
+            Set {
                 red: 0,
                 green: 2,
                 blue: 0,
@@ -91,5 +103,28 @@ mod tests {
         let output = crate::Game::parse_string(line);
 
         assert_eq!(expected_output, output);
+    }
+
+    #[test]
+    fn should_correctly_determine_valid_set() {
+        let sets = vec![
+            Set {
+                red: 4,
+                green: 0,
+                blue: 3,
+            },
+            Set {
+                red: 1,
+                green: 2,
+                blue: 6,
+            },
+            Set {
+                red: 0,
+                green: 2,
+                blue: 0,
+            }
+        ];
+         
+        assert_eq!(true, validate_set(VALID_SET, sets))
     }
 }
