@@ -120,12 +120,15 @@ mod tests {
         let result = parse_schematic_line(0, line);
         assert_eq!(expected, result);
     }
-    
-    #[test]
-    fn should_identify_symbols() {}
 
     #[test]
-    fn should_identify_numbers () {}
+    fn should_detect_number_x_adjacent() {}
+    
+    #[test]
+    fn should_detect_number_y_adjacent() {}
+    
+    #[test]
+    fn should_detect_number_diagonally() {}
 
     #[test]
     fn should_calculate_total() {}
