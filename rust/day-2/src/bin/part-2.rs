@@ -95,6 +95,12 @@ fn main() {
         Game::parse_string(&line)
     });  
 
+    for game in games {
+        let minimum_set = get_minimum_set(&game.sets_revealed); 
+        let power = get_power(&minimum_set);
+        total = total + power;
+    }
+
     println!("{}", total)
 }
 
