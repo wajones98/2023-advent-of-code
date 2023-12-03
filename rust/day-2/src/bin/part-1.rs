@@ -90,6 +90,6 @@ mod tests {
         ]); 
         let output = crate::Game::parse_string(line);
 
-        // assert_eq!(expected_output, output);
+        assert_eq!(expected_output, output);
     }
 }
