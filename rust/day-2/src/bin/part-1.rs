@@ -21,9 +21,21 @@ impl Game {
     
     //TODO: Parse game line from input
     fn parse_string(line: &str) -> Self {
-        let id = 1;
+        let mut game_and_sets = line.split(":");
+        let game_id = match game_and_sets.next() {
+            Some(game) => match game.split_whitespace().last() {
+                Some(id) => id.parse::<u32>().expect("Expected positive number"),
+                None => panic!("Id expected"),
+            },
+            None => panic!("Game expected"),
+        }; 
+        let sets = match game_and_sets.next() {
+            Some(sets) => sets,
+            None => panic!("Game expected"),
+        }; 
+
         let sets_revealed = vec![];
-        Game::new(id, sets_revealed) 
+        Game::new(game_id, sets_revealed) 
     }
 }
 
