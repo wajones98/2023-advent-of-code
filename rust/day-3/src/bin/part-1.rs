@@ -82,8 +82,6 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
         if let Some(value) = right_number {
             numbers.push(value);
         }
-
-        println!("{:?}",point);
     }
 
     numbers 
