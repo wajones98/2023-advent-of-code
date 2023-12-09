@@ -64,8 +64,6 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
    
     let mut numbers: Vec<u32> = vec![]; 
 
-    println!("{:?}", schematic);
-
     for point in points_with_symbols {
         let left_point: &Point = point;
         let left_number = walk_line(left_point, &schematic[left_point.y as usize], &Direction::LeftUp);
@@ -79,8 +77,27 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
             numbers.push(value);
         }
          
-        // Handle diagonal
+        // Handle y
+        // let above_y_coord = (point.y + &Direction::LeftUp) as usize; 
+        // if above_y_coord != 9999 {
+        //     let point_above = &schematic[above_y_coord][point.x as usize];
+        // }
 
+        let below_y_coord = (point.y + &Direction::RightDown) as usize; 
+        if below_y_coord < schematic.len() {
+            let point_below = &schematic[below_y_coord][point.x as usize];
+
+            let left_number = walk_line(point_below, &schematic[point_below.y as usize], &Direction::LeftUp);
+            if let Some(value) = left_number {
+                numbers.push(value);
+            }
+
+            let right_number = walk_line(point_below, &schematic[point_below.y as usize], &Direction::RightDown);
+            if let Some(value) = right_number {
+                numbers.push(value);
+            }
+        }
+    
         // let left_y_coord = (point.y + &Direction::RightDown) as usize;  
         // if left_y_coord != 9999 && point.y < schematic.len() as u32 {
         //     let left_y_point: &Point = &schematic[left_y_coord][point.x as usize];
@@ -105,9 +122,9 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
 fn walk_line(point: &Point, line: &Vec<Point>, direction: &Direction) -> Option<u32> {
     let mut point = point;
     let mut number = "".to_string();
+    let mut current_coord: usize = point.x.try_into().expect("Expected u32 to parse into usize");
 
     while point_coord_is_valid(point, line) {
-        let current_coord: usize = (point.x + direction).try_into().expect("Expected u32 to parse into usize");
         if current_coord == 9999 {
             break;
         }
@@ -119,6 +136,7 @@ fn walk_line(point: &Point, line: &Vec<Point>, direction: &Direction) -> Option<
                 Direction::RightDown => format!("{}{}", number, digit),
             };        
         }
+        current_coord = (point.x + direction).try_into().expect("Expected u32 to parse into usize");
     }
 
     match number.parse::<u32>() {
@@ -163,122 +181,122 @@ mod tests {
         ".664.598..",
     ];
 
-    // #[test]
-    // fn should_parse_line() {
-    //     let line = TEST_ENGINE_SCHEMATIC[0];
-    //     let expected: Vec<Point> = vec![
-    //             Point {
-    //                 x: 0,
-    //                 y: 0,
-    //                 point_type: PointType::Digit(4)
-    //             },
-    //             Point {
-    //                 x: 1,
-    //                 y: 0,
-    //                 point_type: PointType::Digit(6)
-    //             },
-    //             Point {
-    //                 x: 2,
-    //                 y: 0,
-    //                 point_type: PointType::Digit(7)
-    //             },
-    //             Point {
-    //                 x: 3,
-    //                 y: 0,
-    //                 point_type: PointType::Symbol(".".to_string())
-    //             },
-    //             Point {
-    //                 x: 4,
-    //                 y: 0,
-    //                 point_type: PointType::Symbol(".".to_string())
-    //             },
-    //             Point {
-    //                 x: 5,
-    //                 y: 0,
-    //                 point_type: PointType::Digit(1)
-    //             },
-    //             Point {
-    //                 x: 6,
-    //                 y: 0,
-    //                 point_type: PointType::Digit(1)
-    //             },
-    //             Point {
-    //                 x: 7,
-    //                 y: 0,
-    //                 point_type: PointType::Digit(4)
-    //             },
-    //             Point {
-    //                 x: 8,
-    //                 y: 0,
-    //                 point_type: PointType::Symbol(".".to_string())
-    //             },
-    //             Point {
-    //                 x: 9,
-    //                 y: 0,
-    //                 point_type: PointType::Symbol(".".to_string())
-    //             },
-    //         ];
-    //     let result = parse_schematic_line(0, line);
-    //     assert_eq!(expected, result);
-    // }
+    #[test]
+    fn should_parse_line() {
+        let line = TEST_ENGINE_SCHEMATIC[0];
+        let expected: Vec<Point> = vec![
+                Point {
+                    x: 0,
+                    y: 0,
+                    point_type: PointType::Digit(4)
+                },
+                Point {
+                    x: 1,
+                    y: 0,
+                    point_type: PointType::Digit(6)
+                },
+                Point {
+                    x: 2,
+                    y: 0,
+                    point_type: PointType::Digit(7)
+                },
+                Point {
+                    x: 3,
+                    y: 0,
+                    point_type: PointType::Symbol(".".to_string())
+                },
+                Point {
+                    x: 4,
+                    y: 0,
+                    point_type: PointType::Symbol(".".to_string())
+                },
+                Point {
+                    x: 5,
+                    y: 0,
+                    point_type: PointType::Digit(1)
+                },
+                Point {
+                    x: 6,
+                    y: 0,
+                    point_type: PointType::Digit(1)
+                },
+                Point {
+                    x: 7,
+                    y: 0,
+                    point_type: PointType::Digit(4)
+                },
+                Point {
+                    x: 8,
+                    y: 0,
+                    point_type: PointType::Symbol(".".to_string())
+                },
+                Point {
+                    x: 9,
+                    y: 0,
+                    point_type: PointType::Symbol(".".to_string())
+                },
+            ];
+        let result = parse_schematic_line(0, line);
+        assert_eq!(expected, result);
+    }
 
-    // #[test]
-    // fn should_add_direction_left() {
-    //     let point = Point {
-    //         x: 5,
-    //         y: 0,
-    //         point_type: PointType::Digit(1)
-    //     };
-    //     let direction = &Direction::LeftUp; 
-    //     let result = point.x + direction; 
-    //     
-    //     let expected = 4;
-    //     assert_eq!(expected, result);
-    // }
-    //
-    // #[test]
-    // fn should_add_direction_right() {
-    //     let point = Point {
-    //         x: 5,
-    //         y: 0,
-    //         point_type: PointType::Digit(1)
-    //     };
-    //     let direction = &Direction::RightDown; 
-    //     let result = point.x + direction; 
-    //     
-    //     let expected = 6;
-    //     assert_eq!(expected, result);
-    // }
-    //
-    // #[test]
-    // fn should_detect_number_x_adjacent_left() {
-    //     let line = "617*......";
-    //     let schematic = vec![parse_schematic_line(0, line)];
-    //     
-    //     let expected = vec![617];
-    //     let result = valid_numbers(schematic); 
-    //     assert_eq!(expected, result);
-    // }
-    //
-    // #[test]
-    // fn should_detect_number_x_adjacent_right() {
-    //     let line = "...*12....";
-    //     let schematic = vec![parse_schematic_line(0, line)];
-    //     
-    //     let expected = vec![12];
-    //     let result = valid_numbers(schematic); 
-    //     assert_eq!(expected, result);
-    // }
-    //
-    // #[test]
-    // fn should_detect_number_x_adjacent_multiple() {
-    //     let line = "...*12.6*.";
-    //     let schematic = vec![parse_schematic_line(0, line)];
-    //     
-    //     let expected = vec![12, 6];
-    //     let result = valid_numbers(schematic); 
-    //     assert_eq!(expected, result);
-    // }
+    #[test]
+    fn should_add_direction_left() {
+        let point = Point {
+            x: 5,
+            y: 0,
+            point_type: PointType::Digit(1)
+        };
+        let direction = &Direction::LeftUp; 
+        let result = point.x + direction; 
+        
+        let expected = 4;
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn should_add_direction_right() {
+        let point = Point {
+            x: 5,
+            y: 0,
+            point_type: PointType::Digit(1)
+        };
+        let direction = &Direction::RightDown; 
+        let result = point.x + direction; 
+        
+        let expected = 6;
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn should_detect_number_x_adjacent_left() {
+        let line = "617*......";
+        let schematic = vec![parse_schematic_line(0, line)];
+        
+        let expected = vec![617];
+        let result = valid_numbers(schematic); 
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn should_detect_number_x_adjacent_right() {
+        let line = "...*12....";
+        let schematic = vec![parse_schematic_line(0, line)];
+        
+        let expected = vec![12];
+        let result = valid_numbers(schematic); 
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn should_detect_number_x_adjacent_multiple() {
+        let line = "...*12.6*.";
+        let schematic = vec![parse_schematic_line(0, line)];
+        
+        let expected = vec![12, 6];
+        let result = valid_numbers(schematic); 
+        assert_eq!(expected, result);
+    }
 
     #[test]
     fn should_detect_number_y_adjacent() {
@@ -290,7 +308,7 @@ mod tests {
 
         let expected = vec![664, 598];
         let result = valid_numbers(schematic);
-        // assert_eq!(expected, result);
+        assert_eq!(expected, result);
     }
 
     // #[test]
