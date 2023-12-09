@@ -23,11 +23,22 @@ pub fn parse_schematic_line(y: usize, line: &str) -> Vec<Point> {
     }).collect() 
 }
 
+pub fn points_with_symbol(schematic: &Schematic) -> Vec<&Point> {
+   schematic.iter().map(|line| {
+        line.iter().filter(|point| -> bool {
+            match &point.point_type {
+                PointType::Symbol(point_type) => point_type != ".",
+                PointType::Digit(_) => false,
+            }
+        })
+    }).flatten().collect()
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{point::{Point, PointType}, schematic::new_schematic};
 
-    use super::parse_schematic_line;
+    use super::{parse_schematic_line, points_with_symbol};
     
     #[test]
     fn it_parses_line() {
@@ -106,6 +117,20 @@ mod tests {
         ];
 
         let result = new_schematic(lines);
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn it_identifies_points_with_symbols() {
+        let lines = vec!["*..", ".$."];
+        let schematic = new_schematic(lines);
+        
+        let expected = vec![
+            &schematic[0][0],
+            &schematic[1][1],
+        ];
+
+        let result = points_with_symbol(&schematic);
         assert_eq!(expected, result);
     }
 }
