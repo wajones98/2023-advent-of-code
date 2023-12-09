@@ -1,9 +1,9 @@
-use std::{ops::Add};
+use std::ops::Add;
 
 #[derive(Debug, Copy, Clone)]
 enum Direction {
-    Left = -1,
-    Right = 1,
+    LeftDown = -1,
+    RightUp = 1,
 }
 
 impl Add<&Direction> for u32 {
@@ -11,7 +11,7 @@ impl Add<&Direction> for u32 {
 
     fn add(self, rhs: &Direction) -> Self::Output {
         match *rhs {
-            Direction::Left => {
+            Direction::LeftDown => {
                 let rhs_value = *rhs as i32; // Get the associated integer value
                 if self > (-rhs_value) as u32 {
                     self - (-rhs_value) as u32
@@ -19,7 +19,7 @@ impl Add<&Direction> for u32 {
                     0 // Handle underflow as needed
                 }
             }
-            Direction::Right => {
+            Direction::RightUp => {
                 let rhs_value = *rhs as u32; // Get the associated integer value
                 self + rhs_value
             }
@@ -72,13 +72,13 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
 
     for point in points_with_symbols {
         let left_point: &Point = point;
-        let left_number = walk_line(left_point, &schematic[left_point.y as usize], &Direction::Left);
+        let left_number = walk_line(left_point, &schematic[left_point.y as usize], &Direction::LeftDown);
         if let Some(value) = left_number {
             numbers.push(value);
         }
 
         let right_point: &Point = point;
-        let right_number = walk_line(right_point, &schematic[right_point.y as usize], &Direction::Right);
+        let right_number = walk_line(right_point, &schematic[right_point.y as usize], &Direction::RightUp);
         if let Some(value) = right_number {
             numbers.push(value);
         }
@@ -98,8 +98,8 @@ fn walk_line(point: &Point, line: &Vec<Point>, direction: &Direction) -> Option<
         point = &line[current_coord];   
         if let PointType::Digit(digit) = point.point_type {
             number = match direction {
-                Direction::Left => format!("{}{}", digit, number),
-                Direction::Right => format!("{}{}", number, digit),
+                Direction::LeftDown => format!("{}{}", digit, number),
+                Direction::RightUp => format!("{}{}", number, digit),
             };        
         }
     }
@@ -212,7 +212,7 @@ mod tests {
             y: 0,
             point_type: PointType::Digit(1)
         };
-        let direction = &Direction::Left; 
+        let direction = &Direction::LeftDown; 
         let result = point.x + direction; 
         
         let expected = 4;
@@ -226,7 +226,7 @@ mod tests {
             y: 0,
             point_type: PointType::Digit(1)
         };
-        let direction = &Direction::Right; 
+        let direction = &Direction::RightUp; 
         let result = point.x + direction; 
         
         let expected = 6;
