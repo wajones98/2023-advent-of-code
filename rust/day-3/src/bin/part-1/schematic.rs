@@ -216,4 +216,16 @@ mod tests {
 
         assert_eq!(expected, result);
     }
+
+    #[test]
+    fn it_generates_x_lines() {}
+
+    #[test]
+    fn it_generates_y_lines() {}
+    
+    #[test]
+    fn it_generates_left_diaganol_lines() {}
+    
+    #[test]
+    fn it_generates_right_diaganol_lines() {}
 }
