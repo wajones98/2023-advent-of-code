@@ -34,8 +34,70 @@ pub fn points_with_symbol(schematic: &Schematic) -> Vec<&Point> {
     }).flatten().collect()
 }
 
-pub fn valid_numbers(line: Vec<Point>) -> Vec<u32> {
-   vec![0] 
+pub fn valid_numbers(points: Vec<Point>) -> Vec<u32> {
+    let mut numbers: Vec<u32> = vec![];     
+
+    for (i, point) in points.iter().enumerate() {
+        if let PointType::Symbol(symbol) = &point.point_type {
+            let mut left_current_index: isize = i as isize; 
+            
+            if left_current_index > 0 {
+                let mut number = String::from(""); 
+
+                loop {
+                    if left_current_index > 0 {
+                        break;
+                    }
+                    let left_point = &points[left_current_index as usize];
+
+                    match left_point.point_type {
+                        PointType::Digit(digit) => {
+                            number = format!("{}{}", digit, number);
+                            left_current_index -= 1;
+                        }
+                        _ => break, // Break the loop if current_index > 0 or if conditions are not met
+                    }
+                }
+
+                match number.parse::<u32>() {
+                    Ok(value) => {
+                        numbers.push(value); 
+                    },
+                    Err(_) => {},
+                };
+            }
+            
+            let mut right_current_index: isize = i as isize; 
+            
+            if right_current_index < points.len() as isize {
+                let mut number = String::from(""); 
+
+                loop {
+                    if right_current_index < points.len() as isize {
+                        break;
+                    }
+                    let right_point = &points[right_current_index as usize];
+
+                    match right_point.point_type {
+                        PointType::Digit(digit) => {
+                            number = format!("{}{}", digit, number);
+                            right_current_index += 1;
+                        }
+                        _ => break, // Break the loop if current_index > 0 or if conditions are not met
+                    }
+                }
+
+                match number.parse::<u32>() {
+                    Ok(value) => {
+                        numbers.push(value); 
+                    },
+                    Err(_) => {},
+                };
+            }
+        }
+    } 
+
+    numbers
 }
 
 #[cfg(test)]
