@@ -82,6 +82,9 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
         if let Some(value) = right_number {
             numbers.push(value);
         }
+
+        let left_y_point: &Point = point;
+        // let left_
     }
 
     numbers 
@@ -262,9 +265,16 @@ mod tests {
     }
 
 
-    // #[test]
-    // fn should_detect_number_y_adjacent() {}
-    // 
+    #[test]
+    fn should_detect_number_y_adjacent() {
+        let lines = vec!["...$.*....", ".664.598.."];
+        let schematic = new_schematic(lines); 
+
+        let expected = vec![664, 598];
+        let result = valid_numbers(schematic);
+        assert_eq!(expected, result);
+    }
+
     // #[test]
     // fn should_detect_number_diagonally() {}
     //
