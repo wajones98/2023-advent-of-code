@@ -31,13 +31,13 @@ fn main() {
     println!("Hello, world!");
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 enum PointType {
     Symbol(String),
     Digit(u32),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 struct Point {
     x: u32,
     y: u32,
@@ -63,17 +63,21 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
     }).flatten().collect();
    
     let mut numbers: Vec<u32> = vec![]; 
+    let mut left_found_points: Vec<Point> = vec![];
+    let mut right_found_points: Vec<Point> = vec![];
 
     for point in points_with_symbols {
         let left_point: &Point = point;
-        let left_number = walk_line(left_point, &schematic[left_point.y as usize], &Direction::LeftUp);
+        let left_number = walk_line(left_point, &schematic[left_point.y as usize], &Direction::LeftUp, &mut left_found_points, &mut right_found_points);
         if let Some(value) = left_number {
+            println!("1");
             numbers.push(value);
         }
 
         let right_point: &Point = point;
-        let right_number = walk_line(right_point, &schematic[right_point.y as usize], &Direction::RightDown);
+        let right_number = walk_line(right_point, &schematic[right_point.y as usize], &Direction::RightDown, &mut left_found_points, &mut right_found_points);
         if let Some(value) = right_number {
+            println!("2");
             numbers.push(value);
         }
          
@@ -87,55 +91,50 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
         if below_y_coord < schematic.len() {
             let point_below = &schematic[below_y_coord][point.x as usize];
 
-            let left_number = walk_line(point_below, &schematic[point_below.y as usize], &Direction::LeftUp);
+            let left_number = walk_line(point_below, &schematic[point_below.y as usize], &Direction::LeftUp, &mut left_found_points, &mut right_found_points);
             if let Some(value) = left_number {
                 numbers.push(value);
             }
 
-            let right_number = walk_line(point_below, &schematic[point_below.y as usize], &Direction::RightDown);
+            let right_number = walk_line(point_below, &schematic[point_below.y as usize], &Direction::RightDown, &mut left_found_points, &mut right_found_points);
             if let Some(value) = right_number {
                 numbers.push(value);
             }
         }
-    
-        // let left_y_coord = (point.y + &Direction::RightDown) as usize;  
-        // if left_y_coord != 9999 && point.y < schematic.len() as u32 {
-        //     let left_y_point: &Point = &schematic[left_y_coord][point.x as usize];
-        //     let left_y_number = walk_line(left_y_point, &schematic[left_y_coord], &Direction::LeftUp);
-        //     if let Some(value) = left_y_number {
-        //         numbers.push(value);
-        //     }
-        // }
-
-        //
-        // let right_y_point: &Point = point;
-        // let right_y_coord = (right_y_point.y + &Direction::LeftDown) as usize;  
-        // let right_y_number = walk_line(right_y_point, &schematic[right_y_coord], &Direction::RightUp);
-        // if let Some(value) = right_y_number {
-        //     numbers.push(value);
-        // }
     }
 
     numbers 
 }
 
-fn walk_line(point: &Point, line: &Vec<Point>, direction: &Direction) -> Option<u32> {
+fn walk_line(point: &Point, line: &Vec<Point>, direction: &Direction, left_found_points: &mut Vec<Point>, right_found_points: &mut Vec<Point>) -> Option<u32> {
     let mut point = point;
     let mut number = "".to_string();
     let mut current_coord: usize = point.x.try_into().expect("Expected u32 to parse into usize");
-
+    
     while point_coord_is_valid(point, line) {
         if current_coord == 9999 {
             break;
         }
 
-        point = &line[current_coord];   
+        point = &line[current_coord];  
+
         if let PointType::Digit(digit) = point.point_type {
-            number = match direction {
-                Direction::LeftUp => format!("{}{}", digit, number),
-                Direction::RightDown => format!("{}{}", number, digit),
+            match direction {
+                Direction::LeftUp => { 
+                    if !right_found_points.contains(point) {
+                        number = format!("{}{}", digit, number);
+                        right_found_points.push(point.clone());
+                    }
+                },
+                Direction::RightDown => { 
+                    if !left_found_points.contains(point) {
+                        number = format!("{}{}", number, digit);
+                        left_found_points.push(point.clone());
+                    }
+                },
             };        
         }
+        
         current_coord = (point.x + direction).try_into().expect("Expected u32 to parse into usize");
     }
 
