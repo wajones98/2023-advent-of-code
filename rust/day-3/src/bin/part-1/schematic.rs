@@ -25,7 +25,7 @@ pub fn parse_schematic_line(y: usize, line: &str) -> Vec<Point> {
 
 #[cfg(test)]
 mod tests {
-    use crate::point::{Point, PointType};
+    use crate::{point::{Point, PointType}, schematic::new_schematic};
 
     use super::parse_schematic_line;
     
@@ -61,6 +61,51 @@ mod tests {
         ];       
         let result = parse_schematic_line(0, line);
 
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn it_parses_schematic() {
+        let lines = vec!["4..", ".5."];
+
+        let expected = vec![
+            vec![
+                Point {
+                    x: 0,
+                    y: 0,
+                    point_type: PointType::Digit(4),
+                },
+                Point {
+                    x: 1,
+                    y: 0,
+                    point_type: PointType::Symbol(".".to_string()),
+                },
+                Point {
+                    x: 2,
+                    y: 0,
+                    point_type: PointType::Symbol(".".to_string()),
+                },
+            ],
+            vec![
+                Point {
+                    x: 0,
+                    y: 1,
+                    point_type: PointType::Symbol(".".to_string()),
+                },
+                Point {
+                    x: 1,
+                    y: 1,
+                    point_type: PointType::Digit(5),
+                },
+                Point {
+                    x: 2,
+                    y: 1,
+                    point_type: PointType::Symbol(".".to_string()),
+                },
+            ],
+        ];
+
+        let result = new_schematic(lines);
         assert_eq!(expected, result);
     }
 }
