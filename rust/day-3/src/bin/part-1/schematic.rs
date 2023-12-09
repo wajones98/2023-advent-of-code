@@ -2,7 +2,7 @@ use crate::point::{Point, PointType};
 
 pub type Schematic = Vec<Vec<Point>>;
 
-pub fn new_schematic(lines: Vec<&str>) -> Schematic {
+pub fn new_schematic(lines: &[&str]) -> Schematic {
     lines.iter().enumerate().map(|(i, line)| {
         parse_schematic_line(i, line)
     }).collect()
@@ -34,11 +34,15 @@ pub fn points_with_symbol(schematic: &Schematic) -> Vec<&Point> {
     }).flatten().collect()
 }
 
+pub fn valid_numbers(line: &[&Point]) -> Vec<u32> {
+   vec![0] 
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{point::{Point, PointType}, schematic::new_schematic};
 
-    use super::{parse_schematic_line, points_with_symbol};
+    use super::{parse_schematic_line, points_with_symbol, valid_numbers};
     
     #[test]
     fn it_parses_line() {
@@ -131,6 +135,17 @@ mod tests {
         ];
 
         let result = points_with_symbol(&schematic);
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn it_extracts_correct_numbers() {
+        let line = "617*......";
+        let line = parse_schematic_line(0, line); 
+
+        let expected = vec![617]; 
+        let result = valid_numbers(line);
+
         assert_eq!(expected, result);
     }
 }
