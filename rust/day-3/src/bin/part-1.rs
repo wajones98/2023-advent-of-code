@@ -97,10 +97,13 @@ fn walk_line(point: &Point, line: &Vec<Point>, direction: &Direction) -> Option<
         let current_coord: usize = (point.x + direction).try_into().expect("Expected u32 to parse into usize");
         point = &line[current_coord];   
         if let PointType::Digit(digit) = point.point_type {
-            number = format!("{}{}", number, digit);
+            number = match direction {
+                Direction::Left => format!("{}{}", digit, number),
+                Direction::Right => format!("{}{}", number, digit),
+            };        
         }
     }
-    
+
     match number.parse::<u32>() {
         Ok(value) => Some(value),
         Err(_) => None,
@@ -231,15 +234,15 @@ mod tests {
         assert_eq!(expected, result);
     }
 
-    // #[test]
-    // fn should_detect_number_x_adjacent_left() {
-    //     let line = "617*......";
-    //     let schematic = vec![parse_schematic_line(0, line)];
-    //     
-    //     let expected = vec![617];
-    //     let result = valid_numbers(schematic); 
-    //     assert_eq!(expected, result);
-    // }
+    #[test]
+    fn should_detect_number_x_adjacent_left() {
+        let line = "617*......";
+        let schematic = vec![parse_schematic_line(0, line)];
+        
+        let expected = vec![617];
+        let result = valid_numbers(schematic); 
+        assert_eq!(expected, result);
+    }
 
    //  #[test]
    //  fn should_detect_number_x_adjacent_right() {
