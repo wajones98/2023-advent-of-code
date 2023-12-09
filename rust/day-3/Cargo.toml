@@ -2,7 +2,3 @@
 name = "day-3"
 version = "0.1.0"
 edition = "2021"
-
-[lib]
-name = "point"
-path = "point.rs"
