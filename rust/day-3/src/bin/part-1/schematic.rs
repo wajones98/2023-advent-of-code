@@ -34,7 +34,7 @@ pub fn points_with_symbol(schematic: &Schematic) -> Vec<&Point> {
     }).flatten().collect()
 }
 
-pub fn valid_numbers(line: Vec<&Point>) -> Vec<u32> {
+pub fn valid_numbers(line: Vec<Point>) -> Vec<u32> {
    vec![0] 
 }
 
