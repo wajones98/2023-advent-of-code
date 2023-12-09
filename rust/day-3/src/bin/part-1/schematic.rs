@@ -39,64 +39,70 @@ pub fn valid_numbers(points: Vec<Point>) -> Vec<u32> {
 
     for (i, point) in points.iter().enumerate() {
         if let PointType::Symbol(symbol) = &point.point_type {
-            let mut left_current_index: isize = i as isize; 
-            
-            if left_current_index > 0 {
-                let mut number = String::from(""); 
+            if symbol != "." {
+                let mut left_current_index: isize = i as isize; 
 
-                loop {
-                    if left_current_index > 0 {
-                        break;
-                    }
-                    let left_point = &points[left_current_index as usize];
+                if left_current_index > 0 {
+                    let mut number = String::from(""); 
 
-                    match left_point.point_type {
-                        PointType::Digit(digit) => {
-                            number = format!("{}{}", digit, number);
-                            left_current_index -= 1;
+                    loop {
+                        if left_current_index < 0 {
+                            break;
                         }
-                        _ => break, // Break the loop if current_index > 0 or if conditions are not met
-                    }
-                }
 
-                match number.parse::<u32>() {
-                    Ok(value) => {
-                        numbers.push(value); 
-                    },
-                    Err(_) => {},
-                };
-            }
-            
-            let mut right_current_index: isize = i as isize; 
-            
-            if right_current_index < points.len() as isize {
-                let mut number = String::from(""); 
-
-                loop {
-                    if right_current_index < points.len() as isize {
-                        break;
-                    }
-                    let right_point = &points[right_current_index as usize];
-
-                    match right_point.point_type {
-                        PointType::Digit(digit) => {
-                            number = format!("{}{}", digit, number);
-                            right_current_index += 1;
+                        let left_point = &points[left_current_index as usize];
+                        match &left_point.point_type {
+                            PointType::Digit(digit) => {
+                                number = format!("{}{}", digit, number);
+                            }
+                            PointType::Symbol(symbol) => if symbol == "." {
+                                break
+                            },
                         }
-                        _ => break, // Break the loop if current_index > 0 or if conditions are not met
+                        left_current_index -= 1;
                     }
-                }
 
-                match number.parse::<u32>() {
-                    Ok(value) => {
-                        numbers.push(value); 
-                    },
-                    Err(_) => {},
-                };
+                    match number.parse::<u32>() {
+                        Ok(value) => {
+                            numbers.push(value); 
+                        },
+                        Err(_) => {},
+                    };
+                }
+                
+                let mut right_current_index: isize = i as isize; 
+
+                if right_current_index < points.len() as isize {
+                    let mut number = String::from(""); 
+
+                    loop {
+                        if right_current_index >= points.len() as isize {
+                            break;
+                        }
+
+                        let right_point = &points[right_current_index as usize];
+                        match &right_point.point_type {
+                            PointType::Digit(digit) => {
+                                number = format!("{}{}", number, digit);
+                            }
+                            PointType::Symbol(symbol) => if symbol == "." {
+                                break
+                            },
+                        }
+                        right_current_index += 1;
+                    }
+
+                    match number.parse::<u32>() {
+                        Ok(value) => {
+                            numbers.push(value); 
+                        },
+                        Err(_) => {},
+                    };
+                }
             }
         }
     } 
-
+    println!("{:?}", numbers);
     numbers
 }
 
@@ -202,10 +208,10 @@ mod tests {
 
     #[test]
     fn it_extracts_correct_numbers() {
-        let line = "617*......";
+        let line = "617*...$1.";
         let line = parse_schematic_line(0, line); 
 
-        let expected = vec![617]; 
+        let expected = vec![617, 1]; 
         let result = valid_numbers(line);
 
         assert_eq!(expected, result);
