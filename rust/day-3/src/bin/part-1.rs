@@ -146,7 +146,6 @@ mod tests {
         ".664.598..",
     ];
 
-
     #[test]
     fn should_parse_line() {
         let line = TEST_ENGINE_SCHEMATIC[0];
