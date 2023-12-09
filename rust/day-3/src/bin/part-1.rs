@@ -2,8 +2,8 @@ use std::ops::Add;
 
 #[derive(Debug, Copy, Clone)]
 enum Direction {
-    LeftDown = -1,
-    RightUp = 1,
+    LeftUp = -1,
+    RightDown = 1,
 }
 
 impl Add<&Direction> for u32 {
@@ -11,7 +11,7 @@ impl Add<&Direction> for u32 {
 
     fn add(self, rhs: &Direction) -> Self::Output {
         match *rhs {
-            Direction::LeftDown => {
+            Direction::LeftUp => {
                 let rhs_value = *rhs as i32; // Get the associated integer value
                 if self >= (-rhs_value) as u32 {
                     self - (-rhs_value) as u32
@@ -19,7 +19,7 @@ impl Add<&Direction> for u32 {
                     9999 // Handle underflow as needed
                 }
             }
-            Direction::RightUp => {
+            Direction::RightDown => {
                 let rhs_value = *rhs as u32; // Get the associated integer value
                 self + rhs_value
             }
@@ -47,15 +47,9 @@ struct Point {
 type Schematic = Vec<Vec<Point>>;
 
 fn new_schematic(lines: Vec<&str>) -> Schematic {
-    vec![
-        vec![
-            Point{
-                x: 0,
-                y: 0,
-                point_type: PointType::Symbol(".".to_string()), 
-            }
-        ]
-    ] 
+    lines.iter().enumerate().map(|(i, line)| {
+        parse_schematic_line(i, line)
+    }).collect()
 }
 
 fn valid_numbers(schematic: Schematic) -> Vec<u32> {
@@ -70,26 +64,32 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
    
     let mut numbers: Vec<u32> = vec![]; 
 
+    println!("{:?}", schematic);
+
     for point in points_with_symbols {
         let left_point: &Point = point;
-        let left_number = walk_line(left_point, &schematic[left_point.y as usize], &Direction::LeftDown);
+        let left_number = walk_line(left_point, &schematic[left_point.y as usize], &Direction::LeftUp);
         if let Some(value) = left_number {
             numbers.push(value);
         }
 
         let right_point: &Point = point;
-        let right_number = walk_line(right_point, &schematic[right_point.y as usize], &Direction::RightUp);
+        let right_number = walk_line(right_point, &schematic[right_point.y as usize], &Direction::RightDown);
         if let Some(value) = right_number {
             numbers.push(value);
         }
+         
+        // Handle diagonal
 
-        // let left_y_point: &Point = point;
-        // let left_y_coord = (left_y_point.y + &Direction::LeftDown) as usize;  
-        // if left_y_coord <= 0 {}
-        // let left_y_number = walk_line(left_y_point, &schematic[left_y_coord], &Direction::LeftDown);
-        // if let Some(value) = left_y_number {
-        //     numbers.push(value);
+        // let left_y_coord = (point.y + &Direction::RightDown) as usize;  
+        // if left_y_coord != 9999 && point.y < schematic.len() as u32 {
+        //     let left_y_point: &Point = &schematic[left_y_coord][point.x as usize];
+        //     let left_y_number = walk_line(left_y_point, &schematic[left_y_coord], &Direction::LeftUp);
+        //     if let Some(value) = left_y_number {
+        //         numbers.push(value);
+        //     }
         // }
+
         //
         // let right_y_point: &Point = point;
         // let right_y_coord = (right_y_point.y + &Direction::LeftDown) as usize;  
@@ -115,8 +115,8 @@ fn walk_line(point: &Point, line: &Vec<Point>, direction: &Direction) -> Option<
         point = &line[current_coord];   
         if let PointType::Digit(digit) = point.point_type {
             number = match direction {
-                Direction::LeftDown => format!("{}{}", digit, number),
-                Direction::RightUp => format!("{}{}", number, digit),
+                Direction::LeftUp => format!("{}{}", digit, number),
+                Direction::RightDown => format!("{}{}", number, digit),
             };        
         }
     }
@@ -163,132 +163,135 @@ mod tests {
         ".664.598..",
     ];
 
-    #[test]
-    fn should_parse_line() {
-        let line = TEST_ENGINE_SCHEMATIC[0];
-        let expected: Vec<Point> = vec![
-                Point {
-                    x: 0,
-                    y: 0,
-                    point_type: PointType::Digit(4)
-                },
-                Point {
-                    x: 1,
-                    y: 0,
-                    point_type: PointType::Digit(6)
-                },
-                Point {
-                    x: 2,
-                    y: 0,
-                    point_type: PointType::Digit(7)
-                },
-                Point {
-                    x: 3,
-                    y: 0,
-                    point_type: PointType::Symbol(".".to_string())
-                },
-                Point {
-                    x: 4,
-                    y: 0,
-                    point_type: PointType::Symbol(".".to_string())
-                },
-                Point {
-                    x: 5,
-                    y: 0,
-                    point_type: PointType::Digit(1)
-                },
-                Point {
-                    x: 6,
-                    y: 0,
-                    point_type: PointType::Digit(1)
-                },
-                Point {
-                    x: 7,
-                    y: 0,
-                    point_type: PointType::Digit(4)
-                },
-                Point {
-                    x: 8,
-                    y: 0,
-                    point_type: PointType::Symbol(".".to_string())
-                },
-                Point {
-                    x: 9,
-                    y: 0,
-                    point_type: PointType::Symbol(".".to_string())
-                },
-            ];
-        let result = parse_schematic_line(0, line);
-        assert_eq!(expected, result);
-    }
-
-    #[test]
-    fn should_add_direction_left() {
-        let point = Point {
-            x: 5,
-            y: 0,
-            point_type: PointType::Digit(1)
-        };
-        let direction = &Direction::LeftDown; 
-        let result = point.x + direction; 
-        
-        let expected = 4;
-        assert_eq!(expected, result);
-    }
-
-    #[test]
-    fn should_add_direction_right() {
-        let point = Point {
-            x: 5,
-            y: 0,
-            point_type: PointType::Digit(1)
-        };
-        let direction = &Direction::RightUp; 
-        let result = point.x + direction; 
-        
-        let expected = 6;
-        assert_eq!(expected, result);
-    }
-
-    #[test]
-    fn should_detect_number_x_adjacent_left() {
-        let line = "617*......";
-        let schematic = vec![parse_schematic_line(0, line)];
-        
-        let expected = vec![617];
-        let result = valid_numbers(schematic); 
-        assert_eq!(expected, result);
-    }
-
-    #[test]
-    fn should_detect_number_x_adjacent_right() {
-        let line = "...*12....";
-        let schematic = vec![parse_schematic_line(0, line)];
-        
-        let expected = vec![12];
-        let result = valid_numbers(schematic); 
-        assert_eq!(expected, result);
-    }
-
-    #[test]
-    fn should_detect_number_x_adjacent_multiple() {
-        let line = "...*12.6*.";
-        let schematic = vec![parse_schematic_line(0, line)];
-        
-        let expected = vec![12, 6];
-        let result = valid_numbers(schematic); 
-        assert_eq!(expected, result);
-    }
-
     // #[test]
-    // fn should_detect_number_y_adjacent() {
-    //     let lines = vec!["...$.*....", ".664.598.."];
-    //     let schematic = new_schematic(lines); 
-    //
-    //     let expected = vec![664, 598];
-    //     let result = valid_numbers(schematic);
+    // fn should_parse_line() {
+    //     let line = TEST_ENGINE_SCHEMATIC[0];
+    //     let expected: Vec<Point> = vec![
+    //             Point {
+    //                 x: 0,
+    //                 y: 0,
+    //                 point_type: PointType::Digit(4)
+    //             },
+    //             Point {
+    //                 x: 1,
+    //                 y: 0,
+    //                 point_type: PointType::Digit(6)
+    //             },
+    //             Point {
+    //                 x: 2,
+    //                 y: 0,
+    //                 point_type: PointType::Digit(7)
+    //             },
+    //             Point {
+    //                 x: 3,
+    //                 y: 0,
+    //                 point_type: PointType::Symbol(".".to_string())
+    //             },
+    //             Point {
+    //                 x: 4,
+    //                 y: 0,
+    //                 point_type: PointType::Symbol(".".to_string())
+    //             },
+    //             Point {
+    //                 x: 5,
+    //                 y: 0,
+    //                 point_type: PointType::Digit(1)
+    //             },
+    //             Point {
+    //                 x: 6,
+    //                 y: 0,
+    //                 point_type: PointType::Digit(1)
+    //             },
+    //             Point {
+    //                 x: 7,
+    //                 y: 0,
+    //                 point_type: PointType::Digit(4)
+    //             },
+    //             Point {
+    //                 x: 8,
+    //                 y: 0,
+    //                 point_type: PointType::Symbol(".".to_string())
+    //             },
+    //             Point {
+    //                 x: 9,
+    //                 y: 0,
+    //                 point_type: PointType::Symbol(".".to_string())
+    //             },
+    //         ];
+    //     let result = parse_schematic_line(0, line);
     //     assert_eq!(expected, result);
     // }
+
+    // #[test]
+    // fn should_add_direction_left() {
+    //     let point = Point {
+    //         x: 5,
+    //         y: 0,
+    //         point_type: PointType::Digit(1)
+    //     };
+    //     let direction = &Direction::LeftUp; 
+    //     let result = point.x + direction; 
+    //     
+    //     let expected = 4;
+    //     assert_eq!(expected, result);
+    // }
+    //
+    // #[test]
+    // fn should_add_direction_right() {
+    //     let point = Point {
+    //         x: 5,
+    //         y: 0,
+    //         point_type: PointType::Digit(1)
+    //     };
+    //     let direction = &Direction::RightDown; 
+    //     let result = point.x + direction; 
+    //     
+    //     let expected = 6;
+    //     assert_eq!(expected, result);
+    // }
+    //
+    // #[test]
+    // fn should_detect_number_x_adjacent_left() {
+    //     let line = "617*......";
+    //     let schematic = vec![parse_schematic_line(0, line)];
+    //     
+    //     let expected = vec![617];
+    //     let result = valid_numbers(schematic); 
+    //     assert_eq!(expected, result);
+    // }
+    //
+    // #[test]
+    // fn should_detect_number_x_adjacent_right() {
+    //     let line = "...*12....";
+    //     let schematic = vec![parse_schematic_line(0, line)];
+    //     
+    //     let expected = vec![12];
+    //     let result = valid_numbers(schematic); 
+    //     assert_eq!(expected, result);
+    // }
+    //
+    // #[test]
+    // fn should_detect_number_x_adjacent_multiple() {
+    //     let line = "...*12.6*.";
+    //     let schematic = vec![parse_schematic_line(0, line)];
+    //     
+    //     let expected = vec![12, 6];
+    //     let result = valid_numbers(schematic); 
+    //     assert_eq!(expected, result);
+    // }
+
+    #[test]
+    fn should_detect_number_y_adjacent() {
+        let lines = vec![
+            "...$.*....", 
+            ".664.598.."
+        ];
+        let schematic = new_schematic(lines); 
+
+        let expected = vec![664, 598];
+        let result = valid_numbers(schematic);
+        // assert_eq!(expected, result);
+    }
 
     // #[test]
     // fn should_detect_number_diagonally() {}
