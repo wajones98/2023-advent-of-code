@@ -2,7 +2,7 @@ use crate::point::{Point, PointType};
 
 pub type Schematic = Vec<Vec<Point>>;
 
-pub fn new_schematic(lines: &[&str]) -> Schematic {
+pub fn new_schematic(lines: Vec<&str>) -> Schematic {
     lines.iter().enumerate().map(|(i, line)| {
         parse_schematic_line(i, line)
     }).collect()
@@ -34,7 +34,7 @@ pub fn points_with_symbol(schematic: &Schematic) -> Vec<&Point> {
     }).flatten().collect()
 }
 
-pub fn valid_numbers(line: &[&Point]) -> Vec<u32> {
+pub fn valid_numbers(line: Vec<&Point>) -> Vec<u32> {
    vec![0] 
 }
 
