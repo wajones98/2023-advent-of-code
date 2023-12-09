@@ -254,15 +254,15 @@ mod tests {
         assert_eq!(expected, result);
     }
 
-    // #[test]
-    // fn should_detect_number_x_adjacent_multiple() {
-    //     let line = "...*12.6*.";
-    //     let schematic = vec![parse_schematic_line(0, line)];
-    //     
-    //     let expected = vec![12, 6];
-    //     let result = valid_numbers(schematic); 
-    //     assert_eq!(expected, result);
-    // }
+    #[test]
+    fn should_detect_number_x_adjacent_multiple() {
+        let line = "...*12.6*.";
+        let schematic = vec![parse_schematic_line(0, line)];
+        
+        let expected = vec![12, 6];
+        let result = valid_numbers(schematic); 
+        assert_eq!(expected, result);
+    }
 
 
     // #[test]
