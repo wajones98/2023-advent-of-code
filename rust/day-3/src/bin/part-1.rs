@@ -1,4 +1,26 @@
-use std::fmt::format;
+use std::{num::ParseIntError, ops::Add};
+
+enum Direction {
+    Left = -1,
+    Right = 1,
+}
+
+impl Add<Direction> for u32 {
+    type Output = u32;
+
+    fn add(self, rhs: Direction) -> Self::Output {
+        match rhs {
+            Direction::Left => {
+                if self > rhs as u32 {
+                    self - (rhs as u32)
+                } else {
+                    0 // To prevent underflow, you might want to handle this case accordingly.
+                }
+            }
+            Direction::Right => self + (rhs as u32),
+        }
+    }
+}
 
 fn main() {
     println!("Hello, world!");
@@ -12,8 +34,8 @@ enum PointType {
 
 #[derive(Debug, PartialEq)]
 struct Point {
-    x: usize,
-    y: usize,
+    x: u32,
+    y: u32,
     point_type: PointType,
 }
 
@@ -81,6 +103,23 @@ fn valid_numbers(schematic: Schematic) -> Vec<u32> {
     }
 
     numbers 
+}
+
+fn walk_line(point: &Point, line: &Vec<Point>, direction: Direction) -> Result<u32, ParseIntError> {
+    let mut current_coord = point.x;
+    let mut point = point;
+    let mut number = "".to_string();
+
+    while current_coord < line.len() as u32 && point.point_type != PointType::Symbol(".".to_string()) {
+        current_coord = point.x + direction;
+
+        point = &line[current_coord as usize];   
+        if let PointType::Digit(digit) = point.point_type {
+            number = format!("{}{}", number, digit);
+        }
+    }
+    
+    number.parse()
 }
 
 fn parse_schematic_line(y: usize, line: &str) -> Vec<Point> {
