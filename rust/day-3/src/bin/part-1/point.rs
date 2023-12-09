@@ -1,10 +1,12 @@
+#[derive(Debug, PartialEq)]
 pub enum PointType {
     Symbol(String),
     Digit(u32),
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Point {
-    x: u32,
-    y: u32,
-    point_type: PointType,
+    pub x: u32,
+    pub y: u32,
+    pub point_type: PointType,
 }
