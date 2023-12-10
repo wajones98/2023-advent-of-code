@@ -143,11 +143,41 @@ pub fn generate_y_lines(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<P
     lines
 }
 
+pub fn generate_diagonal_lines_left(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<Point>> {
+    let mut lines: Vec<Vec<Point>> = vec![];
+    for point in points {
+        let mut line: Vec<Point> = vec![];
+        let mut x = point.x as i32;
+        let mut y = point.y as i32;
+
+        while x > 0 && y < (schematic.len() - 1) as i32 {
+            x -= 1;
+            y -= 1;
+            line.push(schematic[y as usize][x as usize].clone()); 
+        }
+
+        x = point.x as i32;
+        y = point.y as i32;
+        line.push(schematic[y as usize][x as usize].clone()); 
+
+        while x < (schematic[y as usize].len() - 1) as i32  && y < (schematic.len() - 1) as i32 {
+            x += 1;
+            y += 1;
+            line.push(schematic[y as usize][x as usize].clone()); 
+        }
+
+        lines.push(line);
+    }
+
+    lines.dedup();
+    lines
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{point::{Point, PointType}, schematic::new_schematic};
 
-    use super::{parse_schematic_line, points_with_symbol, valid_numbers, generate_x_lines, generate_y_lines};
+    use super::*;
     
     #[test]
     fn it_parses_line() {
@@ -308,15 +338,15 @@ mod tests {
     }
     
     #[test]
-    fn it_generates_left_diaganol_lines() {
-        let lines = vec!["...", ".*.", "..1"];
+    fn it_generates_diaganol_lines_left() {
+        let lines = vec!["*..", ".*.", "..1"];
         let schematic = new_schematic(lines);
 
         let expected = vec![vec![
             Point {
                 x: 0,
                 y: 0,
-                point_type: PointType::Symbol(".".to_string()),
+                point_type: PointType::Symbol("*".to_string()),
             },
             Point {
                 x: 1,
