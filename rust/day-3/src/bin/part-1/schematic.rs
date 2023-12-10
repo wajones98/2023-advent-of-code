@@ -116,11 +116,30 @@ pub fn generate_x_lines(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<P
         .collect();
     
     let mut lines: Vec<Vec<Point>> = vec![];
-    for y_coord in &x_lines_with_symbols {
-        let line = &schematic[*y_coord as usize];
+    for y_coord in x_lines_with_symbols {
+        let line = &schematic[y_coord as usize];
         lines.push(line.to_vec());
     }
 
+    lines
+}
+
+pub fn generate_y_lines(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<Point>> {
+    let y_lines_with_symbols: Vec<u32> = points.iter()
+        .map(|point| point.x)
+        .collect::<HashSet<_>>()
+        .into_iter()
+        .collect();
+    
+    let mut lines: Vec<Vec<Point>> = vec![];
+    for x_coord in y_lines_with_symbols {
+        let mut line: Vec<Point> = vec![];
+        for x_line in schematic {
+           line.push(x_line[x_coord as usize].clone()); 
+        }
+        lines.push(line);
+    }
+    
     lines
 }
 
@@ -128,7 +147,7 @@ pub fn generate_x_lines(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<P
 mod tests {
     use crate::{point::{Point, PointType}, schematic::new_schematic};
 
-    use super::{parse_schematic_line, points_with_symbol, valid_numbers, generate_x_lines};
+    use super::{parse_schematic_line, points_with_symbol, valid_numbers, generate_x_lines, generate_y_lines};
     
     #[test]
     fn it_parses_line() {
@@ -265,10 +284,58 @@ mod tests {
     }
 
     #[test]
-    fn it_generates_y_lines() {}
+    fn it_generates_y_lines() {
+        let lines = vec!["...", ".*."];
+        let schematic = new_schematic(lines);
+
+        let expected = vec![vec![
+            Point {
+                x: 1,
+                y: 0,
+                point_type: PointType::Symbol(".".to_string()),
+            },
+            Point {
+                x: 1,
+                y: 1,
+                point_type: PointType::Symbol("*".to_string()),
+            },
+        ]]; 
+
+        let symbols = points_with_symbol(&schematic);
+        let result = generate_y_lines(&schematic, symbols);
+        
+        assert_eq!(expected, result);
+    }
     
     #[test]
-    fn it_generates_left_diaganol_lines() {}
+    fn it_generates_left_diaganol_lines() {
+        let lines = vec!["...", ".*.", "..1"];
+        let schematic = new_schematic(lines);
+
+        let expected = vec![vec![
+            Point {
+                x: 0,
+                y: 0,
+                point_type: PointType::Symbol(".".to_string()),
+            },
+            Point {
+                x: 1,
+                y: 1,
+                point_type: PointType::Symbol("*".to_string()),
+            },
+            Point {
+                x: 2,
+                y: 2,
+                point_type: PointType::Digit(1),
+            },
+        ]]; 
+
+        let symbols = points_with_symbol(&schematic);
+        let result = generate_diagonal_lines_left(&schematic, symbols);
+        
+        assert_eq!(expected, result);
+
+    }
     
     #[test]
     fn it_generates_right_diaganol_lines() {}
