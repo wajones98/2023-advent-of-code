@@ -1,8 +1,25 @@
-use std::collections::HashSet;
+use std::{collections::HashSet, fs::File, io::{BufReader, BufRead}, path::Path};
 
 fn main() {
-    println!("Hello world");
+    let lines = lines_from_file("./input.txt");
+    let mut total = 0;
+
+    for line in lines {
+        let card = parse_line(&line);
+        total += card.get_points();
+    }
+
+    println!("Total: {}", total);
 }
+
+fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
+    let file = File::open(filename).expect("File doesn't exist");
+    let buf = BufReader::new(file);
+    buf.lines()
+        .map(|l| l.expect("Failed to parse line"))
+        .collect()
+}
+
 
 #[derive(Debug, PartialEq)]
 struct Card {
