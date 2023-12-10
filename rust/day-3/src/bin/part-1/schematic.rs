@@ -173,6 +173,37 @@ pub fn generate_diagonal_lines_left(schematic: &Schematic, points: Vec<&Point>) 
     lines
 }
 
+pub fn generate_diagonal_lines_right(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<Point>> {
+    let mut lines: Vec<Vec<Point>> = vec![];
+    for point in points {
+        let mut line: Vec<Point> = vec![];
+        let mut x = point.x as i32;
+        let mut y = point.y as i32;
+
+        while x < (schematic[y as usize].len() - 1) as i32 && y > 0 {
+            x += 1;
+            y -= 1;
+            line.push(schematic[y as usize][x as usize].clone()); 
+        }
+
+        x = point.x as i32;
+        y = point.y as i32;
+        line.push(schematic[y as usize][x as usize].clone()); 
+
+        while x > 0 && y < (schematic.len() - 1) as i32 {
+            x -= 1;
+            y += 1;
+            line.push(schematic[y as usize][x as usize].clone()); 
+        }
+
+        lines.push(line);
+    }
+
+    lines.dedup();
+    lines
+}
+
+
 #[cfg(test)]
 mod tests {
     use crate::{point::{Point, PointType}, schematic::new_schematic};
@@ -339,7 +370,11 @@ mod tests {
     
     #[test]
     fn it_generates_diaganol_lines_left() {
-        let lines = vec!["*..", ".*.", "..1"];
+        let lines = vec![
+            "*..", 
+            ".*.", 
+            "..1"
+        ];
         let schematic = new_schematic(lines);
 
         let expected = vec![vec![
@@ -368,5 +403,30 @@ mod tests {
     }
     
     #[test]
-    fn it_generates_right_diaganol_lines() {}
+    fn it_generates_diaganol_lines_right() {
+        let lines = vec![
+            ".2.", 
+            "$..", 
+            "..."
+        ];
+        let schematic = new_schematic(lines);
+
+        let expected = vec![vec![
+            Point {
+                x: 1,
+                y: 0,
+                point_type: PointType::Digit(2),
+            },
+            Point {
+                x: 0,
+                y: 1,
+                point_type: PointType::Symbol("$".to_string()),
+            },
+        ]]; 
+
+        let symbols = points_with_symbol(&schematic);
+        let result = generate_diagonal_lines_right(&schematic, symbols);
+        println!("{:?}", result); 
+        assert_eq!(expected, result);
+    }
 }
