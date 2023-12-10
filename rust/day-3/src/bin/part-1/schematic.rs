@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::point::{Point, PointType};
 
 pub type Schematic = Vec<Vec<Point>>;
@@ -102,15 +104,31 @@ pub fn valid_numbers(points: Vec<Point>) -> Vec<u32> {
             }
         }
     } 
-    println!("{:?}", numbers);
+
     numbers
+}
+
+pub fn generate_x_lines(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<Point>> {
+    let x_lines_with_symbols: Vec<u32> = points.iter()
+        .map(|point| point.y)
+        .collect::<HashSet<_>>()
+        .into_iter()
+        .collect();
+    
+    let mut lines: Vec<Vec<Point>> = vec![];
+    for y_coord in &x_lines_with_symbols {
+        let line = &schematic[*y_coord as usize];
+        lines.push(line.to_vec());
+    }
+
+    lines
 }
 
 #[cfg(test)]
 mod tests {
     use crate::{point::{Point, PointType}, schematic::new_schematic};
 
-    use super::{parse_schematic_line, points_with_symbol, valid_numbers};
+    use super::{parse_schematic_line, points_with_symbol, valid_numbers, generate_x_lines};
     
     #[test]
     fn it_parses_line() {
@@ -218,7 +236,33 @@ mod tests {
     }
 
     #[test]
-    fn it_generates_x_lines() {}
+    fn it_generates_x_lines() {
+        let lines = vec!["*..", "..."];
+        let schematic = new_schematic(lines);
+
+        let expected = vec![vec![
+            Point {
+                x: 0,
+                y: 0,
+                point_type: PointType::Symbol("*".to_string()),
+            },
+            Point {
+                x: 1,
+                y: 0,
+                point_type: PointType::Symbol(".".to_string()),
+            },
+            Point {
+                x: 2,
+                y: 0,
+                point_type: PointType::Symbol(".".to_string()),
+            },
+        ]];
+        
+        let symbols = points_with_symbol(&schematic);
+        let result = generate_x_lines(&schematic, symbols); 
+
+        assert_eq!(expected, result);
+    }
 
     #[test]
     fn it_generates_y_lines() {}
