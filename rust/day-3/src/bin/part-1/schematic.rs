@@ -25,7 +25,7 @@ pub fn parse_schematic_line(y: usize, line: &str) -> Vec<Point> {
     }).collect() 
 }
 
-pub fn points_with_symbol(schematic: &Schematic) -> Vec<&Point> {
+pub fn points_with_symbol(schematic: &Schematic) -> Vec<Point> {
    schematic.iter().map(|line| {
         line.iter().filter(|point| -> bool {
             match &point.point_type {
@@ -33,7 +33,7 @@ pub fn points_with_symbol(schematic: &Schematic) -> Vec<&Point> {
                 PointType::Digit(_) => false,
             }
         })
-    }).flatten().collect()
+    }).flatten().map(|point| point.clone()).collect()
 }
 
 pub fn valid_numbers(points: Vec<Point>) -> Vec<u32> {
@@ -108,7 +108,7 @@ pub fn valid_numbers(points: Vec<Point>) -> Vec<u32> {
     numbers
 }
 
-pub fn generate_x_lines(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<Point>> {
+pub fn generate_x_lines(schematic: &Schematic, points: &Vec<Point>) -> Vec<Vec<Point>> {
     let x_lines_with_symbols: Vec<u32> = points.iter()
         .map(|point| point.y)
         .collect::<HashSet<_>>()
@@ -124,7 +124,7 @@ pub fn generate_x_lines(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<P
     lines
 }
 
-pub fn generate_y_lines(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<Point>> {
+pub fn generate_y_lines(schematic: &Schematic, points: &Vec<Point>) -> Vec<Vec<Point>> {
     let y_lines_with_symbols: Vec<u32> = points.iter()
         .map(|point| point.x)
         .collect::<HashSet<_>>()
@@ -143,7 +143,7 @@ pub fn generate_y_lines(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<P
     lines
 }
 
-pub fn generate_diagonal_lines_left(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<Point>> {
+pub fn generate_diagonal_lines_left(schematic: &Schematic, points: &Vec<Point>) -> Vec<Vec<Point>> {
     let mut lines: Vec<Vec<Point>> = vec![];
     for point in points {
         let mut line: Vec<Point> = vec![];
@@ -173,7 +173,7 @@ pub fn generate_diagonal_lines_left(schematic: &Schematic, points: Vec<&Point>) 
     lines
 }
 
-pub fn generate_diagonal_lines_right(schematic: &Schematic, points: Vec<&Point>) -> Vec<Vec<Point>> {
+pub fn generate_diagonal_lines_right(schematic: &Schematic, points: &Vec<Point>) -> Vec<Vec<Point>> {
     let mut lines: Vec<Vec<Point>> = vec![];
     for point in points {
         let mut line: Vec<Point> = vec![];
@@ -296,8 +296,8 @@ mod tests {
         let schematic = new_schematic(lines);
         
         let expected = vec![
-            &schematic[0][0],
-            &schematic[1][1],
+            schematic[0][0].clone(),
+            schematic[1][1].clone(),
         ];
 
         let result = points_with_symbol(&schematic);
@@ -339,7 +339,7 @@ mod tests {
         ]];
         
         let symbols = points_with_symbol(&schematic);
-        let result = generate_x_lines(&schematic, symbols); 
+        let result = generate_x_lines(&schematic, &symbols); 
 
         assert_eq!(expected, result);
     }
@@ -363,7 +363,7 @@ mod tests {
         ]]; 
 
         let symbols = points_with_symbol(&schematic);
-        let result = generate_y_lines(&schematic, symbols);
+        let result = generate_y_lines(&schematic, &symbols);
         
         assert_eq!(expected, result);
     }
@@ -396,7 +396,7 @@ mod tests {
         ]]; 
 
         let symbols = points_with_symbol(&schematic);
-        let result = generate_diagonal_lines_left(&schematic, symbols);
+        let result = generate_diagonal_lines_left(&schematic, &symbols);
         
         assert_eq!(expected, result);
 
@@ -425,7 +425,7 @@ mod tests {
         ]]; 
 
         let symbols = points_with_symbol(&schematic);
-        let result = generate_diagonal_lines_right(&schematic, symbols);
+        let result = generate_diagonal_lines_right(&schematic, &symbols);
         println!("{:?}", result); 
         assert_eq!(expected, result);
     }
