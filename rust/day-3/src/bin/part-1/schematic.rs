@@ -286,7 +286,7 @@ mod tests {
 
     #[test]
     fn it_generates_x_lines() {
-        let lines = vec!["*..", "..."];
+        let lines = vec!["*$.", "..."];
         let schematic = new_schematic(lines);
 
         let expected = vec![vec![
@@ -298,7 +298,7 @@ mod tests {
             Point {
                 x: 1,
                 y: 0,
-                point_type: PointType::Symbol(".".to_string()),
+                point_type: PointType::Symbol("$".to_string()),
             },
             Point {
                 x: 2,
@@ -315,14 +315,14 @@ mod tests {
 
     #[test]
     fn it_generates_y_lines() {
-        let lines = vec!["...", ".*."];
+        let lines = vec![".*.", ".*."];
         let schematic = new_schematic(lines);
 
         let expected = vec![vec![
             Point {
                 x: 1,
                 y: 0,
-                point_type: PointType::Symbol(".".to_string()),
+                point_type: PointType::Symbol("*".to_string()),
             },
             Point {
                 x: 1,
