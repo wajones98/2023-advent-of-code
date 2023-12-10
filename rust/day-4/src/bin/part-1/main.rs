@@ -15,6 +15,21 @@ impl Card {
     fn matching_numbers(self) -> Vec<u32> {
        self.winning_numbers.intersection(&self.numbers).cloned().collect()  
     }
+
+    fn get_points(self) -> u32 {
+        let matching_numbers = self.matching_numbers();
+
+        matching_numbers.iter().fold(0, |acc, _| {
+            let mut total = acc;
+            if total == 0 {
+                total = 1;
+            } else {
+                total = total * 2;
+            }
+
+            total 
+        }) 
+    }
 }
 
 fn parse_line(line: &str) -> Card { 
@@ -70,6 +85,23 @@ mod tests {
         
         let expected = vec![48, 83, 17, 86].sort();
         let result = card.matching_numbers().sort();
+
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn it_gets_correct_points() {
+        let winning_numbers: HashSet<u32> = vec![41, 48, 83, 86, 17].into_iter().collect(); 
+        let numbers: HashSet<u32> = vec![83, 86, 6, 31, 17, 9, 48, 53].into_iter().collect(); 
+
+        let card = Card {
+            id: 1,
+            winning_numbers,
+            numbers,
+        };
+
+        let expected: u32 = 8; 
+        let result = card.get_points();
 
         assert_eq!(expected, result);
     }
