@@ -8,14 +8,13 @@ import (
 
 const BaseUrl string = "https://adventofcode.com/2024/day/%d/input"
 
-func GetInput(day int) (*bufio.Reader, error) {
+func GetInput(day int) (*bufio.Scanner, func() error, error) {
 	filename := fmt.Sprintf("input/day%d.txt", day)
 
 	fi, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	defer fi.Close()
 
-	return bufio.NewReader(fi), nil
+	return bufio.NewScanner(fi), fi.Close, nil
 }

@@ -5,9 +5,14 @@ import (
 )
 
 func Run(day int) (uint, error) {
-	_, err := input.GetInput(day)
+	s, closeFile, err := input.GetInput(day)
 	if err != nil {
 		return 0, err
+	}
+	defer closeFile()
+
+	for s.Scan() {
+		println(s.Text())
 	}
 
 	return 0, nil
