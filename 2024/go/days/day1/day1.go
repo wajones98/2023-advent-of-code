@@ -1,7 +1,6 @@
 package day1
 
 import (
-	"fmt"
 	"slices"
 	"strconv"
 	"strings"
@@ -9,10 +8,15 @@ import (
 	"github.com/wajones98/advent-of-code/input"
 )
 
-func Run(day int) (int, error) {
+type Result struct {
+	Part1 int
+	Part2 int
+}
+
+func Run(day int) (*Result, error) {
 	s, closeFile, err := input.GetInput(day)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	defer closeFile()
 
@@ -22,19 +26,26 @@ func Run(day int) (int, error) {
 	for s.Scan() {
 		line := s.Text()
 		values := strings.Split(line, "   ")
-		fmt.Println(values)
 		left, err := strconv.Atoi(values[0])
 		if err != nil {
-			return 0, err
+			return nil, err
 		}
 		right, err := strconv.Atoi(values[1])
 		if err != nil {
-			return 0, err
+			return nil, err
 		}
 
 		leftList = append(leftList, left)
 		rightList = append(rightList, right)
 	}
+
+	return &Result{
+		Part1: Part1(leftList, rightList),
+		Part2: Part2(leftList, rightList),
+	}, nil
+}
+
+func Part1(leftList, rightList []int) int {
 	slices.Sort(leftList)
 	slices.Sort(rightList)
 
@@ -50,5 +61,19 @@ func Run(day int) (int, error) {
 		}
 	}
 
-	return sum, nil
+	return sum
+}
+
+func Part2(leftList, rightList []int) int {
+	sum := 0
+	for _, left := range leftList {
+		frequency := 0
+		for _, right := range rightList {
+			if right == left {
+				frequency += 1
+			}
+		}
+		sum += (left * frequency)
+	}
+	return sum
 }

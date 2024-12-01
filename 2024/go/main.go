@@ -25,6 +25,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf("Result: %d\n", result)
+		fmt.Printf("Part 1 Result: %d\n", result.Part1)
+		fmt.Printf("Part 2 Result: %d\n", result.Part2)
 	}
 }
