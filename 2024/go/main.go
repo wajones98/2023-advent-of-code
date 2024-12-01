@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"github.com/wajones98/advent-of-code/days/day1"
 	"log"
 	"os"
 	"strconv"
@@ -19,6 +21,10 @@ func main() {
 
 	switch arg {
 	case 1:
-		println("HELLO DAY 1")
+		result, err := day1.Run(arg)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("Result: %d\n", result)
 	}
 }
