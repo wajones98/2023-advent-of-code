@@ -1,6 +1,7 @@
 package day2
 
 import (
+	"log"
 	"strconv"
 	"strings"
 
@@ -34,7 +35,7 @@ func Run() (*days.Result[int, int], error) {
 
 	return &days.Result[int, int]{
 		Part1: Part1(reports),
-		Part2: Part2(),
+		Part2: Part2(reports),
 	}, nil
 }
 
@@ -127,6 +128,40 @@ func reportIsSafe(report []uint64) bool {
 	return true
 }
 
-func Part2() int {
-	return 0
+func Part2(reports [][]uint64) int {
+	total := 0
+	for _, report := range reports {
+		if reportIsSafeWithTolerance(report) {
+			total += 1
+		}
+	}
+	return total
+}
+
+func reportIsSafeWithTolerance(report []uint64) bool {
+	var direction Direction
+	errCount := 0
+	for i := 1; i < len(report); i++ {
+		left := report[i-1]
+		right := report[i]
+		if i == 1 {
+			d, err := determineDirection(left, right)
+			direction = d
+			if err != nil {
+				d, err := determineDirection(left, right+1)
+				direction = d
+				if err != nil {
+					return false
+				}
+				errCount += 1
+			}
+		}
+
+		ok := isSafe(left, right, direction)
+		if !ok {
+			errCount += 1
+		}
+	}
+	log.Printf("HERE: %d\n", errCount)
+	return errCount <= 1
 }

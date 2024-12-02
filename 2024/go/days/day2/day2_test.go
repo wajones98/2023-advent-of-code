@@ -128,7 +128,7 @@ func TestIsSafe(t *testing.T) {
 	}
 }
 
-func TestExampleData(t *testing.T) {
+func TestExampleDataPart1(t *testing.T) {
 	tests := []struct {
 		Data          []uint64
 		ExpectedValue bool
@@ -163,6 +163,48 @@ func TestExampleData(t *testing.T) {
 		testName := fmt.Sprintf("%v", test.Data)
 		t.Run(testName, func(t *testing.T) {
 			actual := reportIsSafe(test.Data)
+			if actual != test.ExpectedValue {
+				log.Fatalf("Value Error -> Expected: %v, Actual: %v", test.ExpectedValue, actual)
+			}
+		})
+	}
+}
+
+func TestExampleDataPart2(t *testing.T) {
+	tests := []struct {
+		Data          []uint64
+		ExpectedValue bool
+	}{
+		{
+			Data:          []uint64{7, 6, 4, 2, 1},
+			ExpectedValue: true,
+		},
+		{
+			Data:          []uint64{1, 2, 7, 8, 9},
+			ExpectedValue: false,
+		},
+		{
+			Data:          []uint64{9, 7, 6, 2, 1},
+			ExpectedValue: false,
+		},
+		{
+			Data:          []uint64{1, 3, 2, 4, 5},
+			ExpectedValue: true,
+		},
+		{
+			Data:          []uint64{8, 6, 4, 4, 1},
+			ExpectedValue: true,
+		},
+		{
+			Data:          []uint64{1, 3, 6, 7, 9},
+			ExpectedValue: true,
+		},
+	}
+
+	for _, test := range tests {
+		testName := fmt.Sprintf("%v", test.Data)
+		t.Run(testName, func(t *testing.T) {
+			actual := reportIsSafeWithTolerance(test.Data)
 			if actual != test.ExpectedValue {
 				log.Fatalf("Value Error -> Expected: %v, Actual: %v", test.ExpectedValue, actual)
 			}
