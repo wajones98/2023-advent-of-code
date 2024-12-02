@@ -77,6 +77,10 @@ func determineDirection(left, right uint64) (Direction, error) {
 	return Direction(left < right), nil
 }
 
+func isSafe(left, right uint64, direction Direction) bool {
+
+}
+
 func Part2() int {
 	return 0
 }

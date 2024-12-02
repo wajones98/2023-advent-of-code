@@ -50,3 +50,79 @@ func TestDetermineDirection(t *testing.T) {
 		})
 	}
 }
+
+func TestIsSafe(t *testing.T) {
+	tests := []struct {
+		Title         string
+		Left          uint64
+		Right         uint64
+		Direction     Direction
+		ExpectedValue bool
+	}{
+		{
+			Title:         "Decreasing with acceptable value",
+			Left:          7,
+			Right:         6,
+			Direction:     Decreasing,
+			ExpectedValue: true,
+		},
+		{
+			Title:         "Increasing with acceptable value",
+			Left:          6,
+			Right:         7,
+			Direction:     Increasing,
+			ExpectedValue: true,
+		},
+		{
+			Title:         "Value decreasing when Increasing",
+			Left:          6,
+			Right:         5,
+			Direction:     Increasing,
+			ExpectedValue: false,
+		},
+		{
+			Title:         "Value increasing when Decreasing",
+			Left:          5,
+			Right:         6,
+			Direction:     Decreasing,
+			ExpectedValue: false,
+		},
+		{
+			Title:         "Increasing but more than 3",
+			Left:          1,
+			Right:         4,
+			Direction:     Increasing,
+			ExpectedValue: false,
+		},
+		{
+			Title:         "Decreasing but more than 3",
+			Left:          4,
+			Right:         1,
+			Direction:     Decreasing,
+			ExpectedValue: false,
+		},
+		{
+			Title:         "Decreasing but same value",
+			Left:          1,
+			Right:         1,
+			Direction:     Decreasing,
+			ExpectedValue: false,
+		},
+		{
+			Title:         "Increasing but same value",
+			Left:          1,
+			Right:         1,
+			Direction:     Increasing,
+			ExpectedValue: false,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.Title, func(t *testing.T) {
+			actual := isSafe(test.Left, test.Right, test.Direction)
+			if actual != test.ExpectedValue {
+				log.Fatalf("Value Error -> Expected: %v, Actual: %v", test.ExpectedValue, actual)
+			}
+		})
+	}
+}
