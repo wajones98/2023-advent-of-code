@@ -1,7 +1,6 @@
 package day2
 
 import (
-	"log"
 	"strconv"
 	"strings"
 
@@ -33,10 +32,8 @@ func Run() (*days.Result[int, int], error) {
 		return nil, err
 	}
 
-	log.Printf("%v\n", reports)
-
 	return &days.Result[int, int]{
-		Part1: Part1(),
+		Part1: Part1(reports),
 		Part2: Part2(),
 	}, nil
 }
@@ -66,8 +63,14 @@ func loadReports() ([][]uint64, error) {
 	return reports, nil
 }
 
-func Part1() int {
-	return 0
+func Part1(reports [][]uint64) int {
+	total := 0
+	for _, report := range reports {
+		if reportIsSafe(report) {
+			total += 1
+		}
+	}
+	return total
 }
 
 func determineDirection(left, right uint64) (Direction, error) {
