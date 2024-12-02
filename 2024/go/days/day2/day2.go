@@ -102,6 +102,28 @@ func isSafe(left, right uint64, direction Direction) bool {
 	return true
 }
 
+func reportIsSafe(report []uint64) bool {
+	var direction Direction
+	for i := 1; i < len(report); i++ {
+		left := report[i-1]
+		right := report[i]
+		if i == 1 {
+			d, err := determineDirection(left, right)
+			direction = d
+			if err != nil {
+				return false
+			}
+		}
+
+		ok := isSafe(left, right, direction)
+		if !ok {
+			return ok
+		}
+	}
+
+	return true
+}
+
 func Part2() int {
 	return 0
 }
