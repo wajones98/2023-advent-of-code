@@ -78,7 +78,28 @@ func determineDirection(left, right uint64) (Direction, error) {
 }
 
 func isSafe(left, right uint64, direction Direction) bool {
+	if left == right {
+		return false
+	}
 
+	var diff uint64 = 0
+	if direction {
+		if left > right {
+			return false
+		}
+		diff = right - left
+	} else {
+		if left < right {
+			return false
+		}
+		diff = left - right
+	}
+
+	if diff > 3 {
+		return false
+	}
+
+	return true
 }
 
 func Part2() int {

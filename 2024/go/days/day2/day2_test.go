@@ -90,13 +90,13 @@ func TestIsSafe(t *testing.T) {
 		{
 			Title:         "Increasing but more than 3",
 			Left:          1,
-			Right:         4,
+			Right:         5,
 			Direction:     Increasing,
 			ExpectedValue: false,
 		},
 		{
 			Title:         "Decreasing but more than 3",
-			Left:          4,
+			Left:          5,
 			Right:         1,
 			Direction:     Decreasing,
 			ExpectedValue: false,
