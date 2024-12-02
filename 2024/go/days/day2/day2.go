@@ -1,7 +1,6 @@
 package day2
 
 import (
-	"log"
 	"strconv"
 	"strings"
 
@@ -131,16 +130,15 @@ func reportIsSafe(report []uint64) bool {
 func Part2(reports [][]uint64) int {
 	total := 0
 	for _, report := range reports {
-		if reportIsSafeWithTolerance(report) {
+		if reportIsSafeWithTolerance(report, false) {
 			total += 1
 		}
 	}
 	return total
 }
 
-func reportIsSafeWithTolerance(report []uint64) bool {
+func reportIsSafeWithTolerance(report []uint64, isErr bool) bool {
 	var direction Direction
-	errCount := 0
 	for i := 1; i < len(report); i++ {
 		left := report[i-1]
 		right := report[i]
@@ -148,20 +146,25 @@ func reportIsSafeWithTolerance(report []uint64) bool {
 			d, err := determineDirection(left, right)
 			direction = d
 			if err != nil {
-				d, err := determineDirection(left, right+1)
-				direction = d
-				if err != nil {
+				if isErr {
 					return false
 				}
-				errCount += 1
+				return reportIsSafeWithTolerance(remove(report, i-1), true)
 			}
 		}
 
 		ok := isSafe(left, right, direction)
 		if !ok {
-			errCount += 1
+			if isErr {
+				return false
+			}
+			return reportIsSafeWithTolerance(remove(report, i-1), true)
 		}
 	}
-	log.Printf("HERE: %d\n", errCount)
-	return errCount <= 1
+
+	return true
+}
+
+func remove(slice []uint64, s int) []uint64 {
+	return append(slice[:s], slice[s+1:]...)
 }
