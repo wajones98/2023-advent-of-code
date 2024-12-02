@@ -27,5 +27,7 @@ func main() {
 		}
 		fmt.Printf("Part 1 Result: %d\n", result.Part1)
 		fmt.Printf("Part 2 Result: %d\n", result.Part2)
+	case 2:
+
 	}
 }

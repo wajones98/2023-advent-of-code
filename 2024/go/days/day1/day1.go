@@ -6,14 +6,11 @@ import (
 	"strings"
 
 	"github.com/wajones98/advent-of-code/input"
+
+	"github.com/wajones98/advent-of-code/days"
 )
 
-type Result struct {
-	Part1 int
-	Part2 int
-}
-
-func Run(day int) (*Result, error) {
+func Run(day int) (*days.Result[int, int], error) {
 	s, closeFile, err := input.GetInput(day)
 	if err != nil {
 		return nil, err
@@ -39,7 +36,7 @@ func Run(day int) (*Result, error) {
 		rightList = append(rightList, right)
 	}
 
-	return &Result{
+	return &days.Result[int, int]{
 		Part1: Part1(leftList, rightList),
 		Part2: Part2(leftList, rightList),
 	}, nil
