@@ -9,8 +9,22 @@ import (
 	"github.com/wajones98/advent-of-code/days"
 )
 
-func Run(day int) (*days.Result[int, int], error) {
-	s, closeFile, err := input.GetInput(day)
+const Day int = 2
+
+func Run() (*days.Result[int, int], error) {
+	_, err := loadReports()
+	if err != nil {
+		return nil, err
+	}
+
+	return &days.Result[int, int]{
+		Part1: Part1(),
+		Part2: Part2(),
+	}, nil
+}
+
+func loadReports() ([]uint64, error) {
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return nil, err
 	}
@@ -29,10 +43,7 @@ func Run(day int) (*days.Result[int, int], error) {
 		}
 	}
 
-	return &days.Result[int, int]{
-		Part1: Part1(),
-		Part2: Part2(),
-	}, nil
+	return reports, nil
 }
 
 func Part1() int {
