@@ -10,9 +10,24 @@ import (
 	"github.com/wajones98/advent-of-code/days"
 )
 
-const Day int = 2
+type Direction = bool
+
+type DetermineDirectionError struct{}
+
+func (e DetermineDirectionError) Error() string {
+	return "Values are the same"
+}
+
+const (
+	Day        int       = 2
+	Increasing Direction = true
+	Decreasing Direction = false
+)
+
+var DirectionError DetermineDirectionError = DetermineDirectionError{}
 
 func Run() (*days.Result[int, int], error) {
+
 	reports, err := loadReports()
 	if err != nil {
 		return nil, err
@@ -43,7 +58,6 @@ func loadReports() ([][]uint64, error) {
 			if err != nil {
 				return nil, err
 			}
-
 			report = append(report, num)
 		}
 		reports = append(reports, report)
@@ -54,6 +68,13 @@ func loadReports() ([][]uint64, error) {
 
 func Part1() int {
 	return 0
+}
+
+func determineDirection(left, right uint64) (Direction, error) {
+	if left == right {
+		return false, DirectionError
+	}
+	return Direction(left < right), nil
 }
 
 func Part2() int {
