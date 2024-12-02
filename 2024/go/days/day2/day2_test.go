@@ -204,7 +204,7 @@ func TestExampleDataPart2(t *testing.T) {
 	for _, test := range tests {
 		testName := fmt.Sprintf("%v", test.Data)
 		t.Run(testName, func(t *testing.T) {
-			actual := reportIsSafeWithTolerance(test.Data, false)
+			actual := reportIsSafeWithTolerance(test.Data)
 			if actual != test.ExpectedValue {
 				log.Fatalf("Value Error -> Expected: %v, Actual: %v", test.ExpectedValue, actual)
 			}

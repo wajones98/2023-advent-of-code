@@ -130,41 +130,30 @@ func reportIsSafe(report []uint64) bool {
 func Part2(reports [][]uint64) int {
 	total := 0
 	for _, report := range reports {
-		if reportIsSafeWithTolerance(report, false) {
+		if reportIsSafeWithTolerance(report) {
 			total += 1
 		}
 	}
 	return total
 }
 
-func reportIsSafeWithTolerance(report []uint64, isErr bool) bool {
-	var direction Direction
-	for i := 1; i < len(report); i++ {
-		left := report[i-1]
-		right := report[i]
-		if i == 1 {
-			d, err := determineDirection(left, right)
-			direction = d
-			if err != nil {
-				if isErr {
-					return false
-				}
-				return reportIsSafeWithTolerance(remove(report, i-1), true)
+func reportIsSafeWithTolerance(report []uint64) bool {
+	for i := 0; i < len(report); i++ {
+		ok := reportIsSafe(report)
+		if ok {
+			return true
+		} else {
+			ok = reportIsSafe(remove(report, i))
+			if ok {
+				return true
 			}
-		}
-
-		ok := isSafe(left, right, direction)
-		if !ok {
-			if isErr {
-				return false
-			}
-			return reportIsSafeWithTolerance(remove(report, i-1), true)
 		}
 	}
-
-	return true
+	return false
 }
 
-func remove(slice []uint64, s int) []uint64 {
-	return append(slice[:s], slice[s+1:]...)
+func remove(s []uint64, index int) []uint64 {
+	ret := make([]uint64, 0)
+	ret = append(ret, s[:index]...)
+	return append(ret, s[index+1:]...)
 }
