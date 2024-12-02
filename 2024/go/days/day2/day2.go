@@ -1,6 +1,7 @@
 package day2
 
 import (
+	"log"
 	"strconv"
 	"strings"
 
@@ -12,10 +13,12 @@ import (
 const Day int = 2
 
 func Run() (*days.Result[int, int], error) {
-	_, err := loadReports()
+	reports, err := loadReports()
 	if err != nil {
 		return nil, err
 	}
+
+	log.Printf("%v\n", reports)
 
 	return &days.Result[int, int]{
 		Part1: Part1(),
@@ -23,24 +26,27 @@ func Run() (*days.Result[int, int], error) {
 	}, nil
 }
 
-func loadReports() ([]uint64, error) {
+func loadReports() ([][]uint64, error) {
 	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return nil, err
 	}
 	defer closeFile()
 
-	reports := []uint64{}
+	reports := [][]uint64{}
 
 	for s.Scan() {
 		line := s.Text()
+		report := []uint64{}
 		for _, val := range strings.Split(line, " ") {
 			num, err := strconv.ParseUint(val, 10, 0)
 			if err != nil {
 				return nil, err
 			}
-			reports = append(reports, num)
+
+			report = append(report, num)
 		}
+		reports = append(reports, report)
 	}
 
 	return reports, nil
