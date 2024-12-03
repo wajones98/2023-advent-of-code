@@ -39,17 +39,19 @@ func LoadLines() ([]string, error) {
 }
 
 func Part1() int {
-	// lines, err := LoadLines()
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// for _, line := range lines {
-	// 	instructions, err := GetInstructions()
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// }
-	return 0
+	lines, err := LoadLines()
+	if err != nil {
+		panic(err)
+	}
+	total := 0
+	for _, line := range lines {
+		instructions, err := GetInstructions(line)
+		if err != nil {
+			panic(err)
+		}
+		total += GetSum(instructions)
+	}
+	return total
 }
 
 func GetInstructions(line string) ([]*Instruction, error) {
@@ -96,4 +98,12 @@ func GetInstruction(instruction []byte) (*Instruction, error) {
 		Left:  left,
 		Right: right,
 	}, nil
+}
+
+func GetSum(instructions []*Instruction) int {
+	sum := 0
+	for _, i := range instructions {
+		sum += (i.Left * i.Right)
+	}
+	return sum
 }

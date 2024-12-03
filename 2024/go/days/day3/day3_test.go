@@ -39,4 +39,10 @@ func TestGetInstructions(t *testing.T) {
 			log.Fatalf("Expected: %v\nGot: %v\n", expected, actual)
 		}
 	}
+
+	expectedSum := 161
+	actualSum := GetSum(actual)
+	if expectedSum != actualSum {
+		log.Fatalf("Expected Sum: %v\nGot: %v\n", expectedSum, actualSum)
+	}
 }
