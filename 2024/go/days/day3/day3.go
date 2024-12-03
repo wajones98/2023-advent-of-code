@@ -2,6 +2,7 @@ package day3
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 
@@ -20,7 +21,7 @@ func Run() (*days.Result[int, int], error) {
 
 	return &days.Result[int, int]{
 		Part1: Part1(),
-		Part2: 0,
+		Part2: Part2(),
 	}, nil
 }
 
@@ -54,6 +55,22 @@ func Part1() int {
 	return total
 }
 
+func Part2() int {
+	lines, err := LoadLines()
+	if err != nil {
+		panic(err)
+	}
+	total := 0
+	for _, line := range lines {
+		instructions, err := GetInstructionsPart2(line)
+		if err != nil {
+			panic(err)
+		}
+		total += GetSum(instructions)
+	}
+	return total
+}
+
 func GetInstructions(line string) ([]*Instruction, error) {
 	instructions := []*Instruction{}
 	exp, err := regexp.Compile(`mul\([0-9]{1,3}\,[0-9]{1,3}\)`)
@@ -61,7 +78,7 @@ func GetInstructions(line string) ([]*Instruction, error) {
 		return nil, err
 	}
 
-	m := exp.FindAll([]byte(line), -1)
+	m := exp.FindAllString(line, -1)
 	if m == nil {
 		return nil, err
 	}
@@ -77,12 +94,12 @@ func GetInstructions(line string) ([]*Instruction, error) {
 	return instructions, nil
 }
 
-func GetInstruction(instruction []byte) (*Instruction, error) {
+func GetInstruction(instruction string) (*Instruction, error) {
 	exp, err := regexp.Compile(`[0-9]{1,3}`)
 	if err != nil {
 		return nil, err
 	}
-	n := exp.FindAll(instruction, -1)
+	n := exp.FindAllString(instruction, -1)
 	if n == nil || len(n) != 2 {
 		return nil, errors.New("Invalid numbers")
 	}
@@ -105,5 +122,52 @@ func GetSum(instructions []*Instruction) int {
 	for _, i := range instructions {
 		sum += (i.Left * i.Right)
 	}
+	println(sum)
 	return sum
+}
+
+func GetInstructionsPart2(line string) ([]*Instruction, error) {
+	println("-------------------------------------------------")
+	println(line)
+
+	instructions := []*Instruction{}
+	exp, err := regexp.Compile(`(mul\(\d{1,3},\d{1,3}\))|(do\(\))|(don't\(\))`)
+	if err != nil {
+		return nil, err
+	}
+
+	m := exp.FindAllString(line, -1)
+	if m == nil {
+		return nil, err
+	}
+	state := true
+	println("Do:")
+	for _, m := range m {
+		switch m {
+		case "do()":
+			println("Do:")
+			state = true
+		case "don't()":
+			println("Don't:")
+			state = false
+
+		default:
+			println("    " + m)
+			if state {
+				instruction, err := GetInstruction(m)
+				if err != nil {
+					return nil, err
+				}
+				instructions = append(instructions, instruction)
+			}
+		}
+	}
+	print("[")
+	for _, v := range instructions {
+		fmt.Printf("%v ", *v)
+	}
+	print("]\n")
+	println("-------------------------------------------------")
+
+	return instructions, nil
 }
