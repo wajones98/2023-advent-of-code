@@ -56,19 +56,21 @@ func Part1() int {
 }
 
 func Part2() int {
-	lines, err := LoadLines()
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		panic(err)
 	}
-	total := 0
-	for _, line := range lines {
-		instructions, err := GetInstructionsPart2(line)
-		if err != nil {
-			panic(err)
-		}
-		total += GetSum(instructions)
+	defer closeFile()
+	input := ""
+	for s.Scan() {
+		input += s.Text()
 	}
-	return total
+
+	instructions, err := GetInstructionsPart2(input)
+	if err != nil {
+		panic(err)
+	}
+	return GetSum(instructions)
 }
 
 func GetInstructions(line string) ([]*Instruction, error) {
