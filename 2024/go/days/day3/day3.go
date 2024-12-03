@@ -1,6 +1,7 @@
 package day3
 
 import (
+	"errors"
 	"regexp"
 	"strconv"
 
@@ -10,6 +11,10 @@ import (
 )
 
 const Day int = 3
+
+type Instruction struct {
+	Left, Right int
+}
 
 func Run() (*days.Result[int, int], error) {
 
@@ -33,52 +38,62 @@ func LoadLines() ([]string, error) {
 	return lines, nil
 }
 
-type Instruction struct {
-	Left, Right int
+func Part1() int {
+	// lines, err := LoadLines()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, line := range lines {
+	// 	instructions, err := GetInstructions()
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// }
+	return 0
 }
 
-func GetInstructions(line string) []Instruction {
-	instructions := []Instruction{}
+func GetInstructions(line string) ([]*Instruction, error) {
+	instructions := []*Instruction{}
 	exp, err := regexp.Compile(`mul\([0-9]{1,3}\,[0-9]{1,3}\)`)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	m := exp.FindAll([]byte(line), -1)
 	if m == nil {
-		return instructions
+		return nil, err
 	}
 
 	for _, m := range m {
-		instructions = append(instructions, GetInstruction(m))
+		instruction, err := GetInstruction(m)
+		if err != nil {
+			return nil, err
+		}
+		instructions = append(instructions, instruction)
 	}
 
-	return instructions
+	return instructions, nil
 }
 
-func GetInstruction(instruction []byte) Instruction {
+func GetInstruction(instruction []byte) (*Instruction, error) {
 	exp, err := regexp.Compile(`[0-9]{1,3}`)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	n := exp.FindAll(instruction, -1)
 	if n == nil || len(n) != 2 {
-		panic("Invalid numbers")
+		return nil, errors.New("Invalid numbers")
 	}
 	left, err := strconv.Atoi(string(n[0]))
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	right, err := strconv.Atoi(string(n[1]))
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return Instruction{
+	return &Instruction{
 		Left:  left,
 		Right: right,
-	}
-}
-
-func Part1() int {
-	return 0
+	}, nil
 }
