@@ -1,7 +1,6 @@
 package day4
 
 import (
-	"fmt"
 	"slices"
 
 	"github.com/wajones98/advent-of-code/input"
