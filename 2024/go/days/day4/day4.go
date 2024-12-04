@@ -1,7 +1,6 @@
 package day4
 
 import (
-	"fmt"
 	"regexp"
 	"slices"
 
@@ -55,6 +54,10 @@ func Part2() int {
 	return 0
 }
 
+func FindMatches(lines []string) int {
+	return 0
+}
+
 // Given a grid, generate all possible lines vertically, horizontally and diagonally.
 func GenerateLineCombinations(lines []string) []string {
 
@@ -64,16 +67,9 @@ func GenerateLineCombinations(lines []string) []string {
 	}
 
 	horizontal := lines
-	fmt.Printf("%v\n", horizontal)
-
 	vertical := GenerateVerticalLines(lines)
-	fmt.Printf("%v\n", vertical)
-
 	diagLeft := GenerateDiagonalLines(lines)
-	fmt.Printf("%v\n", diagLeft)
-
 	diagRight := GenerateDiagonalLines(reversedLines)
-	fmt.Printf("%v\n", diagRight)
 
 	return slices.Concat(horizontal, vertical, diagLeft, diagRight)
 }

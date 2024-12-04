@@ -130,3 +130,11 @@ func TestGenerateDiagonalLines(t *testing.T) {
 		}
 	})
 }
+
+func TestPart2(t *testing.T) {
+	expected := 9
+	actual := FindMatches(Data)
+	if expected != actual {
+		t.Errorf("Expected %d, Got: %d\n", expected, actual)
+	}
+}
