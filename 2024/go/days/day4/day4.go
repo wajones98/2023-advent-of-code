@@ -58,3 +58,8 @@ func GenerateVerticalLines(lines []string) []string {
 	}
 	return combinations
 }
+
+func GenerateDiagonalLines(lines []string) []string {
+	combinations := []string{}
+	return combinations
+}
