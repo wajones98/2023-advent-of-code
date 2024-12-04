@@ -51,11 +51,34 @@ func Part1() int {
 }
 
 func Part2() int {
-	return 0
+	lines, err := LoadInput()
+	if err != nil {
+		panic(err)
+	}
+	return FindMatches(lines)
 }
 
 func FindMatches(lines []string) int {
-	return 0
+	total := 0
+	for i, line := range lines {
+		if i == 0 || i == len(lines)-1 {
+			continue
+		}
+
+		for x, c := range line {
+			if x == 0 || x == len(line)-1 || c != 'A' {
+				continue
+			}
+
+			diagLeft := string(lines[i-1][x-1]) + string(c) + string(lines[i+1][x+1])
+			diagRight := string(lines[i-1][x+1]) + string(c) + string(lines[i+1][x-1])
+			if (diagLeft == "MAS" || diagLeft == "SAM") && (diagRight == "MAS" || diagRight == "SAM") {
+				total += 1
+			}
+		}
+	}
+
+	return total
 }
 
 // Given a grid, generate all possible lines vertically, horizontally and diagonally.
