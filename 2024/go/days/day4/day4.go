@@ -16,7 +16,7 @@ func Run() (*days.Result[int, int], error) {
 	}, nil
 }
 
-func LoadLines() ([]string, error) {
+func LoadInput() ([]string, error) {
 	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func LoadLines() ([]string, error) {
 }
 
 func Part1() int {
-	_, err := LoadLines()
+	_, err := LoadInput()
 	if err != nil {
 		panic(err)
 	}
@@ -40,4 +40,9 @@ func Part1() int {
 
 func Part2() int {
 	return 0
+}
+
+// Given a grid, generate all possible lines vertically, horizontally and diagonally.
+func GenerateLineCombinations(lines []string) ([]string, error) {
+	return nil, nil
 }
