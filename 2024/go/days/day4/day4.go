@@ -1,6 +1,9 @@
 package day4
 
 import (
+	"fmt"
+	"slices"
+
 	"github.com/wajones98/advent-of-code/input"
 
 	"github.com/wajones98/advent-of-code/days"
@@ -59,7 +62,50 @@ func GenerateVerticalLines(lines []string) []string {
 	return combinations
 }
 
+func reverseString(str string) string {
+	result := ""
+	for _, v := range str {
+		result = string(v) + result
+	}
+	return result
+}
+
 func GenerateDiagonalLines(lines []string) []string {
 	combinations := []string{}
+	for i := 0; i < len(lines); i++ {
+		if i == 0 {
+			combinations = append(combinations, string(lines[i][i]))
+			continue
+		} else if i == len(lines)-1 {
+			combinations = append(combinations, string(lines[i][i]))
+		}
+
+		result := ""
+		j := 0
+		for x := i; x >= 0; x-- {
+			result += string(lines[x][j])
+			j++
+		}
+		combinations = append(combinations, result)
+	}
+	linesReversed := []string{}
+	for _, line := range lines {
+		linesReversed = append(linesReversed, reverseString(line))
+	}
+	slices.Reverse(linesReversed)
+
+	for i := 0; i < len(linesReversed); i++ {
+		result := ""
+		j := 0
+		for x := i; x >= 0; x-- {
+			result += string(linesReversed[x][j])
+			j++
+		}
+		result = reverseString(result)
+		if !slices.Contains(combinations, result) {
+			combinations = append(combinations, result)
+		}
+	}
+
 	return combinations
 }
