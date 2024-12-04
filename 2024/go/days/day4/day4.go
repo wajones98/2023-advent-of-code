@@ -1,6 +1,8 @@
 package day4
 
 import (
+	"fmt"
+	"regexp"
 	"slices"
 
 	"github.com/wajones98/advent-of-code/input"
@@ -33,11 +35,20 @@ func LoadInput() ([]string, error) {
 }
 
 func Part1() int {
-	_, err := LoadInput()
+	lines, err := LoadInput()
 	if err != nil {
 		panic(err)
 	}
-	return 0
+
+	total := 0
+	combinations := GenerateLineCombinations(lines)
+	exp := regexp.MustCompile("XMAS")
+	for _, c := range combinations {
+		total += len(exp.FindAllString(c, -1))
+		total += len(exp.FindAllString(reverseString(c), -1))
+	}
+
+	return total
 }
 
 func Part2() int {
@@ -45,8 +56,26 @@ func Part2() int {
 }
 
 // Given a grid, generate all possible lines vertically, horizontally and diagonally.
-func GenerateLineCombinations(lines []string) ([]string, error) {
-	return nil, nil
+func GenerateLineCombinations(lines []string) []string {
+
+	reversedLines := []string{}
+	for _, line := range lines {
+		reversedLines = append(reversedLines, reverseString(line))
+	}
+
+	horizontal := lines
+	fmt.Printf("%v\n", horizontal)
+
+	vertical := GenerateVerticalLines(lines)
+	fmt.Printf("%v\n", vertical)
+
+	diagLeft := GenerateDiagonalLines(lines)
+	fmt.Printf("%v\n", diagLeft)
+
+	diagRight := GenerateDiagonalLines(reversedLines)
+	fmt.Printf("%v\n", diagRight)
+
+	return slices.Concat(horizontal, vertical, diagLeft, diagRight)
 }
 
 func GenerateVerticalLines(lines []string) []string {

@@ -18,20 +18,16 @@ var Data []string = []string{
 	"MXMXAXMASX",
 }
 
-//
-// func TestGenerateLineCombinations(t *testing.T) {
-// 	t.Run("GenerateLineCombinations returns the correct number of possible lines", func(t *testing.T) {
-// 		expected := 58
-// 		combinations, err := GenerateLineCombinations(Data)
-// 		if err != nil {
-// 			t.Error(err)
-// 		}
-// 		actual := len(combinations)
-// 		if expected != actual {
-// 			t.Errorf("Incorrect number of combinations. Expected: %d, Got: %d", expected, actual)
-// 		}
-// 	})
-// }
+func TestGenerateLineCombinations(t *testing.T) {
+	t.Run("GenerateLineCombinations returns the correct number of possible lines", func(t *testing.T) {
+		expected := 58
+		combinations := GenerateLineCombinations(Data)
+		actual := len(combinations)
+		if expected != actual {
+			t.Errorf("Incorrect number of combinations. Expected: %d, Got: %d", expected, actual)
+		}
+	})
+}
 
 func TestGenerateVerticalLines(t *testing.T) {
 	t.Run("GenerateVerticalLines returns the correct vertical lines", func(t *testing.T) {
@@ -68,16 +64,19 @@ func TestGenerateDiagonalLines(t *testing.T) {
 	t.Run("Produces correct combinations left to right", func(t *testing.T) {
 		// Smaller subset of data for sake of time
 		data := []string{
-			"MMM",
-			"MSA",
-			"AMX",
+			"MMMS",
+			"MSAM",
+			"AMXS",
+			"MSAM",
 		}
 		expected := []string{
 			"M",
 			"MM",
 			"ASM",
-			"MA",
-			"X",
+			"MMAS",
+			"SXM",
+			"AS",
+			"M",
 		}
 		expectedLen := len(expected)
 
