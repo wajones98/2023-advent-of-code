@@ -43,6 +43,10 @@ func Part2() int {
 }
 
 // Given a grid, generate all possible lines vertically, horizontally and diagonally.
-func GenerateLineCombinations(lines []string) ([]string, error) {
+func GenerateLineCombinations(lines []string) ([][]string, error) {
+	return nil, nil
+}
+
+func GenerateHorizontalLines(lines []string) ([][]string, error) {
 	return nil, nil
 }
