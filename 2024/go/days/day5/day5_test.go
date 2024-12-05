@@ -44,17 +44,24 @@ func TestLoadInput(t *testing.T) {
 
 }
 
+type Expected struct {
+	Ok    bool
+	Value int
+}
+
 func TestUpdateIsOkay(t *testing.T) {
 	s := bufio.NewScanner(strings.NewReader(Input))
 	rules, updates, err := LoadInput(s)
 	if err != nil {
 		t.Error(err)
 	}
-	expected := []bool{true, true, true, false, false, false}
+	expected := []Expected{{true, 61}, {true, 53}, {true, 29}, {false, 0}, {false, 0}, {false, 0}}
 	for i, update := range updates {
-		ok := UpdateIsOkay(rules, update)
-		if ok != expected[i] {
-			t.Errorf("-----------\n%v\nGot: %t\nExpected: %t\n-----------\n", update, ok, expected[i])
+		value, ok := UpdateIsOkay(rules, update)
+		if ok != expected[i].Ok {
+			t.Errorf("-----------\n%v\nGot: %t\nExpected: %t\n-----------\n", update, ok, expected[i].Ok)
+		} else if value != expected[i].Value {
+			t.Errorf("-----------\n%v\nGot: %d\nExpected: %d\n-----------\n", update, value, expected[i].Value)
 		}
 	}
 }

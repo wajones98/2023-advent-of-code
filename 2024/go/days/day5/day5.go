@@ -65,17 +65,17 @@ func LoadInput(s *bufio.Scanner) (map[int][]int, [][]int, error) {
 	return rules, updates, nil
 }
 
-func UpdateIsOkay(rules map[int][]int, updates []int) bool {
+func UpdateIsOkay(rules map[int][]int, updates []int) (int, bool) {
 	for i, update := range updates {
 		rule := rules[update]
 		subset := updates[:i]
 		for _, r := range rule {
 			if slices.Contains(subset, r) {
-				return false
+				return 0, false
 			}
 		}
 	}
-	return true
+	return updates[len(updates)/2], true
 }
 
 func Part1() int {
