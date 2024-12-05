@@ -52,6 +52,14 @@ func main() {
 		}
 		fmt.Printf("Part 1 Result: %d\n", result.Part1)
 		fmt.Printf("Part 2 Result: %d\n", result.Part2)
+
+	case 5:
+		result, err := day5.Run()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("Part 1 Result: %d\n", result.Part1)
+		fmt.Printf("Part 2 Result: %d\n", result.Part2)
 	default:
 		fmt.Printf("%d is not a valid day\n", arg)
 	}
