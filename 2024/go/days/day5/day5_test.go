@@ -43,3 +43,13 @@ func TestLoadInput(t *testing.T) {
 	}
 
 }
+
+func TestUpdateIsOkay(t *testing.T) {
+	s := bufio.NewScanner(strings.NewReader(Input))
+	rules, updates, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	UpdateIsOkay(rules, updates)
+}

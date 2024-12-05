@@ -10,6 +10,7 @@ import (
 	"github.com/wajones98/advent-of-code/days/day2"
 	"github.com/wajones98/advent-of-code/days/day3"
 	"github.com/wajones98/advent-of-code/days/day4"
+	"github.com/wajones98/advent-of-code/days/day5"
 )
 
 func main() {

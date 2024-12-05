@@ -2,6 +2,7 @@ package day5
 
 import (
 	"bufio"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -20,9 +21,9 @@ func Run() (*days.Result[int, int], error) {
 	}, nil
 }
 
-func LoadInput(s *bufio.Scanner) (map[int][]int, []int, error) {
+func LoadInput(s *bufio.Scanner) (map[int][]int, [][]int, error) {
 	rules := map[int][]int{}
-	updates := []int{}
+	updates := [][]int{}
 	isSectionOne := true
 	for s.Scan() {
 		line := s.Text()
@@ -50,16 +51,31 @@ func LoadInput(s *bufio.Scanner) (map[int][]int, []int, error) {
 			rules[key] = append(values, value)
 		} else {
 			parts := strings.Split(line, ",")
+			values := []int{}
 			for _, part := range parts {
 				value, err := strconv.Atoi(part)
 				if err != nil {
 					return nil, nil, err
 				}
-				updates = append(updates, value)
+				values = append(values, value)
 			}
+			updates = append(updates, values)
 		}
 	}
 	return rules, updates, nil
+}
+
+func UpdateIsOkay(rules map[int][]int, updates []int) bool {
+	for i, update := range updates {
+		rule := rules[update]
+		subset := updates[:i]
+		for _, r := range rule {
+			if slices.Contains(subset, r) {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func Part1() int {
