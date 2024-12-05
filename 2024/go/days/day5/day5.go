@@ -2,6 +2,7 @@ package day5
 
 import (
 	"bufio"
+	"fmt"
 	"slices"
 	"strconv"
 	"strings"
@@ -135,17 +136,26 @@ func Part2() int {
 func FixUpdate(rules map[int][]int, updates []int) []int {
 	fixed := make([]int, len(updates))
 	copy(fixed, updates)
-	for i, update := range updates {
-		rule := rules[update]
-		subset := updates[:i]
-		for _, r := range rule {
-			for si, s := range subset {
-				if s == r {
-					fixed[si] = fixed[i]
-					fixed[i] = fixed[si]
+
+	for {
+		_, ok := UpdateIsOkay(rules, fixed)
+		if ok {
+			break
+		}
+		fmt.Printf("%v\n", fixed)
+		for i, update := range fixed {
+			rule := rules[update]
+			subset := updates[:i]
+			for _, r := range rule {
+				for si, s := range subset {
+					if s == r {
+						fixed[i] = r
+						fixed[si] = update
+					}
 				}
 			}
 		}
 	}
+
 	return fixed
 }
