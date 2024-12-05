@@ -50,6 +50,11 @@ func TestUpdateIsOkay(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-
-	UpdateIsOkay(rules, updates)
+	expected := []bool{true, true, true, false, false, false}
+	for i, update := range updates {
+		ok := UpdateIsOkay(rules, update)
+		if ok != expected[i] {
+			t.Errorf("-----------\n%v\nGot: %t\nExpected: %t\n-----------\n", update, ok, expected[i])
+		}
+	}
 }
