@@ -56,12 +56,22 @@ func TestUpdateIsOkay(t *testing.T) {
 		t.Error(err)
 	}
 	expected := []Expected{{true, 61}, {true, 53}, {true, 29}, {false, 0}, {false, 0}, {false, 0}}
+	total := 0
 	for i, update := range updates {
 		value, ok := UpdateIsOkay(rules, update)
 		if ok != expected[i].Ok {
-			t.Errorf("-----------\n%v\nGot: %t\nExpected: %t\n-----------\n", update, ok, expected[i].Ok)
+			t.Errorf("\n-----------\n%v\nGot: %t\nExpected: %t\n-----------\n", update, ok, expected[i].Ok)
 		} else if value != expected[i].Value {
-			t.Errorf("-----------\n%v\nGot: %d\nExpected: %d\n-----------\n", update, value, expected[i].Value)
+			t.Errorf("\n-----------\n%v\nGot: %d\nExpected: %d\n-----------\n", update, value, expected[i].Value)
 		}
+		if ok {
+			total += value
+		}
+	}
+
+	expectedTotal := 143
+	if total != expectedTotal {
+
+		t.Errorf("Got: %d\nExpected: %d\n", total, expectedTotal)
 	}
 }
