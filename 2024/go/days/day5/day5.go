@@ -79,15 +79,73 @@ func UpdateIsOkay(rules map[int][]int, updates []int) (int, bool) {
 }
 
 func Part1() int {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		panic(err)
 	}
 	defer closeFile()
 
-	return 0
+	rules, updates, err := LoadInput(s)
+	if err != nil {
+		panic(err)
+	}
+
+	total := 0
+	for _, update := range updates {
+		value, ok := UpdateIsOkay(rules, update)
+		if ok {
+			total += value
+		}
+	}
+
+	return total
 }
 
 func Part2() int {
-	return 0
+	s, closeFile, err := input.GetInput(Day)
+	if err != nil {
+		panic(err)
+	}
+	defer closeFile()
+
+	rules, updates, err := LoadInput(s)
+	if err != nil {
+		panic(err)
+	}
+
+	badUpdates := [][]int{}
+	for _, update := range updates {
+		_, ok := UpdateIsOkay(rules, update)
+		if !ok {
+			badUpdates = append(badUpdates, update)
+		}
+	}
+	total := 0
+	for _, update := range badUpdates {
+		value, ok := UpdateIsOkay(rules, FixUpdate(rules, update))
+		if !ok {
+			panic("Report is not okay when it should be")
+		}
+		total += value
+	}
+
+	return total
+}
+
+func FixUpdate(rules map[int][]int, updates []int) []int {
+	fixed := make([]int, len(updates))
+	copy(fixed, updates)
+	for i, update := range updates {
+		rule := rules[update]
+		subset := updates[:i]
+		for _, r := range rule {
+			for si, s := range subset {
+				if s == r {
+					fixed[si] = fixed[i]
+					fixed[i] = fixed[si]
+				}
+			}
+		}
+	}
+	return fixed
 }

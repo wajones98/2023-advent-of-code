@@ -2,6 +2,7 @@ package day5
 
 import (
 	"bufio"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -73,5 +74,27 @@ func TestUpdateIsOkay(t *testing.T) {
 	if total != expectedTotal {
 
 		t.Errorf("Got: %d\nExpected: %d\n", total, expectedTotal)
+	}
+}
+
+func TestFixUpdate(t *testing.T) {
+	s := bufio.NewScanner(strings.NewReader(Input))
+	rules, updates, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	// Take just the last 3 failing tests
+	updates = updates[3:]
+
+	expected := [][]int{{97, 75, 47, 61, 53}, {61, 29, 13}, {97, 75, 47, 29, 13}}
+	for i, update := range updates {
+		_, ok := UpdateIsOkay(rules, update)
+		if !ok {
+			fixedUpdate := FixUpdate(rules, update)
+			if !reflect.DeepEqual(fixedUpdate, expected[i]) {
+				t.Errorf("\n-----------\n%v\nGot: %v\nExpected: %v\n-----------\n", updates[i], fixedUpdate, expected[i])
+			}
+		}
 	}
 }
