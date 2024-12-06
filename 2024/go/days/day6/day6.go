@@ -67,7 +67,7 @@ func Part1() int {
 		panic(err)
 	}
 
-	total, err := Patrol(twoDMap)
+	total, _, err := Patrol(twoDMap)
 	if err != nil {
 		panic(err)
 	}
@@ -186,13 +186,14 @@ func FindGuard(m *TwoDMap) (*Guard, error) {
 	return nil, errors.New("Could not find guard")
 }
 
-func Patrol(m *TwoDMap) (int, error) {
+func Patrol(m *TwoDMap) (int, bool, error) {
 	total := 0
 	guard, err := FindGuard(m)
 	if err != nil {
-		return total, err
+		return total, false, err
 	}
 
+	isLoop := false
 	hasExited := false
 Loop:
 	for !hasExited {
@@ -211,8 +212,16 @@ Loop:
 		}
 
 		if err != nil {
-			return total, err
+			return total, false, err
 		}
+
+		for _, c := range guard.Visited {
+			if c > 1 {
+				isLoop = true
+				break Loop
+			}
+		}
+
 		hasExited = exited
 		if unique {
 			total += 1
@@ -220,7 +229,7 @@ Loop:
 		fmt.Print(m.String())
 	}
 
-	return total, nil
+	return total, isLoop, nil
 }
 
 func patrol(m *TwoDMap, guard *Guard, x, y uint) (bool, bool, error) {

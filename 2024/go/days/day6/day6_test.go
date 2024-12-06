@@ -122,12 +122,40 @@ func TestPatrol(t *testing.T) {
 		t.Error(err)
 	}
 
-	total, err := Patrol(twoDMap)
+	total, _, err := Patrol(twoDMap)
 	if err != nil {
 		t.Error(err)
 	}
 	expected := 41
 	if total != expected {
 		t.Errorf("Expected %d, Got %d\n", expected, total)
+	}
+}
+
+func TestLoopDetection(t *testing.T) {
+	loopInput := `....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+.#.#^.....
+........#.
+#.........
+......#...`
+
+	s := bufio.NewScanner(strings.NewReader(loopInput))
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	_, loop, err := Patrol(twoDMap)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if !loop {
+		t.Error("Expected loop")
 	}
 }
