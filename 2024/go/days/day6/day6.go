@@ -25,7 +25,7 @@ func Run() (*days.Result[int, int], error) {
 type Direction = string
 
 const (
-	Up, Right, Down, Left Direction = "^", "V", "<", ">"
+	Up, Right, Down, Left Direction = "^", ">", "V", "<"
 )
 
 func ChangeDirection(d Direction) Direction {
@@ -37,7 +37,7 @@ func ChangeDirection(d Direction) Direction {
 	case Down:
 		return Left
 	default:
-		return Down
+		return Up
 	}
 }
 
@@ -196,6 +196,8 @@ Loop:
 			exited, unique, err = patrolRight(m, guard)
 		case Down:
 			exited, unique, err = patrolDown(m, guard)
+		case Left:
+			exited, unique, err = patrolLeft(m, guard)
 		default:
 			break Loop
 		}
@@ -215,13 +217,19 @@ Loop:
 
 func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 	newY := guard.Y - 1
-	if newY < 0 {
-		return true, false, nil
+
+	outOfBounds := false
+	if newY == 0 {
+		outOfBounds = true
 	}
 
 	c, err := m.Get(guard.X, newY)
 	if err != nil {
 		return false, false, err
+	}
+
+	if outOfBounds && c != "#" {
+		return true, false, nil
 	}
 
 	switch c {
@@ -245,13 +253,18 @@ func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 
 func patrolRight(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 	newX := guard.X + 1
-	if newX > m.Width {
-		return true, false, nil
+	outOfBounds := false
+	if newX == m.Width {
+		outOfBounds = true
 	}
 
 	c, err := m.Get(newX, guard.Y)
 	if err != nil {
 		return false, false, err
+	}
+
+	if outOfBounds && c != "#" {
+		return true, false, nil
 	}
 
 	switch c {
@@ -275,13 +288,18 @@ func patrolRight(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 
 func patrolDown(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 	newY := guard.Y + 1
-	if newY > m.Height {
-		return true, false, nil
+	outOfBounds := false
+	if newY == m.Height {
+		outOfBounds = true
 	}
 
 	c, err := m.Get(guard.X, newY)
 	if err != nil {
 		return false, false, err
+	}
+
+	if outOfBounds && c != "#" {
+		return true, false, nil
 	}
 
 	switch c {
@@ -298,6 +316,41 @@ func patrolDown(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 			return false, false, err
 		}
 		guard.Y = newY
+		err := m.Put(guard.X, guard.Y, guard.Direction)
+		return false, true, err
+	}
+}
+
+func patrolLeft(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
+	newX := guard.X - 1
+	outOfBounds := false
+	if newX == 0 {
+		outOfBounds = true
+	}
+
+	c, err := m.Get(newX, guard.Y)
+	if err != nil {
+		return false, false, err
+	}
+
+	if outOfBounds && c != "#" {
+		return true, false, nil
+	}
+
+	switch c {
+	case "X":
+		guard.X = newX
+		err := m.Put(guard.X, guard.Y, guard.Direction)
+		return false, false, err
+	case "#":
+		guard.Direction = ChangeDirection(guard.Direction)
+		return false, false, nil
+	default:
+		m.Put(guard.X, guard.Y, "X")
+		if err != nil {
+			return false, false, err
+		}
+		guard.X = newX
 		err := m.Put(guard.X, guard.Y, guard.Direction)
 		return false, true, err
 	}
