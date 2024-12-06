@@ -17,10 +17,10 @@ const Input = `....#.....
 
 func TestMap(t *testing.T) {
 	var width, height uint = 4, 4
-	data := NewMap(width, height)
+	twoDMap := NewTwoDMap(width, height)
 
 	t.Run("Check that the underlying slice is the correct length", func(t *testing.T) {
-		var expectedLength uint = uint(len(data.Map))
+		var expectedLength uint = uint(len(twoDMap.Map))
 		actualLength := width * height
 		if expectedLength < actualLength {
 			t.Errorf("Expected: %d, Got: %d\n", expectedLength, actualLength)
@@ -28,13 +28,13 @@ func TestMap(t *testing.T) {
 	})
 
 	t.Run("Check that Put works as expected", func(t *testing.T) {
-		err := data.Put(0, 1, 'd')
+		err := twoDMap.Put(0, 1, 'd')
 		if err != nil {
 			t.Error(err)
 		}
 
-		if data.Map[4] != 'd' {
-			t.Errorf("Expected %s, Got %s\n", string('d'), string(data.Map[9]))
+		if twoDMap.Map[4] != 'd' {
+			t.Errorf("Expected %s, Got %s\n", string('d'), string(twoDMap.Map[9]))
 		}
 	})
 }

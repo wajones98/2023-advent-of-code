@@ -39,21 +39,21 @@ func Part2() int {
 	return 0
 }
 
-type Map struct {
+type TwoDMap struct {
 	Map    []rune
 	Width  uint
 	Height uint
 }
 
-func NewMap(width, height uint) *Map {
-	return &Map{
+func NewTwoDMap(width, height uint) *TwoDMap {
+	return &TwoDMap{
 		Map:    make([]rune, width*height),
 		Width:  width,
 		Height: height,
 	}
 }
 
-func (m *Map) Put(x, y uint, r rune) error {
+func (m *TwoDMap) Put(x, y uint, r rune) error {
 	err := m.checkBounds(x, y)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func (m *Map) Put(x, y uint, r rune) error {
 	return nil
 }
 
-func (m *Map) Get(x, y uint) (rune, error) {
+func (m *TwoDMap) Get(x, y uint) (rune, error) {
 	err := m.checkBounds(x, y)
 	if err != nil {
 		return -1, err
@@ -70,11 +70,11 @@ func (m *Map) Get(x, y uint) (rune, error) {
 	return m.Map[m.getIndex(x, y)], nil
 }
 
-func (m *Map) getIndex(x, y uint) uint {
+func (m *TwoDMap) getIndex(x, y uint) uint {
 	return y*m.Width + x
 }
 
-func (m *Map) checkBounds(x, y uint) error {
+func (m *TwoDMap) checkBounds(x, y uint) error {
 	if x > m.Width {
 		return fmt.Errorf("%d is out of bounds %d", x, m.Width)
 	} else if y > m.Height {
@@ -84,6 +84,6 @@ func (m *Map) checkBounds(x, y uint) error {
 	return nil
 }
 
-func LoadInput(s *bufio.Scanner) (*Map, error) {
+func LoadInput(s *bufio.Scanner) (*TwoDMap, error) {
 	return nil, nil
 }
