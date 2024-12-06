@@ -1,6 +1,10 @@
 package day6
 
 import (
+	"bufio"
+	"fmt"
+
+	"fyne.io/fyne/widget"
 	"github.com/wajones98/advent-of-code/input"
 
 	"github.com/wajones98/advent-of-code/days"
@@ -34,4 +38,49 @@ func Part2() int {
 	defer closeFile()
 
 	return 0
+}
+
+type Map struct {
+	Map    []rune
+	Width  uint
+	Height uint
+}
+
+func NewMap(width, height uint) *Map {
+	return &Map{
+		Map:    make([]rune, width*height),
+		Width:  width,
+		Height: height,
+	}
+}
+
+func (m *Map) Put(r rune, x, y uint) error {
+	err := m.checkBounds(x, y)
+	if err != nil {
+		return err
+	}
+	m.Map[(x*m.Height)+y] = r
+	return nil
+}
+
+func (m *Map) Get(x, y uint) (rune, error) {
+	err := m.checkBounds(x, y)
+	if err != nil {
+		return -1, err
+	}
+	return m.Map[(x*m.Height)+y], nil
+}
+
+func (m *Map) checkBounds(x, y uint) error {
+	if x > m.Width {
+		return fmt.Errorf("%d is out of bounds %d", x, m.Width)
+	} else if y > m.Height {
+		return fmt.Errorf("%d is out of bounds %d", y, m.Height)
+	}
+
+	return nil
+}
+
+func LoadInput(s *bufio.Scanner) (*Map, error) {
+	return nil, nil
 }
