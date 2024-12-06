@@ -29,15 +29,15 @@ const (
 )
 
 type Visited struct {
-	X, Y  uint
-	Count uint
+	X, Y      uint
+	Direction Direction
 }
 
 type Guard struct {
 	X         uint
 	Y         uint
 	Direction Direction
-	Visited   map[Direction][]Visited
+	Visited   map[Visited]uint
 }
 
 func (g *Guard) ChangeDirection(d Direction) {
@@ -178,7 +178,7 @@ func FindGuard(m *TwoDMap) (*Guard, error) {
 				X:         x,
 				Y:         y,
 				Direction: p,
-				Visited:   map[Direction][]Visited{},
+				Visited:   map[Visited]uint{},
 			}, nil
 		}
 	}
@@ -249,6 +249,19 @@ func patrol(m *TwoDMap, guard *Guard, x, y uint) (bool, bool, error) {
 	if err != nil {
 		return false, false, err
 	}
+
+	visited := Visited{
+		X:         guard.X,
+		Y:         guard.Y,
+		Direction: guard.Direction,
+	}
+	count, ok := guard.Visited[visited]
+	if !ok {
+		count = 0
+	}
+
+	count += 1
+	guard.Visited[visited] = count
 
 	return false, c == ".", nil
 }
