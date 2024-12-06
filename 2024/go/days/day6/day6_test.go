@@ -51,6 +51,16 @@ func TestMap(t *testing.T) {
 			t.Errorf("Expected %s, Got %s\n", "d", s)
 		}
 	})
+
+	t.Run("Check FindPosition", func(t *testing.T) {
+		x, y := twoDMap.FindPosition(4)
+
+		if x != 0 {
+			t.Errorf("Expected %d, Got %d\n", 0, x)
+		} else if y != 1 {
+			t.Errorf("Expected %d, Got %d\n", 1, y)
+		}
+	})
 }
 
 func TestLoadInput(t *testing.T) {

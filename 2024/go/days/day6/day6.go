@@ -85,6 +85,12 @@ func (m *TwoDMap) checkBounds(x, y uint) error {
 	return nil
 }
 
+func (m *TwoDMap) FindPosition(i uint) (uint, uint) {
+	y := i / m.Width
+	x := i % m.Width
+	return x, y
+}
+
 func LoadInput(s *bufio.Scanner) (*TwoDMap, error) {
 	lines := []string{}
 	for s.Scan() {
