@@ -122,10 +122,16 @@ func TestPatrol(t *testing.T) {
 		t.Error(err)
 	}
 
-	total, _, err := Patrol(twoDMap)
+	guard, err := FindGuard(twoDMap)
 	if err != nil {
 		t.Error(err)
 	}
+
+	total, _, err := Patrol(twoDMap, guard)
+	if err != nil {
+		t.Error(err)
+	}
+
 	expected := 41
 	if total != expected {
 		t.Errorf("Expected %d, Got %d\n", expected, total)
@@ -150,7 +156,12 @@ func TestLoopDetection(t *testing.T) {
 		t.Error(err)
 	}
 
-	_, loop, err := Patrol(twoDMap)
+	guard, err := FindGuard(twoDMap)
+	if err != nil {
+		t.Error(err)
+	}
+
+	_, loop, err := Patrol(twoDMap, guard)
 	if err != nil {
 		t.Error(err)
 	}

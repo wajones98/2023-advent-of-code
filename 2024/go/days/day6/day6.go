@@ -67,7 +67,12 @@ func Part1() int {
 		panic(err)
 	}
 
-	total, _, err := Patrol(twoDMap)
+	guard, err := FindGuard(twoDMap)
+	if err != nil {
+		panic(err)
+	}
+
+	total, _, err := Patrol(twoDMap, guard)
 	if err != nil {
 		panic(err)
 	}
@@ -75,13 +80,34 @@ func Part1() int {
 }
 
 func Part2() int {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		panic(err)
 	}
 	defer closeFile()
 
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		panic(err)
+	}
+
+	guard, err := FindGuard(twoDMap)
+	if err != nil {
+		panic(err)
+	}
+
+	_, _, err = Patrol(twoDMap, guard)
+	if err != nil {
+		panic(err)
+	}
+
 	return 0
+}
+
+func GetTotalLoops() (int, error) {
+	total := 0
+
+	return total, nil
 }
 
 type TwoDMap struct {
@@ -186,18 +212,15 @@ func FindGuard(m *TwoDMap) (*Guard, error) {
 	return nil, errors.New("Could not find guard")
 }
 
-func Patrol(m *TwoDMap) (int, bool, error) {
+func Patrol(m *TwoDMap, guard *Guard) (int, bool, error) {
 	total := 0
-	guard, err := FindGuard(m)
-	if err != nil {
-		return total, false, err
-	}
 
 	isLoop := false
 	hasExited := false
 Loop:
 	for !hasExited {
 		exited, unique := false, false
+		var err error
 		switch guard.Direction {
 		case Up:
 			exited, unique, err = patrol(m, guard, guard.X, guard.Y-1)
