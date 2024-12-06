@@ -192,13 +192,13 @@ Loop:
 		exited, unique := false, false
 		switch guard.Direction {
 		case Up:
-			exited, unique, err = patrolUp(m, guard)
+			exited, unique, err = patrol(m, guard, guard.X, guard.Y-1)
 		case Right:
-			exited, unique, err = patrolRight(m, guard)
+			exited, unique, err = patrol(m, guard, guard.X+1, guard.Y)
 		case Down:
-			exited, unique, err = patrolDown(m, guard)
+			exited, unique, err = patrol(m, guard, guard.X, guard.Y+1)
 		case Left:
-			exited, unique, err = patrolLeft(m, guard)
+			exited, unique, err = patrol(m, guard, guard.X-1, guard.Y)
 		default:
 			break Loop
 		}
@@ -210,145 +210,38 @@ Loop:
 		if unique {
 			total += 1
 		}
+		fmt.Print(m.String())
 	}
 
 	return total, nil
 }
 
-func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
-	if guard.Y == 0 {
+func patrol(m *TwoDMap, guard *Guard, x, y uint) (bool, bool, error) {
+	if guard.Y == 0 || guard.Y == m.Height-1 || guard.X == 0 || guard.X == m.Width-1 {
 		return true, true, nil
 	}
-	newY := guard.Y - 1
 
-	c, err := m.Get(guard.X, newY)
+	c, err := m.Get(x, y)
 	if err != nil {
 		return false, false, err
 	}
 
-	switch c {
-	case "X":
-		m.Put(guard.X, guard.Y, "X")
-		if err != nil {
-			return false, false, err
-		}
-		guard.Y = newY
-		err := m.Put(guard.X, guard.Y, guard.Direction)
-		return false, false, err
-	case "#":
-		guard.Direction = ChangeDirection(guard.Direction)
-		return false, false, nil
-	default:
-		m.Put(guard.X, guard.Y, "X")
-		if err != nil {
-			return false, false, err
-		}
-		guard.Y = newY
-		err := m.Put(guard.X, guard.Y, guard.Direction)
-		return false, true, err
-	}
-}
-
-func patrolRight(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
-	if guard.X == m.Width-1 {
-		return true, true, nil
-	}
-
-	newX := guard.X + 1
-
-	c, err := m.Get(newX, guard.Y)
+	m.Put(guard.X, guard.Y, "X")
 	if err != nil {
 		return false, false, err
 	}
 
-	switch c {
-	case "X":
-		m.Put(guard.X, guard.Y, "X")
-		if err != nil {
-			return false, false, err
-		}
-		guard.X = newX
-		err := m.Put(guard.X, guard.Y, guard.Direction)
-		return false, false, err
-	case "#":
+	if c == "#" {
 		guard.Direction = ChangeDirection(guard.Direction)
-		return false, false, nil
-	default:
-		m.Put(guard.X, guard.Y, "X")
-		if err != nil {
-			return false, false, err
-		}
-		guard.X = newX
-		err := m.Put(guard.X, guard.Y, guard.Direction)
-		return false, true, err
+	} else {
+		guard.X = x
+		guard.Y = y
+
 	}
-}
-
-func patrolDown(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
-	if guard.Y == m.Height-1 {
-		return true, true, nil
-	}
-
-	newY := guard.Y + 1
-
-	c, err := m.Get(guard.X, newY)
+	err = m.Put(guard.X, guard.Y, guard.Direction)
 	if err != nil {
 		return false, false, err
 	}
 
-	switch c {
-	case "X":
-		m.Put(guard.X, guard.Y, "X")
-		if err != nil {
-			return false, false, err
-		}
-		guard.Y = newY
-		err := m.Put(guard.X, guard.Y, guard.Direction)
-		return false, false, err
-	case "#":
-		guard.Direction = ChangeDirection(guard.Direction)
-		return false, false, nil
-	default:
-		m.Put(guard.X, guard.Y, "X")
-		if err != nil {
-			return false, false, err
-		}
-		guard.Y = newY
-		err := m.Put(guard.X, guard.Y, guard.Direction)
-		return false, true, err
-	}
-}
-
-func patrolLeft(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
-	if guard.X == 0 {
-		return true, true, nil
-	}
-	newX := guard.X - 1
-
-	c, err := m.Get(newX, guard.Y)
-	if err != nil {
-		return false, false, err
-	}
-
-	switch c {
-	case "X":
-		m.Put(guard.X, guard.Y, "X")
-		if err != nil {
-			return false, false, err
-		}
-		guard.X = newX
-		err := m.Put(guard.X, guard.Y, guard.Direction)
-		return false, false, err
-	case "#":
-		guard.Direction = ChangeDirection(guard.Direction)
-		return false, false, nil
-	default:
-		m.Put(guard.X, guard.Y, "X")
-		if err != nil {
-			return false, false, err
-		}
-		guard.X = newX
-		err := m.Put(guard.X, guard.Y, guard.Direction)
-		return false, true, err
-	}
+	return false, c == ".", nil
 }
