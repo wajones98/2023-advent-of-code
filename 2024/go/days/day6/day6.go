@@ -2,7 +2,9 @@ package day6
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/wajones98/advent-of-code/input"
@@ -19,6 +21,14 @@ func Run() (*days.Result[int, int], error) {
 		Part2: Part2(),
 	}, nil
 }
+
+type Direction = string
+
+const (
+	Up, Down, Left, Right Direction = "^", "v", "<", ">"
+)
+
+var Directions []Direction = []Direction{Up, Down, Left, Right}
 
 func Part1() int {
 	_, closeFile, err := input.GetInput(Day)
@@ -111,4 +121,15 @@ func LoadInput(s *bufio.Scanner) (*TwoDMap, error) {
 	}
 
 	return twoDMap, nil
+}
+
+func FindGuard(m *TwoDMap) (uint, uint, error) {
+	for i, p := range m.Map {
+		if slices.Contains(Directions, p) {
+			x, y := m.FindPosition(uint(i))
+			return x, y, nil
+		}
+	}
+
+	return 0, 0, errors.New("Could not find guard")
 }

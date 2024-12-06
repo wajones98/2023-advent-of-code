@@ -79,3 +79,22 @@ func TestLoadInput(t *testing.T) {
 		t.Errorf("Expected %v, Got %v\n", expectedSlice, actualTwoDMap.Map)
 	}
 }
+
+func TestFindGuard(t *testing.T) {
+	s := bufio.NewScanner(strings.NewReader(Input))
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	x, y, err := FindGuard(twoDMap)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if x != 4 {
+		t.Errorf("Expected %d, Got %d\n", 0, x)
+	} else if y != 6 {
+		t.Errorf("Expected %d, Got %d\n", 1, y)
+	}
+}
