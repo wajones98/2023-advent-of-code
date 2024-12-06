@@ -34,7 +34,18 @@ func TestMap(t *testing.T) {
 		}
 
 		if twoDMap.Map[4] != 'd' {
-			t.Errorf("Expected %s, Got %s\n", string('d'), string(twoDMap.Map[9]))
+			t.Errorf("Expected %s, Got %s\n", string('d'), string(twoDMap.Map[4]))
+		}
+	})
+
+	t.Run("Check that Get works as expected", func(t *testing.T) {
+		r, err := twoDMap.Get(0, 1)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if r != 'd' {
+			t.Errorf("Expected %s, Got %s\n", string('d'), string(r))
 		}
 	})
 }
