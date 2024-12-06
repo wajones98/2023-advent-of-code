@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 
-	"fyne.io/fyne/widget"
 	"github.com/wajones98/advent-of-code/input"
 
 	"github.com/wajones98/advent-of-code/days"
@@ -54,12 +53,12 @@ func NewMap(width, height uint) *Map {
 	}
 }
 
-func (m *Map) Put(r rune, x, y uint) error {
+func (m *Map) Put(x, y uint, r rune) error {
 	err := m.checkBounds(x, y)
 	if err != nil {
 		return err
 	}
-	m.Map[(x*m.Height)+y] = r
+	m.Map[m.getIndex(x, y)] = r
 	return nil
 }
 
@@ -68,7 +67,11 @@ func (m *Map) Get(x, y uint) (rune, error) {
 	if err != nil {
 		return -1, err
 	}
-	return m.Map[(x*m.Height)+y], nil
+	return m.Map[m.getIndex(x, y)], nil
+}
+
+func (m *Map) getIndex(x, y uint) uint {
+	return y*m.Width + x
 }
 
 func (m *Map) checkBounds(x, y uint) error {
