@@ -90,11 +90,19 @@ func LoadInput(s *bufio.Scanner) (*TwoDMap, error) {
 	for s.Scan() {
 		lines = append(lines, s.Text())
 	}
+
 	width, height := uint(len(lines[0])), uint(len(lines))
-	TwoDMap := NewTwoDMap(width, height)
-	for _, line := range lines {
+	twoDMap := NewTwoDMap(width, height)
+
+	for y, line := range lines {
 		chars := strings.Split(line, "")
+		for x, char := range chars {
+			err := twoDMap.Put(uint(x), uint(y), char)
+			if err != nil {
+				return nil, err
+			}
+		}
 	}
 
-	return nil, nil
+	return twoDMap, nil
 }

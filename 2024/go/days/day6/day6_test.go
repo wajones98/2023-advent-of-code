@@ -1,6 +1,9 @@
 package day6
 
 import (
+	"bufio"
+	"slices"
+	"strings"
 	"testing"
 )
 
@@ -48,4 +51,21 @@ func TestMap(t *testing.T) {
 			t.Errorf("Expected %s, Got %s\n", "d", s)
 		}
 	})
+}
+
+func TestLoadInput(t *testing.T) {
+	const smallerInput = `..#
+#.#
+..^`
+	s := bufio.NewScanner(strings.NewReader(smallerInput))
+
+	expectedSlice := []string{".", ".", "#", "#", ".", "#", ".", ".", "^"}
+	actualTwoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if !slices.Equal(expectedSlice, actualTwoDMap.Map) {
+		t.Errorf("Expected %v, Got %v\n", expectedSlice, actualTwoDMap.Map)
+	}
 }
