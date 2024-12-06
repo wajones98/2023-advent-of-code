@@ -129,11 +129,11 @@ func LoadInput(s *bufio.Scanner) (*TwoDMap, error) {
 	return twoDMap, nil
 }
 
-func FindGuard(m *TwoDMap) (Guard, error) {
+func FindGuard(m *TwoDMap) (*Guard, error) {
 	for i, p := range m.Map {
 		if slices.Contains(Directions, p) {
 			x, y := m.FindPosition(uint(i))
-			return Guard{
+			return &Guard{
 				X:         x,
 				Y:         y,
 				Direction: p,
@@ -141,5 +141,5 @@ func FindGuard(m *TwoDMap) (Guard, error) {
 		}
 	}
 
-	return Guard{}, errors.New("Could not find guard")
+	return nil, errors.New("Could not find guard")
 }

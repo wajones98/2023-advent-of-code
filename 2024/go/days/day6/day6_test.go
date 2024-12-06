@@ -2,6 +2,7 @@ package day6
 
 import (
 	"bufio"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
@@ -98,7 +99,7 @@ func TestFindGuard(t *testing.T) {
 		Direction: Up,
 	}
 
-	if expected != actual {
+	if reflect.DeepEqual(expected, actual) {
 		t.Errorf("Expected %v, Got %v\n", expected, actual)
 	}
 }
