@@ -216,20 +216,14 @@ Loop:
 }
 
 func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
-	newY := guard.Y - 1
-
-	outOfBounds := false
-	if newY == 0 {
-		outOfBounds = true
+	if guard.Y == 0 {
+		return true, true, nil
 	}
+	newY := guard.Y - 1
 
 	c, err := m.Get(guard.X, newY)
 	if err != nil {
 		return false, false, err
-	}
-
-	if outOfBounds && c != "#" {
-		return true, false, nil
 	}
 
 	switch c {
@@ -256,19 +250,15 @@ func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 }
 
 func patrolRight(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
-	newX := guard.X + 1
-	outOfBounds := false
-	if newX == m.Width {
-		outOfBounds = true
+	if guard.X == m.Width-1 {
+		return true, true, nil
 	}
+
+	newX := guard.X + 1
 
 	c, err := m.Get(newX, guard.Y)
 	if err != nil {
 		return false, false, err
-	}
-
-	if outOfBounds && c != "#" {
-		return true, false, nil
 	}
 
 	switch c {
@@ -295,19 +285,15 @@ func patrolRight(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 }
 
 func patrolDown(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
-	newY := guard.Y + 1
-	outOfBounds := false
-	if newY == m.Height {
-		outOfBounds = true
+	if guard.Y == m.Height-1 {
+		return true, true, nil
 	}
+
+	newY := guard.Y + 1
 
 	c, err := m.Get(guard.X, newY)
 	if err != nil {
 		return false, false, err
-	}
-
-	if outOfBounds && c != "#" {
-		return true, false, nil
 	}
 
 	switch c {
@@ -334,19 +320,14 @@ func patrolDown(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 }
 
 func patrolLeft(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
-	newX := guard.X - 1
-	outOfBounds := false
-	if newX == 0 {
-		outOfBounds = true
+	if guard.X == 0 {
+		return true, true, nil
 	}
+	newX := guard.X - 1
 
 	c, err := m.Get(newX, guard.Y)
 	if err != nil {
 		return false, false, err
-	}
-
-	if outOfBounds && c != "#" {
-		return true, false, nil
 	}
 
 	switch c {

@@ -123,5 +123,4 @@ func TestPatrol(t *testing.T) {
 	}
 
 	Patrol(twoDMap)
-	t.Error("For logs")
 }
