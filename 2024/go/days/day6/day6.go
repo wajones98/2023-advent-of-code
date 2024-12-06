@@ -210,7 +210,6 @@ Loop:
 		if unique {
 			total += 1
 		}
-		fmt.Print(m)
 	}
 
 	return total, nil
