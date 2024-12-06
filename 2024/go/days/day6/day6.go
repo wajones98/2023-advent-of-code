@@ -25,8 +25,21 @@ func Run() (*days.Result[int, int], error) {
 type Direction = string
 
 const (
-	Up, Down, Left, Right Direction = "^", "v", "<", ">"
+	Up, Right, Down, Left Direction = "^", "V", "<", ">"
 )
+
+func ChangeDirection(d Direction) Direction {
+	switch d {
+	case Up:
+		return Right
+	case Right:
+		return Down
+	case Down:
+		return Left
+	default:
+		return Down
+	}
+}
 
 type Guard struct {
 	X         uint
@@ -142,4 +155,60 @@ func FindGuard(m *TwoDMap) (*Guard, error) {
 	}
 
 	return nil, errors.New("Could not find guard")
+}
+
+func Patrol(m *TwoDMap) (int, error) {
+	guard, err := FindGuard(m)
+	if err != nil {
+		panic(err)
+	}
+
+	total := 0
+
+	isPatrolling := true
+	for isPatrolling {
+		switch guard.Direction {
+		case Up:
+			exited, unique, err := patrolUp(m, guard)
+			if err != nil {
+				return total, err
+			}
+			isPatrolling = exited
+			if unique {
+				total += 1
+			}
+		default:
+			isPatrolling = false
+		}
+	}
+
+	return total, nil
+}
+
+func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
+	newY := guard.Y + 1
+	if newY >= m.Height {
+		return true, false, nil
+	}
+
+	c, err := m.Get(guard.X, newY)
+	if err != nil {
+		return false, false, err
+	}
+
+	switch c {
+	case "X":
+		guard.Y = newY
+		return false, false, nil
+	case "#":
+		guard.Direction = ChangeDirection(guard.Direction)
+		return false, false, nil
+	default:
+		m.Put(guard.X, guard.Y, "X")
+		if err != nil {
+			return false, false, err
+		}
+		guard.Y = newY
+		return false, false, nil
+	}
 }
