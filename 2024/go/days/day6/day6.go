@@ -101,11 +101,35 @@ func Part2() int {
 		panic(err)
 	}
 
-	return 0
+	total, err := GetTotalLoops(s, guard)
+	if err != nil {
+		panic(err)
+	}
+
+	return total
 }
 
-func GetTotalLoops() (int, error) {
+func GetTotalLoops(s *bufio.Scanner, guard *Guard) (int, error) {
 	total := 0
+
+	for v, _ := range guard.Visited {
+		twoDMap, err := LoadInput(s)
+		if err != nil {
+			return 0, err
+		}
+
+		g, err := FindGuard(twoDMap)
+
+		err = twoDMap.Put(v.X, v.Y, "#")
+		if err != nil {
+			return 0, err
+		}
+
+		_, loop, err := Patrol(twoDMap, g)
+		if loop {
+			total += 1
+		}
+	}
 
 	return total, nil
 }
