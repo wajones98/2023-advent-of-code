@@ -61,9 +61,11 @@ func Part1() int {
 		panic(err)
 	}
 
-	fmt.Print(twoDMap)
-
-	return 0
+	total, err := Patrol(twoDMap)
+	if err != nil {
+		panic(err)
+	}
+	return total
 }
 
 func Part2() int {
