@@ -114,3 +114,14 @@ func TestFindGuard(t *testing.T) {
 		t.Errorf("Expected %v, Got %v\n", expected, actual)
 	}
 }
+
+func TestPatrol(t *testing.T) {
+	s := bufio.NewScanner(strings.NewReader(Input))
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	Patrol(twoDMap)
+	t.Error("For logs")
+}

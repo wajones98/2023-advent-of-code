@@ -185,20 +185,21 @@ func Patrol(m *TwoDMap) (int, error) {
 
 	total := 0
 
-	isPatrolling := true
-	for isPatrolling {
+	hasExited := false
+	for !hasExited {
 		switch guard.Direction {
 		case Up:
 			exited, unique, err := patrolUp(m, guard)
 			if err != nil {
 				return total, err
 			}
-			isPatrolling = exited
+			hasExited = exited
 			if unique {
 				total += 1
 			}
+			fmt.Print(m)
 		default:
-			isPatrolling = false
+			hasExited = false
 		}
 	}
 
@@ -206,8 +207,8 @@ func Patrol(m *TwoDMap) (int, error) {
 }
 
 func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
-	newY := guard.Y + 1
-	if newY >= m.Height {
+	newY := guard.Y - 1
+	if newY == 0 {
 		return true, false, nil
 	}
 
@@ -219,7 +220,8 @@ func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 	switch c {
 	case "X":
 		guard.Y = newY
-		return false, false, nil
+		err := m.Put(guard.X, guard.Y, guard.Direction)
+		return false, false, err
 	case "#":
 		guard.Direction = ChangeDirection(guard.Direction)
 		return false, false, nil
@@ -229,6 +231,7 @@ func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 			return false, false, err
 		}
 		guard.Y = newY
-		return false, false, nil
+		err := m.Put(guard.X, guard.Y, guard.Direction)
+		return false, false, err
 	}
 }
