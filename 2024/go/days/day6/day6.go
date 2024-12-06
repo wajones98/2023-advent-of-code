@@ -234,6 +234,10 @@ func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 
 	switch c {
 	case "X":
+		m.Put(guard.X, guard.Y, "X")
+		if err != nil {
+			return false, false, err
+		}
 		guard.Y = newY
 		err := m.Put(guard.X, guard.Y, guard.Direction)
 		return false, false, err
@@ -269,6 +273,10 @@ func patrolRight(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 
 	switch c {
 	case "X":
+		m.Put(guard.X, guard.Y, "X")
+		if err != nil {
+			return false, false, err
+		}
 		guard.X = newX
 		err := m.Put(guard.X, guard.Y, guard.Direction)
 		return false, false, err
@@ -304,6 +312,10 @@ func patrolDown(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 
 	switch c {
 	case "X":
+		m.Put(guard.X, guard.Y, "X")
+		if err != nil {
+			return false, false, err
+		}
 		guard.Y = newY
 		err := m.Put(guard.X, guard.Y, guard.Direction)
 		return false, false, err
@@ -339,6 +351,10 @@ func patrolLeft(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 
 	switch c {
 	case "X":
+		m.Put(guard.X, guard.Y, "X")
+		if err != nil {
+			return false, false, err
+		}
 		guard.X = newX
 		err := m.Put(guard.X, guard.Y, guard.Direction)
 		return false, false, err
