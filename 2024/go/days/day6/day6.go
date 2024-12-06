@@ -28,23 +28,23 @@ const (
 	Up, Right, Down, Left Direction = "^", ">", "V", "<"
 )
 
-func ChangeDirection(d Direction) Direction {
-	switch d {
-	case Up:
-		return Right
-	case Right:
-		return Down
-	case Down:
-		return Left
-	default:
-		return Up
-	}
-}
-
 type Guard struct {
 	X         uint
 	Y         uint
 	Direction Direction
+}
+
+func (g *Guard) ChangeDirection(d Direction) {
+	switch g.Direction {
+	case Up:
+		g.Direction = Right
+	case Right:
+		g.Direction = Down
+	case Down:
+		g.Direction = Left
+	default:
+		g.Direction = Up
+	}
 }
 
 var Directions []Direction = []Direction{Up, Down, Left, Right}
@@ -232,7 +232,7 @@ func patrol(m *TwoDMap, guard *Guard, x, y uint) (bool, bool, error) {
 	}
 
 	if c == "#" {
-		guard.Direction = ChangeDirection(guard.Direction)
+		guard.ChangeDirection(guard.Direction)
 	} else {
 		guard.X = x
 		guard.Y = y
