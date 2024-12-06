@@ -28,10 +28,16 @@ const (
 	Up, Right, Down, Left Direction = "^", ">", "V", "<"
 )
 
+type Visited struct {
+	X, Y  uint
+	Count uint
+}
+
 type Guard struct {
 	X         uint
 	Y         uint
 	Direction Direction
+	Visited   map[Direction][]Visited
 }
 
 func (g *Guard) ChangeDirection(d Direction) {
@@ -172,6 +178,7 @@ func FindGuard(m *TwoDMap) (*Guard, error) {
 				X:         x,
 				Y:         y,
 				Direction: p,
+				Visited:   map[Direction][]Visited{},
 			}, nil
 		}
 	}
