@@ -194,6 +194,8 @@ Loop:
 			exited, unique, err = patrolUp(m, guard)
 		case Right:
 			exited, unique, err = patrolRight(m, guard)
+		case Down:
+			exited, unique, err = patrolDown(m, guard)
 		default:
 			break Loop
 		}
@@ -266,6 +268,36 @@ func patrolRight(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 			return false, false, err
 		}
 		guard.X = newX
+		err := m.Put(guard.X, guard.Y, guard.Direction)
+		return false, true, err
+	}
+}
+
+func patrolDown(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
+	newY := guard.Y + 1
+	if newY > m.Height {
+		return true, false, nil
+	}
+
+	c, err := m.Get(guard.X, newY)
+	if err != nil {
+		return false, false, err
+	}
+
+	switch c {
+	case "X":
+		guard.Y = newY
+		err := m.Put(guard.X, guard.Y, guard.Direction)
+		return false, false, err
+	case "#":
+		guard.Direction = ChangeDirection(guard.Direction)
+		return false, false, nil
+	default:
+		m.Put(guard.X, guard.Y, "X")
+		if err != nil {
+			return false, false, err
+		}
+		guard.Y = newY
 		err := m.Put(guard.X, guard.Y, guard.Direction)
 		return false, true, err
 	}
