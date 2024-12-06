@@ -87,14 +87,18 @@ func TestFindGuard(t *testing.T) {
 		t.Error(err)
 	}
 
-	x, y, err := FindGuard(twoDMap)
+	actual, err := FindGuard(twoDMap)
 	if err != nil {
 		t.Error(err)
 	}
 
-	if x != 4 {
-		t.Errorf("Expected %d, Got %d\n", 0, x)
-	} else if y != 6 {
-		t.Errorf("Expected %d, Got %d\n", 1, y)
+	expected := Guard{
+		X:         4,
+		Y:         6,
+		Direction: Up,
+	}
+
+	if expected != actual {
+		t.Errorf("Expected %v, Got %v\n", expected, actual)
 	}
 }

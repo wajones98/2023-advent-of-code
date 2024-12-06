@@ -28,6 +28,12 @@ const (
 	Up, Down, Left, Right Direction = "^", "v", "<", ">"
 )
 
+type Guard struct {
+	X         uint
+	Y         uint
+	Direction Direction
+}
+
 var Directions []Direction = []Direction{Up, Down, Left, Right}
 
 func Part1() int {
@@ -123,13 +129,17 @@ func LoadInput(s *bufio.Scanner) (*TwoDMap, error) {
 	return twoDMap, nil
 }
 
-func FindGuard(m *TwoDMap) (uint, uint, error) {
+func FindGuard(m *TwoDMap) (Guard, error) {
 	for i, p := range m.Map {
 		if slices.Contains(Directions, p) {
 			x, y := m.FindPosition(uint(i))
-			return x, y, nil
+			return Guard{
+				X:         x,
+				Y:         y,
+				Direction: p,
+			}, nil
 		}
 	}
 
-	return 0, 0, errors.New("Could not find guard")
+	return Guard{}, errors.New("Could not find guard")
 }
