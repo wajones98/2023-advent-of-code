@@ -170,3 +170,27 @@ func TestLoopDetection(t *testing.T) {
 		t.Error("Expected loop")
 	}
 }
+
+func TestTotalLoops(t *testing.T) {
+	s := bufio.NewScanner(strings.NewReader(Input))
+
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	guard, err := FindGuard(twoDMap)
+	if err != nil {
+		t.Error(err)
+	}
+
+	total, err := GetTotalLoops(s, guard)
+	if err != nil {
+		t.Error(err)
+	}
+
+	expected := 6
+	if total != expected {
+		t.Errorf("Expected %d, Got %d\n", expected, total)
+	}
+}
