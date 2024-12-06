@@ -178,12 +178,11 @@ func FindGuard(m *TwoDMap) (*Guard, error) {
 }
 
 func Patrol(m *TwoDMap) (int, error) {
+	total := 0
 	guard, err := FindGuard(m)
 	if err != nil {
-		panic(err)
+		return total, err
 	}
-
-	total := 0
 
 	hasExited := false
 Loop:

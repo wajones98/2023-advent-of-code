@@ -122,5 +122,12 @@ func TestPatrol(t *testing.T) {
 		t.Error(err)
 	}
 
-	Patrol(twoDMap)
+	total, err := Patrol(twoDMap)
+	if err != nil {
+		t.Error(err)
+	}
+	expected := 41
+	if total != expected {
+		t.Errorf("Expected %d, Got %d\n", expected, total)
+	}
 }
