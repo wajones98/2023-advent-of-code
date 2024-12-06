@@ -186,21 +186,26 @@ func Patrol(m *TwoDMap) (int, error) {
 	total := 0
 
 	hasExited := false
+Loop:
 	for !hasExited {
+		exited, unique := false, false
 		switch guard.Direction {
 		case Up:
-			exited, unique, err := patrolUp(m, guard)
-			if err != nil {
-				return total, err
-			}
-			hasExited = exited
-			if unique {
-				total += 1
-			}
-			fmt.Print(m)
+			exited, unique, err = patrolUp(m, guard)
+		case Right:
+			exited, unique, err = patrolRight(m, guard)
 		default:
-			hasExited = false
+			break Loop
 		}
+
+		if err != nil {
+			return total, err
+		}
+		hasExited = exited
+		if unique {
+			total += 1
+		}
+		fmt.Print(m)
 	}
 
 	return total, nil
@@ -208,7 +213,7 @@ func Patrol(m *TwoDMap) (int, error) {
 
 func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 	newY := guard.Y - 1
-	if newY == 0 {
+	if newY < 0 {
 		return true, false, nil
 	}
 
@@ -232,6 +237,36 @@ func patrolUp(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
 		}
 		guard.Y = newY
 		err := m.Put(guard.X, guard.Y, guard.Direction)
+		return false, true, err
+	}
+}
+
+func patrolRight(m *TwoDMap, guard *Guard) (exited, unique bool, err error) {
+	newX := guard.X + 1
+	if newX > m.Width {
+		return true, false, nil
+	}
+
+	c, err := m.Get(newX, guard.Y)
+	if err != nil {
 		return false, false, err
+	}
+
+	switch c {
+	case "X":
+		guard.X = newX
+		err := m.Put(guard.X, guard.Y, guard.Direction)
+		return false, false, err
+	case "#":
+		guard.Direction = ChangeDirection(guard.Direction)
+		return false, false, nil
+	default:
+		m.Put(guard.X, guard.Y, "X")
+		if err != nil {
+			return false, false, err
+		}
+		guard.X = newX
+		err := m.Put(guard.X, guard.Y, guard.Direction)
+		return false, true, err
 	}
 }
