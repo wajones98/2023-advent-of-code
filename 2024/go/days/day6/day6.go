@@ -91,14 +91,17 @@ func Part2() int {
 		panic(err)
 	}
 
-	twoDMapOrig := *twoDMap
-	fmt.Printf(twoDMapOrig.String())
+	twoDMapOrig := TwoDMap{
+		Map:    []string{},
+		Width:  twoDMap.Width,
+		Height: twoDMap.Height,
+	}
+	twoDMapOrig.Map = append(twoDMapOrig.Map, twoDMap.Map...)
 
 	guard, err := FindGuard(twoDMap)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf(twoDMapOrig.String())
 
 	startX, startY := guard.X, guard.Y
 
@@ -115,15 +118,36 @@ func Part2() int {
 	return total
 }
 
+type Coord struct {
+	X, Y uint
+}
+
 func GetTotalLoops(twoDMapOrig TwoDMap, guard *Guard, startX, startY uint) (int, error) {
 	total := 0
-
+	tried := map[Coord]bool{}
 	for v, _ := range guard.Visited {
 		if v.X == guard.X && v.Y == guard.Y && guard.Direction == Up {
 			continue
 		}
 
-		twoDMap := twoDMapOrig
+		coord := Coord{
+			X: v.X,
+			Y: v.Y,
+		}
+
+		_, ok := tried[coord]
+		if ok {
+			continue
+		}
+
+		tried[coord] = true
+
+		twoDMap := &TwoDMap{
+			Map:    []string{},
+			Width:  twoDMapOrig.Width,
+			Height: twoDMapOrig.Height,
+		}
+		twoDMap.Map = append(twoDMap.Map, twoDMapOrig.Map...)
 
 		g := &Guard{
 			X:         startX,
@@ -132,14 +156,19 @@ func GetTotalLoops(twoDMapOrig TwoDMap, guard *Guard, startX, startY uint) (int,
 			Visited:   map[Visited]uint{},
 		}
 
-		err := twoDMap.Put(v.X, v.Y, "#")
+		err := twoDMap.Put(v.X, v.Y, "O")
 		if err != nil {
 			return 0, err
 		}
 
-		_, loop, err := Patrol(&twoDMap, g)
+		_, loop, err := Patrol(twoDMap, g)
 		if loop {
 			total += 1
+		}
+
+		if loop {
+			fmt.Println("HAS LOOP")
+			fmt.Printf(twoDMap.String())
 		}
 	}
 
@@ -280,7 +309,7 @@ Loop:
 		}
 
 		c, _ := guard.Visited[visited]
-		if c > 1 {
+		if c > 10 {
 			isLoop = true
 			break Loop
 		}
@@ -309,7 +338,7 @@ func patrol(m *TwoDMap, guard *Guard, x, y uint) (bool, bool, error) {
 		return false, false, err
 	}
 
-	if c == "#" {
+	if c == "#" || c == "O" {
 		guard.ChangeDirection(guard.Direction)
 	} else {
 		guard.X = x

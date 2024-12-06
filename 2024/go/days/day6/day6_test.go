@@ -2,7 +2,6 @@ package day6
 
 import (
 	"bufio"
-	"fmt"
 	"reflect"
 	"slices"
 	"strings"
@@ -180,14 +179,17 @@ func TestTotalLoops(t *testing.T) {
 		panic(err)
 	}
 
-	twoDMapOrig := *twoDMap
-	fmt.Printf(twoDMapOrig.String())
+	twoDMapOrig := TwoDMap{
+		Map:    []string{},
+		Width:  twoDMap.Width,
+		Height: twoDMap.Height,
+	}
+	twoDMapOrig.Map = append(twoDMapOrig.Map, twoDMap.Map...)
 
 	guard, err := FindGuard(twoDMap)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf(twoDMapOrig.String())
 
 	startX, startY := guard.X, guard.Y
 
