@@ -62,6 +62,17 @@ func TestMap(t *testing.T) {
 			t.Errorf("Expected %d, Got %d\n", 1, y)
 		}
 	})
+
+	t.Run("Test Display", func(t *testing.T) {
+		s := bufio.NewScanner(strings.NewReader(Input))
+		twoDMap, err := LoadInput(s)
+		if err != nil {
+			t.Error(err)
+		}
+		if strings.ReplaceAll(twoDMap.String(), "\n", "") != strings.ReplaceAll(Input, "\n", "") {
+			t.Errorf("\nExpected: \n%s\nGot: \n%s\n", Input, twoDMap.String())
+		}
+	})
 }
 
 func TestLoadInput(t *testing.T) {

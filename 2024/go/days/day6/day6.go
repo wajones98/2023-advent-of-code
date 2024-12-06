@@ -50,11 +50,18 @@ type Guard struct {
 var Directions []Direction = []Direction{Up, Down, Left, Right}
 
 func Part1() int {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		panic(err)
 	}
 	defer closeFile()
+
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Print(twoDMap)
 
 	return 0
 }
@@ -118,6 +125,19 @@ func (m *TwoDMap) FindPosition(i uint) (uint, uint) {
 	y := i / m.Width
 	x := i % m.Width
 	return x, y
+}
+
+func (m *TwoDMap) String() string {
+	result := ""
+	for i, c := range m.Map {
+		result += c
+		x := (i + 1) % int(m.Width)
+		if x == 0 {
+			result += "\n"
+		}
+	}
+	result += "\n"
+	return result
 }
 
 func LoadInput(s *bufio.Scanner) (*TwoDMap, error) {
