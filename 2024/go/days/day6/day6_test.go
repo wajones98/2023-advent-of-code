@@ -28,24 +28,24 @@ func TestMap(t *testing.T) {
 	})
 
 	t.Run("Check that Put works as expected", func(t *testing.T) {
-		err := twoDMap.Put(0, 1, 'd')
+		err := twoDMap.Put(0, 1, "d")
 		if err != nil {
 			t.Error(err)
 		}
 
-		if twoDMap.Map[4] != 'd' {
-			t.Errorf("Expected %s, Got %s\n", string('d'), string(twoDMap.Map[4]))
+		if twoDMap.Map[4] != "d" {
+			t.Errorf("Expected %s, Got %s\n", "d", twoDMap.Map[4])
 		}
 	})
 
 	t.Run("Check that Get works as expected", func(t *testing.T) {
-		r, err := twoDMap.Get(0, 1)
+		s, err := twoDMap.Get(0, 1)
 		if err != nil {
 			t.Error(err)
 		}
 
-		if r != 'd' {
-			t.Errorf("Expected %s, Got %s\n", string('d'), string(r))
+		if s != "d" {
+			t.Errorf("Expected %s, Got %s\n", "d", s)
 		}
 	})
 }

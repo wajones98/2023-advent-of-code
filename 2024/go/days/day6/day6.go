@@ -3,6 +3,7 @@ package day6
 import (
 	"bufio"
 	"fmt"
+	"strings"
 
 	"github.com/wajones98/advent-of-code/input"
 
@@ -40,20 +41,20 @@ func Part2() int {
 }
 
 type TwoDMap struct {
-	Map    []rune
+	Map    []string
 	Width  uint
 	Height uint
 }
 
 func NewTwoDMap(width, height uint) *TwoDMap {
 	return &TwoDMap{
-		Map:    make([]rune, width*height),
+		Map:    make([]string, width*height),
 		Width:  width,
 		Height: height,
 	}
 }
 
-func (m *TwoDMap) Put(x, y uint, r rune) error {
+func (m *TwoDMap) Put(x, y uint, r string) error {
 	err := m.checkBounds(x, y)
 	if err != nil {
 		return err
@@ -62,10 +63,10 @@ func (m *TwoDMap) Put(x, y uint, r rune) error {
 	return nil
 }
 
-func (m *TwoDMap) Get(x, y uint) (rune, error) {
+func (m *TwoDMap) Get(x, y uint) (string, error) {
 	err := m.checkBounds(x, y)
 	if err != nil {
-		return -1, err
+		return "", err
 	}
 	return m.Map[m.getIndex(x, y)], nil
 }
@@ -85,5 +86,15 @@ func (m *TwoDMap) checkBounds(x, y uint) error {
 }
 
 func LoadInput(s *bufio.Scanner) (*TwoDMap, error) {
+	lines := []string{}
+	for s.Scan() {
+		lines = append(lines, s.Text())
+	}
+	width, height := uint(len(lines[0])), uint(len(lines))
+	TwoDMap := NewTwoDMap(width, height)
+	for _, line := range lines {
+		chars := strings.Split(line, "")
+	}
+
 	return nil, nil
 }
