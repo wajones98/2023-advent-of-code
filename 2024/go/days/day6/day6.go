@@ -165,11 +165,6 @@ func GetTotalLoops(twoDMapOrig TwoDMap, guard *Guard, startX, startY uint) (int,
 		if loop {
 			total += 1
 		}
-
-		if loop {
-			fmt.Println("HAS LOOP")
-			fmt.Printf(twoDMap.String())
-		}
 	}
 
 	return total, nil
