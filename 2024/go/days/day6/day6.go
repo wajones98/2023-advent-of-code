@@ -91,17 +91,23 @@ func Part2() int {
 		panic(err)
 	}
 
+	twoDMapOrig := *twoDMap
+	fmt.Printf(twoDMapOrig.String())
+
 	guard, err := FindGuard(twoDMap)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf(twoDMapOrig.String())
+
+	startX, startY := guard.X, guard.Y
 
 	_, _, err = Patrol(twoDMap, guard)
 	if err != nil {
 		panic(err)
 	}
 
-	total, err := GetTotalLoops(s, guard)
+	total, err := GetTotalLoops(twoDMapOrig, guard, startX, startY)
 	if err != nil {
 		panic(err)
 	}
@@ -109,23 +115,29 @@ func Part2() int {
 	return total
 }
 
-func GetTotalLoops(s *bufio.Scanner, guard *Guard) (int, error) {
+func GetTotalLoops(twoDMapOrig TwoDMap, guard *Guard, startX, startY uint) (int, error) {
 	total := 0
 
 	for v, _ := range guard.Visited {
-		twoDMap, err := LoadInput(s)
+		if v.X == guard.X && v.Y == guard.Y && guard.Direction == Up {
+			continue
+		}
+
+		twoDMap := twoDMapOrig
+
+		g := &Guard{
+			X:         startX,
+			Y:         startY,
+			Direction: Up,
+			Visited:   map[Visited]uint{},
+		}
+
+		err := twoDMap.Put(v.X, v.Y, "#")
 		if err != nil {
 			return 0, err
 		}
 
-		g, err := FindGuard(twoDMap)
-
-		err = twoDMap.Put(v.X, v.Y, "#")
-		if err != nil {
-			return 0, err
-		}
-
-		_, loop, err := Patrol(twoDMap, g)
+		_, loop, err := Patrol(&twoDMap, g)
 		if loop {
 			total += 1
 		}
@@ -262,18 +274,21 @@ Loop:
 			return total, false, err
 		}
 
-		for _, c := range guard.Visited {
-			if c > 1 {
-				isLoop = true
-				break Loop
-			}
+		visited := Visited{
+			guard.X, guard.Y,
+			guard.Direction,
+		}
+
+		c, _ := guard.Visited[visited]
+		if c > 1 {
+			isLoop = true
+			break Loop
 		}
 
 		hasExited = exited
 		if unique {
 			total += 1
 		}
-		fmt.Print(m.String())
 	}
 
 	return total, isLoop, nil

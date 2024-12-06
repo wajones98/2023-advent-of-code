@@ -2,6 +2,7 @@ package day6
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"slices"
 	"strings"
@@ -176,17 +177,28 @@ func TestTotalLoops(t *testing.T) {
 
 	twoDMap, err := LoadInput(s)
 	if err != nil {
-		t.Error(err)
+		panic(err)
 	}
+
+	twoDMapOrig := *twoDMap
+	fmt.Printf(twoDMapOrig.String())
 
 	guard, err := FindGuard(twoDMap)
 	if err != nil {
-		t.Error(err)
+		panic(err)
+	}
+	fmt.Printf(twoDMapOrig.String())
+
+	startX, startY := guard.X, guard.Y
+
+	_, _, err = Patrol(twoDMap, guard)
+	if err != nil {
+		panic(err)
 	}
 
-	total, err := GetTotalLoops(s, guard)
+	total, err := GetTotalLoops(twoDMapOrig, guard, startX, startY)
 	if err != nil {
-		t.Error(err)
+		panic(err)
 	}
 
 	expected := 6
