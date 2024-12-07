@@ -61,6 +61,25 @@ type Equation struct {
 	Values []int
 }
 
+func (e Equation) IsValid(combinations []int) bool {
+	total := 0
+	for i := 0; i < len(e.Values); i++ {
+		value := e.Values[i]
+		if i == 0 {
+			total += value
+			continue
+		}
+
+		operator := combinations[i-1]
+		if operator == Add {
+			total += value
+		} else {
+			total *= value
+		}
+	}
+	return total == e.Result
+}
+
 func GenerateCombinations(count int) [][]int {
 	operators := []int{Add, Multiply}
 	combinations := [][]int{}

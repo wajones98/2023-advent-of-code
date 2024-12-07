@@ -94,3 +94,24 @@ func TestGenerateCombinations(t *testing.T) {
 		}
 	}
 }
+
+func TestEquationIsValid(t *testing.T) {
+	combinations := [][]int{
+		{Add},
+		{Multiply},
+	}
+
+	equation := Equation{
+		Result: 190,
+		Values: []int{10, 19},
+	}
+
+	expected := []bool{false, true}
+
+	for i, c := range combinations {
+		actual := equation.IsValid(c)
+		if actual != expected[i] {
+			t.Errorf("\nExpected: %t\nGot: %t\n", expected[i], actual)
+		}
+	}
+}
