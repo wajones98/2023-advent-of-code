@@ -109,23 +109,7 @@ func GetSum(combinations []int, values []int) int {
 	return total
 }
 
-func (e Equation) IsValidPartTwo(combinations []int) bool {
-	total := 0
-	// for i := 0; i < len(e.Values); i++ {
-	// 	value := e.Values[i]
-	// 	if i == 0 {
-	// 		total += value
-	// 		continue
-	// 	}
-	//
-	// 	operator := combinations[i-1]
-	// 	if operator == Add {
-	// 		total += value
-	// 	} else {
-	// 		total *= value
-	// 	}
-	// }
-	// return total == e.Result
+func (e Equation) IsValidPartTwo(combinations []int) (bool, error) {
 	combineIndexes := []int{}
 	for i, c := range combinations {
 		if c == Combine {
@@ -133,12 +117,17 @@ func (e Equation) IsValidPartTwo(combinations []int) bool {
 		}
 	}
 
-	// results := []int{}
-	// for _, ci := range combineIndexes {
-	// 	// results = append(results, e.Values[:ci])
-	// }
+	result := 0
+	var err error
+	for _, ci := range combineIndexes {
+		sum := GetSum(combinations[:ci], e.Values[:ci])
+		result, err = strconv.Atoi(strconv.Itoa(result) + strconv.Itoa(sum))
+		if err != nil {
+			return false, err
+		}
+	}
 
-	return total == e.Result
+	return result == e.Result, nil
 }
 
 func GenerateCombinations(count int, operators []int) [][]int {
