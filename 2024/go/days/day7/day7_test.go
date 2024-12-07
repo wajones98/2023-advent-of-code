@@ -19,6 +19,10 @@ const Input string = `190: 10 19
 
 var Data []Equation = []Equation{
 	{
+		Result: 190,
+		Values: []int{10, 19},
+	},
+	{
 		Result: 3267,
 		Values: []int{81, 40, 27},
 	},
@@ -32,7 +36,7 @@ var Data []Equation = []Equation{
 	},
 	{
 		Result: 7290,
-		Values: []int{68615},
+		Values: []int{6, 8, 6, 15},
 	},
 	{
 		Result: 161011,
@@ -59,7 +63,13 @@ func TestLoadInput(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !reflect.DeepEqual(Data, actual) {
-		t.Errorf("Expected: %v\nGot: %v\n", Data, actual)
+	if len(Data) != len(actual) {
+		t.Errorf("Expected: %d\nGot: %d\n", len(Data), len(actual))
+	}
+
+	for i, a := range actual {
+		if !reflect.DeepEqual(a, Data[i]) {
+			t.Errorf("Expected: %v\nGot: %v\n", Data[i], a)
+		}
 	}
 }

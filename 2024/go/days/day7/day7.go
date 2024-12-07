@@ -69,6 +69,9 @@ func LoadInput(s *bufio.Scanner) ([]Equation, error) {
 		values := []int{}
 		valuesString := strings.Split(parts[1], " ")
 		for _, v := range valuesString {
+			if v == "" {
+				continue
+			}
 			value, err := strconv.Atoi(v)
 			if err != nil {
 				return nil, err
