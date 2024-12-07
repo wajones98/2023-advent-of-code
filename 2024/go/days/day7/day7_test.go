@@ -145,6 +145,7 @@ func TestEquationIsValid(t *testing.T) {
 		Combinations [][]int
 		Equation     Equation
 		Expected     []bool
+		PartTwo      bool
 	}{
 		{
 			Combinations: [][]int{
@@ -156,6 +157,20 @@ func TestEquationIsValid(t *testing.T) {
 				Values: []int{10, 19},
 			},
 			Expected: []bool{false, true},
+			PartTwo:  false,
+		},
+		{
+			Combinations: [][]int{
+				{Add},
+				{Multiply},
+				{Combine},
+			},
+			Equation: Equation{
+				Result: 156,
+				Values: []int{15, 6},
+			},
+			Expected: []bool{false, false, true},
+			PartTwo:  true,
 		},
 		{
 			Combinations: [][]int{
@@ -169,6 +184,7 @@ func TestEquationIsValid(t *testing.T) {
 				Values: []int{81, 40, 27},
 			},
 			Expected: []bool{false, true, true, false},
+			PartTwo:  false,
 		},
 		{
 			Combinations: [][]int{
@@ -186,13 +202,24 @@ func TestEquationIsValid(t *testing.T) {
 				Values: []int{11, 6, 16, 20},
 			},
 			Expected: []bool{false, false, true, false, false, false, false, false},
+			PartTwo:  false,
 		},
 	}
 
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("%v", test.Equation), func(t *testing.T) {
 			for i, c := range test.Combinations {
-				actual := test.Equation.IsValid(c)
+				var actual bool
+				var err error
+				if test.PartTwo {
+					actual, err = test.Equation.IsValidPartTwo(c)
+					if err != nil {
+						t.Error(err)
+					}
+				} else {
+					actual = test.Equation.IsValid(c)
+				}
+
 				if actual != test.Expected[i] {
 					t.Errorf("\nExpected: %t\nGot: %t\n", test.Expected[i], actual)
 				}
