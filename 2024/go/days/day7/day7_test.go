@@ -73,3 +73,24 @@ func TestLoadInput(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerateCombinations(t *testing.T) {
+	length := 2
+	actual := GenerateCombinations(length)
+	expected := [][]int{
+		{Add, Add},
+		{Add, Multiply},
+		{Multiply, Add},
+		{Multiply, Multiply},
+	}
+
+	if len(expected) != len(actual) {
+		t.Errorf("Expected: %d\nGot: %d\n", len(expected), len(actual))
+	}
+
+	for i, a := range actual {
+		if !reflect.DeepEqual(a, expected[i]) {
+			t.Errorf("Expected: %v\nGot: %v\n", expected[i], a)
+		}
+	}
+}
