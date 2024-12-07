@@ -49,7 +49,12 @@ func Part2() (int, error) {
 	return 0, nil
 }
 
-var Combinations map[int][]string = map[int][]string{}
+const (
+	Add = iota
+	Multiply
+)
+
+var Combinations map[int][]int = map[int][]int{}
 
 type Equation struct {
 	Result int
