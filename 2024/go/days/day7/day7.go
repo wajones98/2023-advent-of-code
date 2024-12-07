@@ -86,9 +86,14 @@ type Equation struct {
 }
 
 func (e Equation) IsValid(combinations []int) bool {
+	total := GetSum(combinations, e.Values)
+	return total == e.Result
+}
+
+func GetSum(combinations []int, values []int) int {
 	total := 0
-	for i := 0; i < len(e.Values); i++ {
-		value := e.Values[i]
+	for i := 0; i < len(values); i++ {
+		value := values[i]
 		if i == 0 {
 			total += value
 			continue
@@ -101,6 +106,38 @@ func (e Equation) IsValid(combinations []int) bool {
 			total *= value
 		}
 	}
+	return total
+}
+
+func (e Equation) IsValidPartTwo(combinations []int) bool {
+	total := 0
+	// for i := 0; i < len(e.Values); i++ {
+	// 	value := e.Values[i]
+	// 	if i == 0 {
+	// 		total += value
+	// 		continue
+	// 	}
+	//
+	// 	operator := combinations[i-1]
+	// 	if operator == Add {
+	// 		total += value
+	// 	} else {
+	// 		total *= value
+	// 	}
+	// }
+	// return total == e.Result
+	combineIndexes := []int{}
+	for i, c := range combinations {
+		if c == Combine {
+			combineIndexes = append(combineIndexes, i)
+		}
+	}
+
+	// results := []int{}
+	// for _, ci := range combineIndexes {
+	// 	// results = append(results, e.Values[:ci])
+	// }
+
 	return total == e.Result
 }
 
@@ -169,7 +206,6 @@ func LoadInput(s *bufio.Scanner) ([]Equation, error) {
 		_, ok = CombinationsPartTwo[possibleCombinations]
 		if !ok {
 			CombinationsPartTwo[possibleCombinations] = GenerateCombinations(possibleCombinations, []int{Add, Multiply, Combine})
-
 		}
 
 		equations = append(equations, Equation{
