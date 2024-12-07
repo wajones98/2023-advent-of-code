@@ -2,6 +2,7 @@ package day7
 
 import (
 	"bufio"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -115,6 +116,12 @@ func (e Equation) IsValid(combinations []int) bool {
 
 func GetSum(combinations []int, values []int) int {
 	total := 0
+
+	if len(combinations) == 0 {
+		total, _ = strconv.Atoi(strconv.Itoa(values[0]) + strconv.Itoa(values[1]))
+		return total
+	}
+
 	for i := 0; i < len(values); i++ {
 		value := values[i]
 		if i == 0 {
@@ -143,7 +150,15 @@ func (e Equation) IsValidPartTwo(combinations []int) (bool, error) {
 	result := 0
 	var err error
 	for _, ci := range combineIndexes {
-		sum := GetSum(combinations[:ci], e.Values[:ci])
+		fmt.Printf("%v -> %v\n", combinations, e.Values)
+		fmt.Printf("%v -> %v\n", combinations[:ci], e.Values[:ci])
+		var split []int
+		if len(e.Values) == 2 {
+			split = e.Values
+		} else {
+			split = e.Values[:ci]
+		}
+		sum := GetSum(combinations[:ci], split)
 		result, err = strconv.Atoi(strconv.Itoa(result) + strconv.Itoa(sum))
 		if err != nil {
 			return false, err
