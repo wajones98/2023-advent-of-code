@@ -93,6 +93,21 @@ func TestGenerateCombinations(t *testing.T) {
 			},
 		},
 		{
+			Length:    2,
+			Operators: []int{Add, Multiply, Combine},
+			Expected: [][]int{
+				{Add, Add},
+				{Add, Multiply},
+				{Add, Combine},
+				{Multiply, Add},
+				{Multiply, Multiply},
+				{Multiply, Combine},
+				{Combine, Add},
+				{Combine, Multiply},
+				{Combine, Combine},
+			},
+		},
+		{
 			Length:    3,
 			Operators: []int{Add, Multiply},
 			Expected: [][]int{
@@ -189,6 +204,18 @@ func TestEquationIsValid(t *testing.T) {
 func TestTotal(t *testing.T) {
 	expected := 3749
 	actual := GetPart1Total(Data)
+
+	if expected != actual {
+		t.Errorf("Expected: %d\nGot: %d\n", expected, actual)
+	}
+}
+
+func TestTotalPartTwo(t *testing.T) {
+	expected := 11387
+	actual, err := GetPart2Total(Data)
+	if err != nil {
+		t.Error(err)
+	}
 
 	if expected != actual {
 		t.Errorf("Expected: %d\nGot: %d\n", expected, actual)

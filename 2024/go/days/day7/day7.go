@@ -30,7 +30,6 @@ func Run() (*days.Result[int, int], error) {
 }
 
 func Part1() (int, error) {
-
 	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
@@ -62,13 +61,37 @@ func GetPart1Total(equations []Equation) int {
 }
 
 func Part2() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		panic(err)
 	}
 	defer closeFile()
 
-	return 0, nil
+	equations, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+	res, err := GetPart2Total(equations)
+	return res, err
+}
+
+func GetPart2Total(equations []Equation) (int, error) {
+	total := 0
+	for _, equation := range equations {
+		combinations := Combinations[len(equation.Values)-1]
+		for _, c := range combinations {
+			ok, err := equation.IsValidPartTwo(c)
+			if err != nil {
+				return total, err
+			}
+			if ok {
+				total += equation.Result
+				break
+			}
+		}
+	}
+
+	return total, nil
 }
 
 const (
