@@ -74,9 +74,11 @@ func Part2() (int, error) {
 const (
 	Add = iota
 	Multiply
+	Combine
 )
 
 var Combinations map[int][][]int = map[int][][]int{}
+var CombinationsPartTwo map[int][][]int = map[int][][]int{}
 
 type Equation struct {
 	Result int
@@ -102,8 +104,7 @@ func (e Equation) IsValid(combinations []int) bool {
 	return total == e.Result
 }
 
-func GenerateCombinations(count int) [][]int {
-	operators := []int{Add, Multiply}
+func GenerateCombinations(count int, operators []int) [][]int {
 	combinations := [][]int{}
 
 	if count == 0 {
@@ -161,7 +162,14 @@ func LoadInput(s *bufio.Scanner) ([]Equation, error) {
 		possibleCombinations := len(values) - 1
 		_, ok := Combinations[possibleCombinations]
 		if !ok {
-			Combinations[possibleCombinations] = GenerateCombinations(possibleCombinations)
+			Combinations[possibleCombinations] = GenerateCombinations(possibleCombinations, []int{Add, Multiply})
+
+		}
+
+		_, ok = CombinationsPartTwo[possibleCombinations]
+		if !ok {
+			CombinationsPartTwo[possibleCombinations] = GenerateCombinations(possibleCombinations, []int{Add, Multiply, Combine})
+
 		}
 
 		equations = append(equations, Equation{

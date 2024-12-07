@@ -78,11 +78,13 @@ func TestLoadInput(t *testing.T) {
 func TestGenerateCombinations(t *testing.T) {
 
 	tests := []struct {
-		Length   int
-		Expected [][]int
+		Length    int
+		Operators []int
+		Expected  [][]int
 	}{
 		{
-			Length: 2,
+			Length:    2,
+			Operators: []int{Add, Multiply},
 			Expected: [][]int{
 				{Add, Add},
 				{Add, Multiply},
@@ -91,7 +93,8 @@ func TestGenerateCombinations(t *testing.T) {
 			},
 		},
 		{
-			Length: 3,
+			Length:    3,
+			Operators: []int{Add, Multiply},
 			Expected: [][]int{
 				{Add, Add, Add},
 				{Add, Add, Multiply},
@@ -107,7 +110,7 @@ func TestGenerateCombinations(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("For length %d", test.Length), func(t *testing.T) {
-			actual := GenerateCombinations(test.Length)
+			actual := GenerateCombinations(test.Length, test.Operators)
 			if len(test.Expected) != len(actual) {
 				t.Errorf("Expected: %d\nGot: %d\n", len(test.Expected), len(actual))
 			}
