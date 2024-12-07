@@ -126,6 +126,23 @@ func TestEquationIsValid(t *testing.T) {
 			},
 			Expected: []bool{false, true, true, false},
 		},
+		{
+			Combinations: [][]int{
+				{Add, Add, Add},
+				{Add, Add, Multiply},
+				{Add, Multiply, Add},
+				{Add, Multiply, Multiply},
+				{Multiply, Add, Add},
+				{Multiply, Add, Multiply},
+				{Multiply, Multiply, Add},
+				{Multiply, Multiply, Multiply},
+			},
+			Equation: Equation{
+				Result: 292,
+				Values: []int{11, 6, 16, 20},
+			},
+			Expected: []bool{false, false, true, false, false, false, false, false},
+		},
 	}
 
 	for _, test := range tests {
@@ -138,5 +155,13 @@ func TestEquationIsValid(t *testing.T) {
 			}
 		})
 	}
+}
 
+func TestTotal(t *testing.T) {
+	expected := 3749
+	actual := GetPart1Total(Data)
+
+	if expected != actual {
+		t.Errorf("Expected: %d\nGot: %d\n", expected, actual)
+	}
 }

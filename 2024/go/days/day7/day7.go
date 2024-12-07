@@ -30,19 +30,23 @@ func Run() (*days.Result[int, int], error) {
 }
 
 func Part1() (int, error) {
-	total := 0
 
 	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
-		return total, err
+		return 0, err
 	}
 	defer closeFile()
 
 	equations, err := LoadInput(s)
 	if err != nil {
-		return total, err
+		return 0, err
 	}
 
+	return GetPart1Total(equations), nil
+}
+
+func GetPart1Total(equations []Equation) int {
+	total := 0
 	for _, equation := range equations {
 		combinations := Combinations[len(equation.Values)]
 		for _, c := range combinations {
@@ -54,7 +58,7 @@ func Part1() (int, error) {
 		}
 	}
 
-	return total, nil
+	return total
 }
 
 func Part2() (int, error) {
