@@ -79,7 +79,7 @@ func Part2() (int, error) {
 func GetPart2Total(equations []Equation) (int, error) {
 	total := 0
 	for _, equation := range equations {
-		combinations := Combinations[len(equation.Values)-1]
+		combinations := CombinationsPartTwo[len(equation.Values)-1]
 		for _, c := range combinations {
 			ok, err := equation.IsValidPartTwo(c)
 			if err != nil {
@@ -147,11 +147,9 @@ func (e Equation) IsValidPartTwo(combinations []int) (bool, error) {
 		}
 	}
 
-	result := 0
+	var result int
 	var err error
 	for _, ci := range combineIndexes {
-		fmt.Printf("%v -> %v\n", combinations, e.Values)
-		fmt.Printf("%v -> %v\n", combinations[:ci], e.Values[:ci])
 		var split []int
 		if len(e.Values) == 2 {
 			split = e.Values
@@ -164,7 +162,6 @@ func (e Equation) IsValidPartTwo(combinations []int) (bool, error) {
 			return false, err
 		}
 	}
-
 	return result == e.Result, nil
 }
 
