@@ -12,6 +12,7 @@ import (
 	"github.com/wajones98/advent-of-code/days/day4"
 	"github.com/wajones98/advent-of-code/days/day5"
 	"github.com/wajones98/advent-of-code/days/day6"
+	"github.com/wajones98/advent-of-code/days/day7"
 )
 
 func main() {
@@ -65,6 +66,13 @@ func main() {
 
 	case 6:
 		result, err := day6.Run()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("Part 1 Result: %d\n", result.Part1)
+		fmt.Printf("Part 2 Result: %d\n", result.Part2)
+	case 7:
+		result, err := day7.Run()
 		if err != nil {
 			panic(err)
 		}
