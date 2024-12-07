@@ -2,6 +2,7 @@ package day7
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -96,22 +97,46 @@ func TestGenerateCombinations(t *testing.T) {
 }
 
 func TestEquationIsValid(t *testing.T) {
-	combinations := [][]int{
-		{Add},
-		{Multiply},
+	tests := []struct {
+		Combinations [][]int
+		Equation     Equation
+		Expected     []bool
+	}{
+		{
+			Combinations: [][]int{
+				{Add},
+				{Multiply},
+			},
+			Equation: Equation{
+				Result: 190,
+				Values: []int{10, 19},
+			},
+			Expected: []bool{false, true},
+		},
+		{
+			Combinations: [][]int{
+				{Add, Add},
+				{Add, Multiply},
+				{Multiply, Add},
+				{Multiply, Multiply},
+			},
+			Equation: Equation{
+				Result: 3267,
+				Values: []int{81, 40, 27},
+			},
+			Expected: []bool{false, true, true, false},
+		},
 	}
 
-	equation := Equation{
-		Result: 190,
-		Values: []int{10, 19},
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%v", test.Equation), func(t *testing.T) {
+			for i, c := range test.Combinations {
+				actual := test.Equation.IsValid(c)
+				if actual != test.Expected[i] {
+					t.Errorf("\nExpected: %t\nGot: %t\n", test.Expected[i], actual)
+				}
+			}
+		})
 	}
 
-	expected := []bool{false, true}
-
-	for i, c := range combinations {
-		actual := equation.IsValid(c)
-		if actual != expected[i] {
-			t.Errorf("\nExpected: %t\nGot: %t\n", expected[i], actual)
-		}
-	}
 }
