@@ -2,7 +2,6 @@ package day7
 
 import (
 	"bufio"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -49,18 +48,14 @@ func Part1() (int, error) {
 func GetPart1Total(equations []Equation) int {
 	total := 0
 	for _, equation := range equations {
-		fmt.Printf("TESTING: %d\n", equation.Result)
 		combinations := Combinations[len(equation.Values)-1]
-		fmt.Printf("%v", combinations)
 		for _, c := range combinations {
 			ok := equation.IsValid(c)
 			if ok {
-				fmt.Printf("FOUND: %d\n", equation.Result)
 				total += equation.Result
 				break
 			}
 		}
-		fmt.Printf("\n")
 	}
 
 	return total
@@ -162,13 +157,10 @@ func LoadInput(s *bufio.Scanner) ([]Equation, error) {
 			values = append(values, value)
 		}
 
-		fmt.Printf("LOADING %d\n", result)
-
 		// Dodgy side effect :(
 		possibleCombinations := len(values) - 1
 		_, ok := Combinations[possibleCombinations]
 		if !ok {
-			fmt.Printf("Combinations for %d -> %v\n", result, GenerateCombinations(possibleCombinations))
 			Combinations[possibleCombinations] = GenerateCombinations(possibleCombinations)
 		}
 
