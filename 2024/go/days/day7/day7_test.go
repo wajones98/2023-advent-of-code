@@ -76,24 +76,50 @@ func TestLoadInput(t *testing.T) {
 }
 
 func TestGenerateCombinations(t *testing.T) {
-	length := 2
-	actual := GenerateCombinations(length)
-	expected := [][]int{
-		{Add, Add},
-		{Add, Multiply},
-		{Multiply, Add},
-		{Multiply, Multiply},
+
+	tests := []struct {
+		Length   int
+		Expected [][]int
+	}{
+		{
+			Length: 2,
+			Expected: [][]int{
+				{Add, Add},
+				{Add, Multiply},
+				{Multiply, Add},
+				{Multiply, Multiply},
+			},
+		},
+		{
+			Length: 3,
+			Expected: [][]int{
+				{Add, Add, Add},
+				{Add, Add, Multiply},
+				{Add, Multiply, Add},
+				{Add, Multiply, Multiply},
+				{Multiply, Add, Add},
+				{Multiply, Add, Multiply},
+				{Multiply, Multiply, Add},
+				{Multiply, Multiply, Multiply},
+			},
+		},
 	}
 
-	if len(expected) != len(actual) {
-		t.Errorf("Expected: %d\nGot: %d\n", len(expected), len(actual))
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("For length %d", test.Length), func(t *testing.T) {
+			actual := GenerateCombinations(test.Length)
+			if len(test.Expected) != len(actual) {
+				t.Errorf("Expected: %d\nGot: %d\n", len(test.Expected), len(actual))
+			}
+
+			for i, a := range actual {
+				if !reflect.DeepEqual(a, test.Expected[i]) {
+					t.Errorf("Expected: %v\nGot: %v\n", test.Expected[i], a)
+				}
+			}
+		})
 	}
 
-	for i, a := range actual {
-		if !reflect.DeepEqual(a, expected[i]) {
-			t.Errorf("Expected: %v\nGot: %v\n", expected[i], a)
-		}
-	}
 }
 
 func TestEquationIsValid(t *testing.T) {
