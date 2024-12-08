@@ -2,7 +2,6 @@ package day7
 
 import (
 	"bufio"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -81,10 +80,7 @@ func GetPart2Total(equations []Equation) (int, error) {
 	for _, equation := range equations {
 		combinations := CombinationsPartTwo[len(equation.Values)-1]
 		for _, c := range combinations {
-			ok, err := equation.IsValidPartTwo(c)
-			if err != nil {
-				return total, err
-			}
+			ok := equation.IsValid(c)
 			if ok {
 				total += equation.Result
 				break
@@ -117,14 +113,14 @@ func (e Equation) IsValid(combinations []int) bool {
 func GetSum(combinations []int, values []int) int {
 	total := 0
 
-	if len(values) == 1 {
-		return values[0]
-	}
-
-	if len(combinations) == 0 {
-		total, _ = strconv.Atoi(strconv.Itoa(values[0]) + strconv.Itoa(values[1]))
-		return total
-	}
+	// if len(values) == 1 {
+	// 	return values[0]
+	// }
+	//
+	// if len(combinations) == 0 {
+	// 	total, _ = strconv.Atoi(strconv.Itoa(values[0]) + strconv.Itoa(values[1]))
+	// 	return total
+	// }
 
 	for i := 0; i < len(values); i++ {
 		value := values[i]
@@ -136,70 +132,58 @@ func GetSum(combinations []int, values []int) int {
 		operator := combinations[i-1]
 		if operator == Add {
 			total += value
-		} else {
+		} else if operator == Multiply {
 			total *= value
+		} else {
+			total, _ = strconv.Atoi(strconv.Itoa(total) + strconv.Itoa(value))
 		}
 	}
 	return total
 }
 
-func (e Equation) IsValidPartTwo(combinations []int) (bool, error) {
-	combineIndexes := []int{}
-	for i, c := range combinations {
-		if c == Combine {
-			combineIndexes = append(combineIndexes, i)
-		}
-	}
-
-	parts := [][]int{}
-	combinationParts := [][]int{}
-	remaining := 0
-	for i := 0; i < len(combineIndexes); i++ {
-		curr := combineIndexes[i] + 1
-		slice := e.Values[remaining:curr]
-		parts = append(parts, slice)
-		combinationParts = append(combinationParts, combinations[remaining:curr-1])
-		remaining += len(slice)
-	}
-
-	parts = append(parts, e.Values[remaining:])
-	combinationParts = append(combinationParts, combinations[remaining:])
-
-	fmt.Printf("Operators: %v\n", combinations)
-	fmt.Printf("Combination Indexes: %v\n", combineIndexes)
-	fmt.Printf("Values: %v\n", e.Values)
-	fmt.Printf("Parts: %v\n", parts)
-	fmt.Printf("Combination Parts: %v\n", combinationParts)
-	fmt.Printf("\n")
-
-	var result int
-	var err error
-	for i, p := range parts {
-		sum := GetSum(combinationParts[i], p)
-		result, err = strconv.Atoi(strconv.Itoa(result) + strconv.Itoa(sum))
-		if err != nil {
-			return false, err
-		}
-	}
-
-	// var result int
-	// var err error
-	// for _, ci := range combineIndexes {
-	// 	var split []int
-	// 	if len(e.Values) == 2 {
-	// 		split = e.Values
-	// 	} else {
-	// 		split = e.Values[:ci]
-	// 	}
-	// 	// fmt.Printf("%v\n", split)
-	// 	sum := GetSum(combinations[:ci], split)
-	// 	result, err = strconv.Atoi(strconv.Itoa(result) + strconv.Itoa(sum))
-	// 	if err != nil {
-	// 		return false, err
-	// 	}
-	// }
-	return result == e.Result, nil
-}
+// func (e Equation) IsValidPartTwo(combinations []int) (bool, error) {
+// 	combineIndexes := []int{}
+// 	for i, c := range combinations {
+// 		if c == Combine {
+// 			combineIndexes = append(combineIndexes, i)
+// 		}
+// 	}
+//
+// 	parts := [][]int{}
+// 	combinationParts := [][]int{}
+// 	remaining := 0
+// 	for i := 0; i < len(combineIndexes); i++ {
+// 		curr := combineIndexes[i] + 1
+// 		slice := e.Values[remaining:curr]
+// 		parts = append(parts, slice)
+// 		combinationParts = append(combinationParts, combinations[remaining:curr-1])
+// 		remaining += len(slice)
+// 	}
+//
+// 	parts = append(parts, e.Values[remaining:])
+// 	combinationParts = append(combinationParts, combinations[remaining:])
+//
+// 	fmt.Printf("Operators: %v\n", combinations)
+// 	fmt.Printf("Combination Indexes: %v\n", combineIndexes)
+// 	fmt.Printf("Values: %v\n", e.Values)
+// 	fmt.Printf("Parts: %v\n", parts)
+// 	fmt.Printf("Combination Parts: %v\n", combinationParts)
+//
+// 	var result int
+// 	var err error
+// 	for i, p := range parts {
+// 		sum := GetSum(combinationParts[i], p)
+// 		result, err = strconv.Atoi(strconv.Itoa(result) + strconv.Itoa(sum))
+// 		if err != nil {
+// 			return false, err
+// 		}
+// 	}
+//
+// 	fmt.Printf("%d == %d = %t\n", result, e.Result, result == e.Result)
+// 	fmt.Printf("\n")
+//
+// 	return result == e.Result, nil
+// }
 
 func GenerateCombinations(count int, operators []int) [][]int {
 	combinations := [][]int{}

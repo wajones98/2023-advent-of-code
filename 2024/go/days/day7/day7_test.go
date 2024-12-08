@@ -246,17 +246,7 @@ func TestEquationIsValid(t *testing.T) {
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("%v", test.Equation), func(t *testing.T) {
 			for i, c := range test.Combinations {
-				var actual bool
-				var err error
-				if test.PartTwo {
-					actual, err = test.Equation.IsValidPartTwo(c)
-					if err != nil {
-						t.Error(err)
-					}
-				} else {
-					actual = test.Equation.IsValid(c)
-				}
-
+				actual := test.Equation.IsValid(c)
 				if actual != test.Expected[i] {
 					t.Errorf("\nExpected: %t\nGot: %t\n", test.Expected[i], actual)
 				}
