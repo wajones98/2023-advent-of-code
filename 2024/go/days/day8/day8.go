@@ -34,13 +34,19 @@ func Run() (*days.Result[int, int], error) {
 }
 
 func Part1() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+	f := FindFrequencies(twoDMap)
+
+	return FindAllUniqueAntinodes(twoDMap, f), nil
 }
 
 func Part2() (int, error) {
