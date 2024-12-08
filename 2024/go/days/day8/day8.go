@@ -2,7 +2,6 @@ package day8
 
 import (
 	"bufio"
-	"fmt"
 	"strings"
 
 	"github.com/wajones98/advent-of-code/common"
@@ -74,6 +73,28 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap, error) {
 	}
 
 	return twoDMap, nil
+}
+
+func FindAllUniqueAntinodes(m *common.TwoDMap, frequencies map[string][]Coords) int {
+	unique := map[Coords]bool{}
+
+	for _, coords := range frequencies {
+		for i := 0; i < len(coords)-1; i++ {
+			for j := i + 1; j < len(coords); j++ {
+				nodes := FindAntinodes(coords[i], coords[j])
+				for _, n := range nodes {
+					if isValidAntinode(m.Width, m.Height, n) {
+						_, ok := unique[n]
+						if !ok {
+							unique[n] = true
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return len(unique)
 }
 
 func FindFrequencies(m *common.TwoDMap) map[string][]Coords {

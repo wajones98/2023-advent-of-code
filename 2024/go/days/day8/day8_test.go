@@ -131,3 +131,18 @@ func TestIsValidAntinode(t *testing.T) {
 		})
 	}
 }
+
+func TestFindAllUniqueAntinodes(t *testing.T) {
+	s := bufio.NewScanner(strings.NewReader(Input))
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	f := FindFrequencies(twoDMap)
+	expected := 14
+	actual := FindAllUniqueAntinodes(twoDMap, f)
+	if expected != actual {
+		t.Errorf("Expected: %d, Got: %d\n", expected, actual)
+	}
+}
