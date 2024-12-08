@@ -1,3 +1,32 @@
 package day8
 
-import ()
+import (
+	"bufio"
+	"strings"
+	"testing"
+)
+
+const Input = `............
+........0...
+.....0......
+.......0....
+....0.......
+......A.....
+............
+............
+........A...
+.........A..
+............
+............`
+
+func TestLoadInput(t *testing.T) {
+
+	s := bufio.NewScanner(strings.NewReader(Input))
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+	if strings.ReplaceAll(twoDMap.String(), "\n", "") != strings.ReplaceAll(Input, "\n", "") {
+		t.Errorf("\nExpected: \n%s\nGot: \n%s\n", Input, twoDMap.String())
+	}
+}
