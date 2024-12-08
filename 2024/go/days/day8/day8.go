@@ -11,6 +11,11 @@ import (
 
 const Day int = 8
 
+type Coords struct {
+	X int
+	Y int
+}
+
 func Run() (*days.Result[int, int], error) {
 	pOne, err := Part1()
 	if err != nil {
@@ -54,13 +59,13 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap, error) {
 		lines = append(lines, s.Text())
 	}
 
-	width, height := uint(len(lines[0])), uint(len(lines))
+	width, height := len(lines[0]), len(lines)
 	twoDMap := common.NewTwoDMap(width, height)
 
 	for y, line := range lines {
 		chars := strings.Split(line, "")
 		for x, char := range chars {
-			err := twoDMap.Put(uint(x), uint(y), char)
+			err := twoDMap.Put(x, y, char)
 			if err != nil {
 				return nil, err
 			}
@@ -68,4 +73,23 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap, error) {
 	}
 
 	return twoDMap, nil
+}
+
+func FindFrequencies(m *common.TwoDMap) map[string][]Coords {
+	frequencies := map[string][]Coords{}
+
+	for i, c := range m.Map {
+		if c == "." {
+			continue
+		}
+		coords, ok := frequencies[c]
+		if !ok {
+			coords = []Coords{}
+		}
+		x, y := m.FindPosition(i)
+		coords = append(coords, Coords{X: x, Y: y})
+		frequencies[c] = coords
+	}
+
+	return frequencies
 }
