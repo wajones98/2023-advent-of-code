@@ -2,6 +2,7 @@ package day8
 
 import (
 	"bufio"
+	"fmt"
 	"strings"
 
 	"github.com/wajones98/advent-of-code/common"
@@ -102,4 +103,8 @@ func FindAntinodes(pOne, pTwo Coords) []Coords {
 	antiNodeTwo := Coords{X: pTwo.X + dx, Y: pTwo.Y + dy}
 
 	return []Coords{antiNodeOne, antiNodeTwo}
+}
+
+func isValidAntinode(width, height int, node Coords) bool {
+	return node.X >= 0 && node.X < width && node.Y >= 0 && node.Y < height
 }

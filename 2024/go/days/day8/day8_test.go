@@ -84,3 +84,50 @@ func TestFindAntinodes(t *testing.T) {
 		})
 	}
 }
+
+func TestIsValidAntinode(t *testing.T) {
+	s := bufio.NewScanner(strings.NewReader(Input))
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	tests := []struct {
+		Coords   Coords
+		Expected bool
+	}{
+		{
+			Coords:   Coords{3, 1},
+			Expected: true,
+		},
+		{
+			Coords:   Coords{6, 7},
+			Expected: true,
+		},
+		{
+			Coords:   Coords{0, 2},
+			Expected: true,
+		},
+		{
+			Coords:   Coords{12, 5},
+			Expected: false,
+		},
+		{
+			Coords:   Coords{11, 3},
+			Expected: true,
+		},
+		{
+			Coords:   Coords{2, 6},
+			Expected: true,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%v\n", test.Coords), func(t *testing.T) {
+			actual := isValidAntinode(twoDMap.Width, twoDMap.Height, test.Coords)
+			if test.Expected != actual {
+				t.Errorf("Expected: %t, Got: %t\n", test.Expected, actual)
+			}
+		})
+	}
+}
