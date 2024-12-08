@@ -66,7 +66,12 @@ func TestFindAntinodes(t *testing.T) {
 		{
 			POne:     Coords{4, 3},
 			PTwo:     Coords{8, 4},
-			Expected: []Coords{{0, 2}, {12, 3}},
+			Expected: []Coords{{0, 2}, {12, 5}},
+		},
+		{
+			POne:     Coords{8, 4},
+			PTwo:     Coords{5, 5},
+			Expected: []Coords{{11, 3}, {2, 6}},
 		},
 	}
 
