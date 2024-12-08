@@ -170,6 +170,7 @@ func GetTotalLoops(twoDMapOrig TwoDMap, guard *Guard, startX, startY uint) (int,
 	return total, nil
 }
 
+// TODO: Migrate to common package
 type TwoDMap struct {
 	Map    []string
 	Width  uint
