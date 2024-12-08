@@ -2,6 +2,7 @@ package day8
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -52,13 +53,26 @@ func TestFindFrequencies(t *testing.T) {
 }
 
 func TestFindAntinodes(t *testing.T) {
-	pOne := Coords{4, 3}
-	pTwo := Coords{5, 5}
+	tests := []struct {
+		POne     Coords
+		PTwo     Coords
+		Expected []Coords
+	}{
+		{
+			POne:     Coords{4, 3},
+			PTwo:     Coords{5, 5},
+			Expected: []Coords{{3, 1}, {6, 7}},
+		},
+	}
 
-	expected := []Coords{{3, 1}, {6, 7}}
-	actual := FindAntinodes(pOne, pTwo)
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("POne: %v, PTwo: %v\n", test.POne, test.PTwo), func(t *testing.T) {
+			actual := FindAntinodes(test.POne, test.PTwo)
 
-	if !reflect.DeepEqual(expected, actual) {
-		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
+			if !reflect.DeepEqual(test.Expected, actual) {
+				t.Errorf("Expected: %v, Got: %v\n", test.Expected, actual)
+			}
+
+		})
 	}
 }
