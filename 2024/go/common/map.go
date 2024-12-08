@@ -4,11 +4,11 @@ import "fmt"
 
 type TwoDMap struct {
 	Map    []string
-	Width  uint
-	Height uint
+	Width  int
+	Height int
 }
 
-func NewTwoDMap(width, height uint) *TwoDMap {
+func NewTwoDMap(width, height int) *TwoDMap {
 	return &TwoDMap{
 		Map:    make([]string, width*height),
 		Width:  width,
@@ -16,7 +16,7 @@ func NewTwoDMap(width, height uint) *TwoDMap {
 	}
 }
 
-func (m *TwoDMap) Put(x, y uint, r string) error {
+func (m *TwoDMap) Put(x, y int, r string) error {
 	err := m.checkBounds(x, y)
 	if err != nil {
 		return err
@@ -25,7 +25,7 @@ func (m *TwoDMap) Put(x, y uint, r string) error {
 	return nil
 }
 
-func (m *TwoDMap) Get(x, y uint) (string, error) {
+func (m *TwoDMap) Get(x, y int) (string, error) {
 	err := m.checkBounds(x, y)
 	if err != nil {
 		return "", err
@@ -33,11 +33,11 @@ func (m *TwoDMap) Get(x, y uint) (string, error) {
 	return m.Map[m.getIndex(x, y)], nil
 }
 
-func (m *TwoDMap) getIndex(x, y uint) uint {
+func (m *TwoDMap) getIndex(x, y int) int {
 	return y*m.Width + x
 }
 
-func (m *TwoDMap) checkBounds(x, y uint) error {
+func (m *TwoDMap) checkBounds(x, y int) error {
 	if x > m.Width {
 		return fmt.Errorf("%d is out of bounds %d", x, m.Width)
 	} else if y > m.Height {
@@ -47,7 +47,7 @@ func (m *TwoDMap) checkBounds(x, y uint) error {
 	return nil
 }
 
-func (m *TwoDMap) FindPosition(i uint) (uint, uint) {
+func (m *TwoDMap) FindPosition(i int) (int, int) {
 	y := i / m.Width
 	x := i % m.Width
 	return x, y
