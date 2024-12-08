@@ -93,3 +93,13 @@ func FindFrequencies(m *common.TwoDMap) map[string][]Coords {
 
 	return frequencies
 }
+
+func FindAntinodes(pOne, pTwo Coords) []Coords {
+	antinodes := []Coords{}
+
+	diffOne := pTwo.Y - pOne.X
+	diffTwo := pTwo.X - pOne.Y
+
+	antinodes = append(antinodes, Coords{X: pOne.X - diffOne, Y: pOne.Y - diffTwo}, Coords{X: pTwo.X + diffOne, Y: pTwo.Y + diffTwo})
+	return antinodes
+}

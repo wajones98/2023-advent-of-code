@@ -20,6 +20,11 @@ const Input = `............
 ............
 ............`
 
+var Frequencies map[string][]Coords = map[string][]Coords{
+	"0": {{8, 1}, {5, 2}, {7, 3}, {4, 4}},
+	"A": {{6, 5}, {8, 8}, {9, 9}},
+}
+
 func TestLoadInput(t *testing.T) {
 	s := bufio.NewScanner(strings.NewReader(Input))
 	twoDMap, err := LoadInput(s)
@@ -38,12 +43,20 @@ func TestFindFrequencies(t *testing.T) {
 		t.Error(err)
 	}
 
-	expected := map[string][]Coords{
-		"0": {{8, 1}, {5, 2}, {7, 3}, {4, 4}},
-		"A": {{6, 5}, {8, 8}, {9, 9}},
-	}
-
+	expected := Frequencies
 	actual := FindFrequencies(twoDMap)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
+	}
+}
+
+func TestFindAntinodes(t *testing.T) {
+	pOne := Coords{4, 3}
+	pTwo := Coords{5, 5}
+
+	expected := []Coords{{3, 1}, {6, 7}}
+	actual := FindAntinodes(pOne, pTwo)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
