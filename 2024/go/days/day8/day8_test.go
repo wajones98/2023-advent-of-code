@@ -63,16 +63,19 @@ func TestFindAntinodes(t *testing.T) {
 			PTwo:     Coords{5, 5},
 			Expected: []Coords{{3, 1}, {6, 7}},
 		},
+		{
+			POne:     Coords{4, 3},
+			PTwo:     Coords{8, 4},
+			Expected: []Coords{{0, 2}, {12, 3}},
+		},
 	}
 
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("POne: %v, PTwo: %v\n", test.POne, test.PTwo), func(t *testing.T) {
 			actual := FindAntinodes(test.POne, test.PTwo)
-
 			if !reflect.DeepEqual(test.Expected, actual) {
 				t.Errorf("Expected: %v, Got: %v\n", test.Expected, actual)
 			}
-
 		})
 	}
 }

@@ -97,9 +97,16 @@ func FindFrequencies(m *common.TwoDMap) map[string][]Coords {
 func FindAntinodes(pOne, pTwo Coords) []Coords {
 	antinodes := []Coords{}
 
-	diffOne := pTwo.Y - pOne.X
-	diffTwo := pTwo.X - pOne.Y
+	diffY := pTwo.Y - pOne.Y
+	diffX := pTwo.X - pOne.X
+	slope := float64(diffY) / float64(diffX)
+	if slope < 1 {
+		delta := int(1.0 / slope)
+		antinodes = append(antinodes, Coords{X: pOne.X - delta, Y: pOne.Y - 1}, Coords{X: pTwo.X + delta, Y: pTwo.Y - 1})
+	} else {
+		delta := int(slope)
+		antinodes = append(antinodes, Coords{X: pOne.X - 1, Y: pOne.Y - delta}, Coords{X: pTwo.X + 1, Y: pTwo.Y + delta})
+	}
 
-	antinodes = append(antinodes, Coords{X: pOne.X - diffOne, Y: pOne.Y - diffTwo}, Coords{X: pTwo.X + diffOne, Y: pTwo.Y + diffTwo})
 	return antinodes
 }
