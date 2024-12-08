@@ -145,7 +145,6 @@ func TestEquationIsValid(t *testing.T) {
 		Combinations [][]int
 		Equation     Equation
 		Expected     []bool
-		PartTwo      bool
 	}{
 		{
 			Combinations: [][]int{
@@ -157,7 +156,6 @@ func TestEquationIsValid(t *testing.T) {
 				Values: []int{10, 19},
 			},
 			Expected: []bool{false, true},
-			PartTwo:  false,
 		},
 		{
 			Combinations: [][]int{
@@ -170,7 +168,6 @@ func TestEquationIsValid(t *testing.T) {
 				Values: []int{15, 6},
 			},
 			Expected: []bool{false, false, true},
-			PartTwo:  true,
 		},
 		{
 			Combinations: [][]int{
@@ -184,7 +181,6 @@ func TestEquationIsValid(t *testing.T) {
 				Values: []int{81, 40, 27},
 			},
 			Expected: []bool{false, true, true, false},
-			PartTwo:  false,
 		},
 		{
 			Combinations: [][]int{
@@ -202,7 +198,6 @@ func TestEquationIsValid(t *testing.T) {
 				Values: []int{11, 6, 16, 20},
 			},
 			Expected: []bool{false, false, true, false, false, false, false, false},
-			PartTwo:  false,
 		},
 		{
 			Combinations: [][]int{
@@ -239,7 +234,6 @@ func TestEquationIsValid(t *testing.T) {
 				Values: []int{6, 8, 6, 15},
 			},
 			Expected: []bool{false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false},
-			PartTwo:  true,
 		},
 	}
 
@@ -264,14 +258,14 @@ func TestTotal(t *testing.T) {
 	}
 }
 
-// func TestTotalPartTwo(t *testing.T) {
-// 	expected := 11387
-// 	actual, err := GetPart2Total(Data)
-// 	if err != nil {
-// 		t.Error(err)
-// 	}
-//
-// 	if expected != actual {
-// 		t.Errorf("Expected: %d\nGot: %d\n", expected, actual)
-// 	}
-// }
+func TestTotalPartTwo(t *testing.T) {
+	expected := 11387
+	actual, err := GetPart2Total(Data)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if expected != actual {
+		t.Errorf("Expected: %d\nGot: %d\n", expected, actual)
+	}
+}
