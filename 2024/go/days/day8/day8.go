@@ -46,17 +46,23 @@ func Part1() (int, error) {
 	}
 	f := FindFrequencies(twoDMap)
 
-	return FindAllUniqueAntinodes(twoDMap, f), nil
+	return FindAllUniqueAntinodes(twoDMap, f, false), nil
 }
 
 func Part2() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 	defer closeFile()
 
-	return 0, err
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+	f := FindFrequencies(twoDMap)
+
+	return FindAllUniqueAntinodes(twoDMap, f, true), nil
 }
 
 func LoadInput(s *bufio.Scanner) (*common.TwoDMap, error) {
@@ -81,13 +87,17 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap, error) {
 	return twoDMap, nil
 }
 
-func FindAllUniqueAntinodes(m *common.TwoDMap, frequencies map[string][]Coords) int {
+func FindAllUniqueAntinodes(m *common.TwoDMap, frequencies map[string][]Coords, includeHarmonics bool) int {
 	unique := map[Coords]bool{}
+	steps := 1
+	if includeHarmonics {
+		steps = max(m.Width, m.Height)
+	}
 
 	for _, coords := range frequencies {
 		for i := 0; i < len(coords)-1; i++ {
 			for j := i + 1; j < len(coords); j++ {
-				nodes := FindAntinodes(coords[i], coords[j])
+				nodes := FindAntinodes(coords[i], coords[j], steps)
 				for _, n := range nodes {
 					if isValidAntinode(m.Width, m.Height, n) {
 						_, ok := unique[n]
@@ -122,14 +132,18 @@ func FindFrequencies(m *common.TwoDMap) map[string][]Coords {
 	return frequencies
 }
 
-func FindAntinodes(pOne, pTwo Coords) []Coords {
+func FindAntinodes(pOne, pTwo Coords, steps int) []Coords {
+	nodes := []Coords{}
 	dx := pTwo.X - pOne.X
 	dy := pTwo.Y - pOne.Y
 
-	antiNodeOne := Coords{X: pOne.X - dx, Y: pOne.Y - dy}
-	antiNodeTwo := Coords{X: pTwo.X + dx, Y: pTwo.Y + dy}
+	for i := 0; i < steps; i++ {
+		antiNodeOne := Coords{X: pOne.X - dx*i, Y: pOne.Y - dy*i}
+		antiNodeTwo := Coords{X: pTwo.X + dx*i, Y: pTwo.Y + dy*i}
+		nodes = append(nodes, antiNodeOne, antiNodeTwo)
+	}
 
-	return []Coords{antiNodeOne, antiNodeTwo}
+	return nodes
 }
 
 func isValidAntinode(width, height int, node Coords) bool {
