@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"reflect"
+	"slices"
 	"strconv"
 
 	"github.com/wajones98/advent-of-code/days"
@@ -132,28 +133,43 @@ func LoadInputPartTwo(s *bufio.Scanner) []Block {
 }
 
 func CompressPartTwo(blocks []Block) int {
-	nextBlock := len(blocks) - 1
+	blockIndex := len(blocks) - 1
+	emptyIndex := 0
+
 	checksum := 0
 
-	for i := 0; i < len(blocks); i++ {
-		curr := blocks[i]
-		b := blocks[nextBlock]
+	fmt.Printf("%v\n", blocks)
 
-		if b.Id == -1 {
-			nextBlock -= 1
-			i -= 1
-			continue
-		} else if nextBlock < i {
+	for {
+		if emptyIndex == len(blocks) || blockIndex < emptyIndex {
 			break
 		}
 
-		if curr.Id == -1 && b.Length <= curr.Length {
-			reflect.Swapper(blocks)(i, nextBlock)
-		} else {
-			nextBlock -= 1
+		currBlock := Block{
+			Id:     blocks[emptyIndex].Id,
+			Length: blocks[emptyIndex].Length,
 		}
-		fmt.Printf("%v\n", blocks)
+		if currBlock.Id != -1 {
+			emptyIndex += 1
+			continue
+		}
+
+		blockToMove := blocks[blockIndex]
+
+		if blockToMove.Length == currBlock.Length {
+			reflect.Swapper(blocks)(blockIndex, emptyIndex)
+		} else if blockToMove.Length < currBlock.Length {
+			newBlock := Block{Id: -1, Length: blockToMove.Length}
+			currBlock.Length -= blockToMove.Length
+			blocks[emptyIndex] = blockToMove
+			blocks[blockIndex] = newBlock
+			blocks = slices.Insert(blocks, emptyIndex+1, currBlock)
+			break
+		}
+
 	}
+
+	fmt.Printf("%v\n", blocks)
 
 	return checksum
 }
