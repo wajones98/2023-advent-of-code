@@ -2,6 +2,7 @@ package day9
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strconv"
 
@@ -121,7 +122,9 @@ func LoadInputPartTwo(s *bufio.Scanner) []Block {
 			id = idIndex
 			idIndex += 1
 		}
-		blocks = append(blocks, Block{Id: id, Length: v})
+		if v > 0 {
+			blocks = append(blocks, Block{Id: id, Length: v})
+		}
 		isFile = !isFile
 	}
 
@@ -131,9 +134,11 @@ func LoadInputPartTwo(s *bufio.Scanner) []Block {
 func CompressPartTwo(blocks []Block) int {
 	nextBlock := len(blocks) - 1
 	checksum := 0
+
 	for i := 0; i < len(blocks); i++ {
 		curr := blocks[i]
 		b := blocks[nextBlock]
+
 		if b.Id == -1 {
 			nextBlock -= 1
 			i -= 1
@@ -142,14 +147,12 @@ func CompressPartTwo(blocks []Block) int {
 			break
 		}
 
-		if curr.Id == -1 {
+		if curr.Id == -1 && b.Length <= curr.Length {
 			reflect.Swapper(blocks)(i, nextBlock)
+		} else {
+			nextBlock -= 1
 		}
-
-		curr = blocks[i]
-		if curr.Id > 0 {
-			checksum += curr.Id * b.Length
-		}
+		fmt.Printf("%v\n", blocks)
 	}
 
 	return checksum

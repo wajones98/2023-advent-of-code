@@ -22,14 +22,13 @@ func TestLoadInput(t *testing.T) {
 }
 
 func TestLoadInputPartTwo(t *testing.T) {
-	input := "12345"
-	s := bufio.NewScanner(strings.NewReader(input))
+	s := bufio.NewScanner(strings.NewReader(Input))
 
 	actual := LoadInputPartTwo(s)
-	expected := []Block{{Id: 0, Length: 1}, {Id: -1, Length: 2}, {Id: 1, Length: 3}, {Id: -1, Length: 4}, {Id: 2, Length: 5}}
+	expected := []Block{{0, 2}, {-1, 3}, {1, 3}, {-1, 3}, {2, 1}, {-1, 3}, {3, 3}, {-1, 1}, {4, 2}, {-1, 1}, {5, 4}, {-1, 1}, {6, 4}, {-1, 1}, {7, 3}, {-1, 1}, {8, 4}, {9, 2}}
 
 	if !reflect.DeepEqual(expected, actual) {
-		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
+		t.Errorf("\nExpected: %v\nGot:      %v\n", expected, actual)
 	}
 }
 
@@ -72,7 +71,17 @@ func TestExampleInputPartTwo(t *testing.T) {
 	// 	t.Errorf("Expected: %d, Got: %d\n", expected, checksum)
 	// }
 
-	if !reflect.DeepEqual(expectedData, data) {
-		t.Errorf("Expected: %v, Got: %v\n", expectedData, data)
+	if len(expectedData) != len(data) {
+		t.Errorf("Expected: %d, Got: %d\n", len(expectedData), len(data))
+
 	}
+
+	for i, e := range expectedData {
+		if !reflect.DeepEqual(e, data[i]) {
+			t.Errorf("Expected: %v, Got: %v\n", e, data[i])
+		}
+	}
+
+	t.Errorf("\nExpected: %v,   Got:      %v\n", expectedData, data)
+
 }
