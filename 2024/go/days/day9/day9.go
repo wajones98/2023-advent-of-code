@@ -2,6 +2,7 @@ package day9
 
 import (
 	"bufio"
+	"reflect"
 	"strconv"
 
 	"github.com/wajones98/advent-of-code/days"
@@ -71,8 +72,29 @@ func LoadInput(s *bufio.Scanner) []int {
 	return blocks
 }
 
-func Compress(blocks []int) {
+func Compress(blocks []int) int {
+	nextBlock := len(blocks) - 1
+	checksum := 0
 	for i := 0; i < len(blocks); i++ {
+		curr := blocks[i]
+		b := blocks[nextBlock]
+		if b == -1 {
+			nextBlock -= 1
+			i -= 1
+			continue
+		} else if nextBlock < i {
+			break
+		}
 
+		if curr == -1 {
+			reflect.Swapper(blocks)(i, nextBlock)
+		}
+
+		curr = blocks[i]
+		if curr > 0 {
+			checksum += curr * i
+		}
 	}
+
+	return checksum
 }

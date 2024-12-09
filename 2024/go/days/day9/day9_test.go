@@ -24,9 +24,26 @@ func TestLoadInput(t *testing.T) {
 func TestCompress(t *testing.T) {
 	data := []int{0, -1, -1, 1, 1, 1, -1, -1, -1, -1, 2, 2, 2, 2, 2}
 	expected := []int{0, 2, 2, 1, 1, 1, 2, 2, 2, -1, -1, -1, -1, -1, -1}
-	Compress(data)
+	expectedChecksum := 60
+	checksum := Compress(data)
 
 	if !reflect.DeepEqual(expected, data) {
 		t.Errorf("Expected: %v, Got: %v\n", expected, data)
+	}
+
+	if expectedChecksum != checksum {
+		t.Errorf("Expected: %d, Got: %d\n", expectedChecksum, checksum)
+	}
+
+}
+
+func TestExampleInput(t *testing.T) {
+	s := bufio.NewScanner(strings.NewReader(Input))
+	data := LoadInput(s)
+	expected := 1928
+	checksum := Compress(data)
+
+	if expected != checksum {
+		t.Errorf("Expected: %d, Got: %d\n", expected, checksum)
 	}
 }
