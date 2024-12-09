@@ -100,3 +100,30 @@ func Compress(blocks []int) int {
 
 	return checksum
 }
+
+type Block struct {
+	Id     int
+	Length int
+}
+
+func LoadInputPartTwo(s *bufio.Scanner) []Block {
+	s.Scan()
+	line := s.Text()
+
+	blocks := []Block{}
+	isFile := true
+	idIndex := 0
+
+	for _, c := range line {
+		v, _ := strconv.Atoi(string(c))
+		id := -1
+		if isFile {
+			id = idIndex
+			idIndex += 1
+		}
+		blocks = append(blocks, Block{Id: id, Length: v})
+		isFile = !isFile
+	}
+
+	return blocks
+}

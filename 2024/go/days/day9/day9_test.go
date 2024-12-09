@@ -21,6 +21,18 @@ func TestLoadInput(t *testing.T) {
 	}
 }
 
+func TestLoadInputPartTwo(t *testing.T) {
+	input := "12345"
+	s := bufio.NewScanner(strings.NewReader(input))
+
+	actual := LoadInputPartTwo(s)
+	expected := []Block{{Id: 0, Length: 1}, {Id: -1, Length: 2}, {Id: 1, Length: 3}, {Id: -1, Length: 4}, {Id: 2, Length: 5}}
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
+	}
+}
+
 func TestCompress(t *testing.T) {
 	data := []int{0, -1, -1, 1, 1, 1, -1, -1, -1, -1, 2, 2, 2, 2, 2}
 	expected := []int{0, 2, 2, 1, 1, 1, 2, 2, 2, -1, -1, -1, -1, -1, -1}
