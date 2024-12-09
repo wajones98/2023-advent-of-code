@@ -129,5 +129,28 @@ func LoadInputPartTwo(s *bufio.Scanner) []Block {
 }
 
 func CompressPartTwo(blocks []Block) int {
-	return 0
+	nextBlock := len(blocks) - 1
+	checksum := 0
+	for i := 0; i < len(blocks); i++ {
+		curr := blocks[i]
+		b := blocks[nextBlock]
+		if b.Id == -1 {
+			nextBlock -= 1
+			i -= 1
+			continue
+		} else if nextBlock < i {
+			break
+		}
+
+		if curr.Id == -1 {
+			reflect.Swapper(blocks)(i, nextBlock)
+		}
+
+		curr = blocks[i]
+		if curr.Id > 0 {
+			checksum += curr.Id * b.Length
+		}
+	}
+
+	return checksum
 }

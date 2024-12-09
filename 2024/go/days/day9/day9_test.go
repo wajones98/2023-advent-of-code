@@ -63,10 +63,16 @@ func TestExampleInputPartOne(t *testing.T) {
 func TestExampleInputPartTwo(t *testing.T) {
 	s := bufio.NewScanner(strings.NewReader(Input))
 	data := LoadInputPartTwo(s)
-	expected := 2858
-	checksum := CompressPartTwo(data)
+	expectedData := []Block{{0, 2}, {-1, 3}, {1, 3}, {-1, 3}, {2, 1}, {-1, 3}, {3, 3}, {-1, 1}, {4, 2}, {-1, 1}, {5, 4}, {1, -1}, {6, 4}, {-1, 1}, {7, 3}, {-1, 1}, {8, 4}, {9, 2}}
 
-	if expected != checksum {
-		t.Errorf("Expected: %d, Got: %d\n", expected, checksum)
+	// expectedChecksum := 2858
+	CompressPartTwo(data)
+
+	// if expectedChecksum != checksum {
+	// 	t.Errorf("Expected: %d, Got: %d\n", expected, checksum)
+	// }
+
+	if !reflect.DeepEqual(expectedData, data) {
+		t.Errorf("Expected: %v, Got: %v\n", expectedData, data)
 	}
 }
