@@ -2,6 +2,7 @@ package day9
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strconv"
 
@@ -130,39 +131,61 @@ func LoadInputPartTwo(s *bufio.Scanner) []Block {
 	return blocks
 }
 
-func CompressPartTwo(blocks []Block) int {
-	nextBlock := len(blocks) - 1
+func CompressPartTwo(blocks []int) int {
 	checksum := 0
-	for i := 0; i < len(blocks); i++ {
-		curr := blocks[i]
-		b := blocks[nextBlock]
-		if b.Id == -1 {
-			nextBlock -= 1
-			i -= 1
+
+	fmt.Printf("%v\n", blocks)
+
+	for i := len(blocks) - 1; i >= 0; i-- {
+		block := blocks[i]
+		if block == -1 {
 			continue
-		} else if nextBlock < i {
-			break
 		}
 
-		if curr.Id == -1 {
-			reflect.Swapper(blocks)(i, nextBlock)
-		}
-
-		curr = blocks[i]
-		if curr.Id > 0 {
-			checksum += curr.Length * i
-		}
+		blockLength := FindChunk(i, block, blocks)
+		result := i - blockLength
+		fmt.Printf("Index: %d, Value: %d, Length: %d, NewIndex: %d\n\n", i, block, blockLength, result)
+		i = result + 1
 	}
 
 	return checksum
 }
 
-// else if blockToMove.Length < currBlock.Length {
-// 		newBlock := Block{Id: -1, Length: blockToMove.Length}
-// 		currBlock.Length -= blockToMove.Length
-// 		blocks[emptyIndex] = blockToMove
-// 		blocks[blockIndex] = newBlock
-// 		fmt.Printf("Swapped %v with %v\n", newBlock, blockToMove)
-// 		blocks = slices.Insert(blocks, emptyIndex+1, currBlock)
-// 		fmt.Printf("Added %v\n", currBlock)
+func FindChunk(start, block int, blocks []int) int {
+	length := 0
+
+	for i := len(blocks) - 1; i >= 0; i-- {
+		if i > start {
+			continue
+		}
+		next := blocks[i]
+		if next != block {
+			break
+		}
+		length += 1
+		fmt.Printf("%d", next)
+	}
+
+	fmt.Printf("\n")
+	return length
+}
+
+// func FindNextEmptySpace(blocks []int) (int, int, int) {
+// 	start, end := 0, 0
+// 	found := false
+// 	for i, b := range blocks {
+// 		if b != -1 {
+// 			continue
+// 		}
+// 		if !found {
+// 			start = i
+// 			found = true
+// 		} else if b != -1 {
+// 			break
+// 		} else {
+// 			end += 1
+// 		}
 // 	}
+//
+// 	return start, end, end + 1 - start
+// }
