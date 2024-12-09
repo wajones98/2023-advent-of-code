@@ -70,3 +70,9 @@ func LoadInput(s *bufio.Scanner) []int {
 
 	return blocks
 }
+
+func Compress(blocks []int) {
+	for i := 0; i < len(blocks); i++ {
+
+	}
+}
