@@ -146,12 +146,17 @@ func CompressPartTwo(blocks []int) int {
 		result := i - blockLength
 		i = result + 1
 
-		_, emptySpaceLength := FindEmptySpace(blocks)
+		emptySpaceStart, emptySpaceLength := FindEmptySpace(blocks)
 
-		fmt.Printf("Index: %d, Value: %d, Length: %d, NewIndex: %d, emptySpaceLength: %d\n\n", i, block, blockLength, result, emptySpaceLength)
+		fmt.Printf("Index: %d, Value: %d, Length: %d, NewIndex: %d, emptySpaceLength: %d, emptySpaceStart: %d\n\n", i, block, blockLength, result, emptySpaceLength, emptySpaceStart)
 
 		if emptySpaceLength >= blockLength {
+			for j := 0; j < blockLength; j++ {
+				blocks[emptySpaceStart+j] = block
+				blocks[i-j+1] = -1
+			}
 		}
+		fmt.Printf("%v\n", blocks)
 	}
 
 	return checksum
