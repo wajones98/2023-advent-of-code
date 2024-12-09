@@ -2,9 +2,7 @@ package day9
 
 import (
 	"bufio"
-	"fmt"
 	"reflect"
-	"slices"
 	"strconv"
 
 	"github.com/wajones98/advent-of-code/days"
@@ -133,43 +131,38 @@ func LoadInputPartTwo(s *bufio.Scanner) []Block {
 }
 
 func CompressPartTwo(blocks []Block) int {
-	blockIndex := len(blocks) - 1
-	emptyIndex := 0
-
+	nextBlock := len(blocks) - 1
 	checksum := 0
-
-	fmt.Printf("%v\n", blocks)
-
-	for {
-		if emptyIndex == len(blocks) || blockIndex < emptyIndex {
-			break
-		}
-
-		currBlock := Block{
-			Id:     blocks[emptyIndex].Id,
-			Length: blocks[emptyIndex].Length,
-		}
-		if currBlock.Id != -1 {
-			emptyIndex += 1
+	for i := 0; i < len(blocks); i++ {
+		curr := blocks[i]
+		b := blocks[nextBlock]
+		if b.Id == -1 {
+			nextBlock -= 1
+			i -= 1
 			continue
-		}
-
-		blockToMove := blocks[blockIndex]
-
-		if blockToMove.Length == currBlock.Length {
-			reflect.Swapper(blocks)(blockIndex, emptyIndex)
-		} else if blockToMove.Length < currBlock.Length {
-			newBlock := Block{Id: -1, Length: blockToMove.Length}
-			currBlock.Length -= blockToMove.Length
-			blocks[emptyIndex] = blockToMove
-			blocks[blockIndex] = newBlock
-			blocks = slices.Insert(blocks, emptyIndex+1, currBlock)
+		} else if nextBlock < i {
 			break
 		}
 
-	}
+		if curr.Id == -1 {
+			reflect.Swapper(blocks)(i, nextBlock)
+		}
 
-	fmt.Printf("%v\n", blocks)
+		curr = blocks[i]
+		if curr.Id > 0 {
+			checksum += curr.Length * i
+		}
+	}
 
 	return checksum
 }
+
+// else if blockToMove.Length < currBlock.Length {
+// 		newBlock := Block{Id: -1, Length: blockToMove.Length}
+// 		currBlock.Length -= blockToMove.Length
+// 		blocks[emptyIndex] = blockToMove
+// 		blocks[blockIndex] = newBlock
+// 		fmt.Printf("Swapped %v with %v\n", newBlock, blockToMove)
+// 		blocks = slices.Insert(blocks, emptyIndex+1, currBlock)
+// 		fmt.Printf("Added %v\n", currBlock)
+// 	}
