@@ -144,8 +144,11 @@ func CompressPartTwo(blocks []int) int {
 
 		blockLength := FindChunk(i, block, blocks)
 		result := i - blockLength
-		fmt.Printf("Index: %d, Value: %d, Length: %d, NewIndex: %d\n\n", i, block, blockLength, result)
 		i = result + 1
+
+		FindEmptySpace(blocks)
+
+		fmt.Printf("Index: %d, Value: %d, Length: %d, NewIndex: %d\n\n", i, block, blockLength, result)
 	}
 
 	return checksum
@@ -153,7 +156,6 @@ func CompressPartTwo(blocks []int) int {
 
 func FindChunk(start, block int, blocks []int) int {
 	length := 0
-
 	for i := len(blocks) - 1; i >= 0; i-- {
 		if i > start {
 			continue
@@ -164,6 +166,28 @@ func FindChunk(start, block int, blocks []int) int {
 		}
 		length += 1
 		fmt.Printf("%d", next)
+	}
+
+	fmt.Printf("\n")
+	return length
+}
+
+func FindEmptySpace(blocks []int) int {
+	length := 0
+
+	prevIndex := 0
+	for i := 0; i < len(blocks)-1; i++ {
+		if prevIndex != 0 && i-prevIndex > 1 {
+			break
+		}
+
+		block := blocks[i]
+		if block != -1 {
+			continue
+		}
+		prevIndex = i
+		fmt.Printf("Index: %d, Block: %d\n", i, block)
+		length += 1
 	}
 
 	fmt.Printf("\n")
