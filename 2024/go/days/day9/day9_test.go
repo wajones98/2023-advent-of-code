@@ -49,11 +49,22 @@ func TestCompress(t *testing.T) {
 
 }
 
-func TestExampleInput(t *testing.T) {
+func TestExampleInputPartOne(t *testing.T) {
 	s := bufio.NewScanner(strings.NewReader(Input))
 	data := LoadInput(s)
 	expected := 1928
 	checksum := Compress(data)
+
+	if expected != checksum {
+		t.Errorf("Expected: %d, Got: %d\n", expected, checksum)
+	}
+}
+
+func TestExampleInputPartTwo(t *testing.T) {
+	s := bufio.NewScanner(strings.NewReader(Input))
+	data := LoadInputPartTwo(s)
+	expected := 2858
+	checksum := CompressPartTwo(data)
 
 	if expected != checksum {
 		t.Errorf("Expected: %d, Got: %d\n", expected, checksum)

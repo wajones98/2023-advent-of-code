@@ -127,3 +127,7 @@ func LoadInputPartTwo(s *bufio.Scanner) []Block {
 
 	return blocks
 }
+
+func CompressPartTwo(blocks []Block) int {
+	return 0
+}
