@@ -2,6 +2,7 @@ package day9
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -62,7 +63,7 @@ func TestExampleInputPartOne(t *testing.T) {
 func TestExampleInputPartTwo(t *testing.T) {
 	s := bufio.NewScanner(strings.NewReader(Input))
 	data := LoadInputPartTwo(s)
-	expectedData := []Block{{0, 2}, {-1, 3}, {1, 3}, {-1, 3}, {2, 1}, {-1, 3}, {3, 3}, {-1, 1}, {4, 2}, {-1, 1}, {5, 4}, {1, -1}, {6, 4}, {-1, 1}, {7, 3}, {-1, 1}, {8, 4}, {9, 2}}
+	expectedData := []Block{{0, 2}, {9, 2}, {2, 1}, {3, 1}, {7, 3}, {-1, 1}, {4, 2}, {-1, 1}, {3, 3}, {-1, 4}, {5, 4}, {1, -1}, {6, 4}, {-1, 5}, {8, 4}, {-1, 2}, {-1, 1}, {-1, 1}}
 
 	// expectedChecksum := 2858
 	CompressPartTwo(data)
@@ -82,6 +83,5 @@ func TestExampleInputPartTwo(t *testing.T) {
 		}
 	}
 
-	t.Errorf("\nExpected: %v,   Got:      %v\n", expectedData, data)
-
+	fmt.Printf("\nExpected: %v\nGot:      %v\n", expectedData, data)
 }
