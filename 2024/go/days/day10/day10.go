@@ -2,7 +2,6 @@ package day10
 
 import (
 	"bufio"
-	"strconv"
 
 	"github.com/wajones98/advent-of-code/common"
 	"github.com/wajones98/advent-of-code/days"
@@ -48,26 +47,7 @@ func Part2() (int, error) {
 	return 0, nil
 }
 
-func LoadInput(s *bufio.Scanner) common.TwoDMap[int] {
-	s.Scan()
-	line := s.Text()
-
-	blocks := []int{}
-	isFile := true
-	idIndex := 0
-
-	for _, c := range line {
-		v, _ := strconv.Atoi(string(c))
-		id := -1
-		if isFile {
-			id = idIndex
-			idIndex += 1
-		}
-		for range v {
-			blocks = append(blocks, id)
-		}
-		isFile = !isFile
-	}
-
-	return blocks
+func LoadInput(s *bufio.Scanner) (*common.TwoDMap[int], error) {
+	twoDMap := common.NewTwoDMap[int](0, 0)
+	return twoDMap, nil
 }
