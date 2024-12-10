@@ -60,6 +60,30 @@ func TestTraverseTrail(t *testing.T) {
 			Direction: Down,
 			Value:     0,
 		},
+		{
+			Expected:  true,
+			Coords:    Coords{3, 3},
+			Direction: Left,
+			Value:     3,
+		},
+		{
+			Expected:  true,
+			Coords:    Coords{3, 3},
+			Direction: Right,
+			Value:     3,
+		},
+		{
+			Expected:  false,
+			Coords:    Coords{3, 3},
+			Direction: Up,
+			Value:     3,
+		},
+		{
+			Expected:  false,
+			Coords:    Coords{0, 6},
+			Direction: Left,
+			Value:     6,
+		},
 	}
 
 	for _, test := range tests {
