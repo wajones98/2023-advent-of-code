@@ -2,7 +2,7 @@ package day9
 
 import (
 	"bufio"
-	"fmt"
+	// "fmt"
 	"reflect"
 	"strconv"
 
@@ -42,13 +42,15 @@ func Part1() (int, error) {
 }
 
 func Part2() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	blocks := LoadInput(s)
+
+	return CompressPartTwo(blocks), nil
 }
 
 func LoadInput(s *bufio.Scanner) []int {
@@ -133,38 +135,43 @@ func LoadInputPartTwo(s *bufio.Scanner) []Block {
 
 func CompressPartTwo(blocks []int) int {
 
-	fmt.Printf("%v\n", blocks)
-	seen := map[int]bool{}
-Loop:
+	// fmt.Printf("%v\n", blocks)
+	// seen := map[int]bool{}
+	// Loop:
 	for i := len(blocks) - 1; i >= 0; i-- {
+
+		emptySpaceStart, _ := FindEmptySpace(0, blocks)
 		block := blocks[i]
 		if block == -1 {
 			continue
+		} else if i < emptySpaceStart {
+			break
 		}
 
 		blockLength := FindChunk(i, block, blocks)
 
 		for x := 0; x < i-blockLength; x++ {
 			emptySpaceStart, emptySpaceLength := FindEmptySpace(x, blocks)
-			x = (emptySpaceStart + emptySpaceLength) - 1
 			if emptySpaceLength == 0 {
 				break
 			}
-			if emptySpaceLength >= blockLength {
-				_, ok := seen[block]
-				if ok {
-					break Loop
-				}
+			if emptySpaceLength >= blockLength && emptySpaceStart < i {
+				// _, ok := seen[block]
+				// if ok {
+				// 	break Loop
+				// }
 				for j := 0; j < blockLength; j++ {
 					blocks[emptySpaceStart+j] = block
 					blocks[i-j] = -1
 				}
-				seen[block] = true
+				// seen[block] = true
 				break
 			}
+
+			x = (emptySpaceStart + emptySpaceLength) - 1
 		}
 
-		fmt.Printf("Index: %d, Result: %v\n", i, blocks)
+		// fmt.Printf("Index: %d, Result: %v\n", i, blocks)
 		// KEEP AT END
 		result := i - blockLength
 		i = result + 1
