@@ -124,19 +124,23 @@ func TraverseTrail(x, y, currentPointValue int, direction Direction, m *common.T
 	var newX, newY int
 
 	switch direction {
-	case Down:
-		newX, newY = x, y+1
-		if newY == m.Height {
-			fmt.Printf("REACHED EDGE OF MAP\n")
+	case Up:
+		newX, newY = x, y-1
+		if newY < 0 {
 			return -1, -1, -1, false
 		}
 		nextPointValue, _ = m.Get(newX, newY)
-		fmt.Printf("New Point: %d\n", nextPointValue)
+		diff = nextPointValue - currentPointValue
+	case Down:
+		newX, newY = x, y+1
+		if newY == m.Height {
+			return -1, -1, -1, false
+		}
+		nextPointValue, _ = m.Get(newX, newY)
 		diff = nextPointValue - currentPointValue
 	}
 
 	if diff != 1 {
-		fmt.Printf("NOT VALID\n")
 		return -1, -1, -1, false
 	}
 
