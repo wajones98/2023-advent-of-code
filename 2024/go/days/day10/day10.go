@@ -85,6 +85,21 @@ var (
 	Right           = Coords{1, 0}
 )
 
+func DirectionString(direction Direction) string {
+	switch direction {
+	case Up:
+		return "Up"
+	case Right:
+		return "Right"
+	case Left:
+		return "Left"
+	case Down:
+		return "Down"
+	default:
+		return "Unknown"
+	}
+}
+
 type Coords struct {
 	X, Y int
 }
@@ -104,37 +119,40 @@ func PossiblePaths(m *common.TwoDMap[int], x, y, value int) []Coords {
 	directions := []Direction{Up, Down, Left, Right}
 	coords := []Coords{}
 
-	paths := 0
-
-	fmt.Printf("Finding possible paths for x: %d, y: %d\n", x, y)
+	fmt.Printf("Finding possible paths for x: %d, y: %d\n-----------------------------------\n", x, y)
 
 	// Loop:
 	var helper func(x, y, value int)
 	helper = func(x, y, value int) {
+		fmt.Printf("\nError: %v for %d, %d\n", m.CheckBounds(x, y), x, y)
 		for _, d := range directions {
-			fmt.Printf("Checking direction %v\n", d)
-
-			newX, newY, newValue := x, y, value
-			found, ok := TraverseTrail(m, newX, newY, newValue, d)
+			fmt.Printf("Checking direction %s for %d, %d\n", DirectionString(d), x, y)
+			found, ok := TraverseTrail(m, x, y, value, d)
+			fmt.Printf("	Found: %v, Ok: %t\n", found, ok)
 			if !ok {
-				paths -= 1
+				continue
 			} else if found != nil {
-				paths -= 1
 				coords = append(coords, *found)
+				continue
 			}
-			paths += 1
-			x = newX
-			y = newY
-			value = newValue
+			newValue, _ := m.Get(x+d.X, y+d.Y)
+			helper(x+d.X, y+d.Y, newValue)
+
+			fmt.Printf("\n")
 		}
 
-		if paths == 0 {
-			return
-		}
+		fmt.Printf("--------------------------------\n")
 
-		helper(x, y, value)
 	}
 	helper(x, y, value)
+
+	// newCoords := []Coords{}
+	// for _, c := range coords {
+	// 	err := m.CheckBounds(c.X, c.Y)
+	// 	if err != nil {
+	// 		newCoords = append(newCoords, c)
+	// 	}
+	// }
 
 	return coords
 }

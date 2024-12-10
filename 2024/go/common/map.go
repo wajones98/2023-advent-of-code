@@ -39,9 +39,9 @@ func (m *TwoDMap[T]) getIndex(x, y int) int {
 }
 
 func (m *TwoDMap[T]) CheckBounds(x, y int) error {
-	if x > m.Width || x < 0 {
+	if x >= m.Width || x < 0 {
 		return fmt.Errorf("%d is out of bounds %d", x, m.Width)
-	} else if y > m.Height || y < 0 {
+	} else if y >= m.Height || y < 0 {
 		return fmt.Errorf("%d is out of bounds %d", y, m.Height)
 	}
 
