@@ -125,7 +125,7 @@ func TestFindTrails(t *testing.T) {
 
 	tests := []struct {
 		Input    string
-		Expected []Coords
+		Expected map[Coords]int
 		X, Y     int
 	}{
 		{
@@ -136,7 +136,7 @@ func TestFindTrails(t *testing.T) {
 7.....7
 8.....8
 9.....9`,
-			Expected: []Coords{{0, 6}, {6, 6}},
+			Expected: map[Coords]int{{0, 6}: 1, {6, 6}: 1},
 			X:        3,
 			Y:        0,
 		},
@@ -148,7 +148,7 @@ func TestFindTrails(t *testing.T) {
 765.987
 876....
 987....`,
-			Expected: []Coords{{6, 0}, {5, 1}, {4, 4}, {0, 6}},
+			Expected: map[Coords]int{{6, 0}: 1, {5, 1}: 1, {4, 4}: 1, {0, 6}: 10},
 			X:        3,
 			Y:        0,
 		},

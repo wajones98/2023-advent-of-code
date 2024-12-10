@@ -31,13 +31,18 @@ func Run() (*days.Result[int, int], error) {
 }
 
 func Part1() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	return FindTrails(twoDMap), nil
 }
 
 func Part2() (int, error) {
@@ -104,20 +109,33 @@ type Coords struct {
 	X, Y int
 }
 
-func FindTrails(m *common.TwoDMap[int]) []Coords {
-	coords := []Coords{}
-	for _, value := range m.Map {
+func FindTrails(m *common.TwoDMap[int]) int {
+	coords := []map[Coords]int{}
+	for i, value := range m.Map {
 		if value == 0 {
-
+			x, y := m.FindPosition(i)
+			coords = append(coords, PossiblePaths(m, x, y, value))
 		}
 	}
+	fmt.Printf("%v\n", coords)
+	total := 0
+	// unique := map[int][]Coords{}
+	// for i, c := range coords {
+	// 	unique[i] = []Coords{}
+	// 	for _, cj := range c {
+	// 		if !slices.Contains(c, cj) {
+	// 			total += 1
+	// 			unique[i] = append(unique[i], cj)
+	// 		}
+	// 	}
+	// }
 
-	return coords
+	return total
 }
 
-func PossiblePaths(m *common.TwoDMap[int], x, y, value int) []Coords {
+func PossiblePaths(m *common.TwoDMap[int], x, y, value int) map[Coords]int {
 	directions := []Direction{Up, Down, Left, Right}
-	coords := []Coords{}
+	coords := map[Coords]int{}
 
 	fmt.Printf("Finding possible paths for x: %d, y: %d\n-----------------------------------\n", x, y)
 
@@ -132,7 +150,11 @@ func PossiblePaths(m *common.TwoDMap[int], x, y, value int) []Coords {
 			if !ok {
 				continue
 			} else if found != nil {
-				coords = append(coords, *found)
+				count, ok := coords[*found]
+				if !ok {
+					count = 0
+				}
+				coords[*found] = count + 1
 				continue
 			}
 			newValue, _ := m.Get(x+d.X, y+d.Y)
