@@ -80,8 +80,8 @@ func FindTrails(m *common.TwoDMap[int]) {
 	for i, h := range m.Map {
 		if h == 0 {
 			x, y := m.FindPosition(i)
-			fmt.Printf("FOUND START: X: %d, Y: %d\n", x, y)
-			valid := FindTrail(x, y, h, m, []Coords{})
+			fmt.Printf("FOUND START: X: %d, Y: %d, Value: %d\n", x, y, h)
+			valid := FindTrail(x, y, h, m, []Coords{}, i)
 			fmt.Printf("%v\n", valid)
 		}
 	}
@@ -100,28 +100,37 @@ type Coords struct {
 	X, Y int
 }
 
-func FindTrail(x, y, value int, m *common.TwoDMap[int], coords []Coords) []Coords {
-	for i := range 3 {
+func FindTrail(x, y, value int, m *common.TwoDMap[int], initial []Coords, index int) []Coords {
+	if index == len(m.Map) {
+		return initial
+	}
+	coords := initial
+Loop:
+	for i := range 4 {
 		for {
 			newX, newY, newValue, ok := TraverseTrail(x, y, value, i, m)
+
+			fmt.Printf("X: %d, Y: %d, Value: %d, Ok: %t\n", newX, newY, newValue, ok)
+
 			if !ok {
-				break
+				continue Loop
 			} else if newValue == 9 {
 				coords = append(coords, Coords{newX, newY})
-				break
+				continue Loop
 			}
 
-			return FindTrail(newX, newY, newValue, m, coords)
+			x = newX
+			y = newY
+			value = newValue
 		}
 	}
-
-	return coords
+	return FindTrail(x, y, value, m, coords, index+1)
 }
 
 func TraverseTrail(x, y, currentPointValue int, direction Direction, m *common.TwoDMap[int]) (int, int, int, bool) {
 	var nextPointValue int
 	var diff int
-	var newX, newY int
+	var newX, newY int = x, y
 
 	switch direction {
 	case Up:
@@ -140,6 +149,7 @@ func TraverseTrail(x, y, currentPointValue int, direction Direction, m *common.T
 			return -1, -1, -1, false
 		}
 	case Right:
+		fmt.Printf("CHECKING RIGHT FOR %d, %d of VALUE %d\n", x, y, currentPointValue)
 		newX = x + 1
 		if newX >= m.Width {
 			return -1, -1, -1, false
