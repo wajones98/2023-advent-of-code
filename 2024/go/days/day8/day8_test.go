@@ -77,7 +77,7 @@ func TestFindAntinodes(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("POne: %v, PTwo: %v\n", test.POne, test.PTwo), func(t *testing.T) {
-			actual := FindAntinodes(test.POne, test.PTwo)
+			actual := FindAntinodes(test.POne, test.PTwo, 1)
 			if !reflect.DeepEqual(test.Expected, actual) {
 				t.Errorf("Expected: %v, Got: %v\n", test.Expected, actual)
 			}
@@ -141,7 +141,7 @@ func TestFindAllUniqueAntinodes(t *testing.T) {
 
 	f := FindFrequencies(twoDMap)
 	expected := 14
-	actual := FindAllUniqueAntinodes(twoDMap, f)
+	actual := FindAllUniqueAntinodes(twoDMap, f, false)
 	if expected != actual {
 		t.Errorf("Expected: %d, Got: %d\n", expected, actual)
 	}

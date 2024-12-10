@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"strconv"
 
+	"github.com/wajones98/advent-of-code/common"
 	"github.com/wajones98/advent-of-code/days"
 	"github.com/wajones98/advent-of-code/input"
 )
@@ -47,7 +48,7 @@ func Part2() (int, error) {
 	return 0, nil
 }
 
-func LoadInput(s *bufio.Scanner) []int {
+func LoadInput(s *bufio.Scanner) common.TwoDMap[int] {
 	s.Scan()
 	line := s.Text()
 

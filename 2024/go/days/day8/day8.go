@@ -65,14 +65,14 @@ func Part2() (int, error) {
 	return FindAllUniqueAntinodes(twoDMap, f, true), nil
 }
 
-func LoadInput(s *bufio.Scanner) (*common.TwoDMap, error) {
+func LoadInput(s *bufio.Scanner) (*common.TwoDMap[string], error) {
 	lines := []string{}
 	for s.Scan() {
 		lines = append(lines, s.Text())
 	}
 
 	width, height := len(lines[0]), len(lines)
-	twoDMap := common.NewTwoDMap(width, height)
+	twoDMap := common.NewTwoDMap[string](width, height)
 
 	for y, line := range lines {
 		chars := strings.Split(line, "")
@@ -87,7 +87,7 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap, error) {
 	return twoDMap, nil
 }
 
-func FindAllUniqueAntinodes(m *common.TwoDMap, frequencies map[string][]Coords, includeHarmonics bool) int {
+func FindAllUniqueAntinodes(m *common.TwoDMap[string], frequencies map[string][]Coords, includeHarmonics bool) int {
 	unique := map[Coords]bool{}
 	steps := 1
 	if includeHarmonics {
@@ -113,7 +113,7 @@ func FindAllUniqueAntinodes(m *common.TwoDMap, frequencies map[string][]Coords, 
 	return len(unique)
 }
 
-func FindFrequencies(m *common.TwoDMap) map[string][]Coords {
+func FindFrequencies(m *common.TwoDMap[string]) map[string][]Coords {
 	frequencies := map[string][]Coords{}
 
 	for i, c := range m.Map {

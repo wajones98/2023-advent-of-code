@@ -1,7 +1,34 @@
 package day10
 
-// import (
-// 	"testing"
-// )
+import (
+	// "bufio"
+	// "reflect"
+	// "strings"
+	"testing"
+)
 
-const Input = `2333133121414131402`
+const Input = `89010123
+78121874
+87430965
+96549874
+45678903
+32019012
+01329801
+10456732`
+
+func TestLoadInput(t *testing.T) {
+	//	input := `0123
+	//
+	// 1234
+	// 8765
+	// 9876`
+	//
+	//	s := bufio.NewScanner(strings.NewReader(Input))
+	//
+	//	actual := LoadInput(s)
+	//	expected := []int{}
+	//
+	//	if !reflect.DeepEqual(expected, actual) {
+	//		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
+	//	}
+}
