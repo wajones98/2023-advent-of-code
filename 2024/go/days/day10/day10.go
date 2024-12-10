@@ -125,20 +125,30 @@ func TraverseTrail(x, y, currentPointValue int, direction Direction, m *common.T
 
 	switch direction {
 	case Up:
-		newX, newY = x, y-1
+		newY = y - 1
 		if newY < 0 {
 			return -1, -1, -1, false
 		}
-		nextPointValue, _ = m.Get(newX, newY)
-		diff = nextPointValue - currentPointValue
 	case Down:
-		newX, newY = x, y+1
-		if newY == m.Height {
+		newY = y + 1
+		if newY >= m.Height {
 			return -1, -1, -1, false
 		}
-		nextPointValue, _ = m.Get(newX, newY)
-		diff = nextPointValue - currentPointValue
+	case Left:
+		newX = x - 1
+		if newX < 0 {
+			return -1, -1, -1, false
+		}
+	case Right:
+		newX = x + 1
+		if newX >= m.Width {
+			return -1, -1, -1, false
+		}
 	}
+
+	nextPointValue, _ = m.Get(newX, newY)
+
+	diff = nextPointValue - currentPointValue
 
 	if diff != 1 {
 		return -1, -1, -1, false
