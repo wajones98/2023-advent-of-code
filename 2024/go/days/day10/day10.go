@@ -2,6 +2,7 @@ package day10
 
 import (
 	"bufio"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -105,10 +106,14 @@ func PossiblePaths(m *common.TwoDMap[int], x, y, value int) []Coords {
 
 	paths := 0
 
+	fmt.Printf("Finding possible paths for x: %d, y: %d\n", x, y)
+
 	// Loop:
 	var helper func(x, y, value int)
 	helper = func(x, y, value int) {
 		for _, d := range directions {
+			fmt.Printf("Checking direction %v\n", d)
+
 			newX, newY, newValue := x, y, value
 			found, ok := TraverseTrail(m, newX, newY, newValue, d)
 			if !ok {

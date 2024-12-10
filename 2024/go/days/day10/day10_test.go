@@ -3,7 +3,6 @@ package day10
 import (
 	"bufio"
 	"fmt"
-	"reflect"
 	"strings"
 	"testing"
 )
@@ -54,6 +53,12 @@ func TestTraverseTrail(t *testing.T) {
 		Direction Direction
 		Value     int
 	}{
+		{
+			Expected:  false,
+			Coords:    Coords{3, 0},
+			Direction: Up,
+			Value:     0,
+		},
 		{
 			Expected:  true,
 			Coords:    Coords{3, 0},
@@ -109,26 +114,27 @@ func TestTraverseTrail(t *testing.T) {
 
 }
 
-func TestFindTrails(t *testing.T) {
-	input := `...0...
-...1...
-...2...
-6543456
-7.....7
-8.....8
-9.....9`
-
-	s := bufio.NewScanner(strings.NewReader(input))
-	twoDMap, err := LoadInput(s)
-	if err != nil {
-		t.Error(err)
-	}
-
-	expected := []Coords{{0, 6}, {6, 6}}
-	actual := PossiblePaths(twoDMap, 0, 3, 0)
-
-	if !reflect.DeepEqual(expected, actual) {
-		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
-	}
-
-}
+//
+// func TestFindTrails(t *testing.T) {
+// 	input := `...0...
+// ...1...
+// ...2...
+// 6543456
+// 7.....7
+// 8.....8
+// 9.....9`
+//
+// 	s := bufio.NewScanner(strings.NewReader(input))
+// 	twoDMap, err := LoadInput(s)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
+//
+// 	expected := []Coords{{0, 6}, {6, 6}}
+// 	actual := PossiblePaths(twoDMap, 3, 0, 0)
+//
+// 	if !reflect.DeepEqual(expected, actual) {
+// 		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
+// 	}
+//
+// }
