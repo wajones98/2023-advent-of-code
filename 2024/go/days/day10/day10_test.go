@@ -122,25 +122,52 @@ func TestTraverseTrail(t *testing.T) {
 }
 
 func TestFindTrails(t *testing.T) {
-	input := `...0...
+
+	tests := []struct {
+		Input    string
+		Expected []Coords
+		X, Y     int
+	}{
+		{
+			Input: `...0...
 ...1...
 ...2...
 6543456
 7.....7
 8.....8
-9.....9`
-
-	s := bufio.NewScanner(strings.NewReader(input))
-	twoDMap, err := LoadInput(s)
-	if err != nil {
-		t.Error(err)
+9.....9`,
+			Expected: []Coords{{0, 6}, {6, 6}},
+			X:        3,
+			Y:        0,
+		},
+		{
+			Input: `..90..9
+...1.98
+...2..7
+6543456
+765.987
+876....
+987....`,
+			Expected: []Coords{{6, 0}, {5, 1}, {4, 4}, {0, 6}},
+			X:        3,
+			Y:        0,
+		},
 	}
 
-	expected := []Coords{{0, 6}, {6, 6}}
-	actual := PossiblePaths(twoDMap, 3, 0, 0)
+	for i, test := range tests {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			s := bufio.NewScanner(strings.NewReader(test.Input))
+			twoDMap, err := LoadInput(s)
+			if err != nil {
+				t.Error(err)
+			}
 
-	if !reflect.DeepEqual(expected, actual) {
-		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
+			actual := PossiblePaths(twoDMap, test.X, test.Y, 0)
+
+			if !reflect.DeepEqual(test.Expected, actual) {
+				t.Errorf("Expected: %v, Got: %v\n", test.Expected, actual)
+			}
+		})
 	}
 
 }
