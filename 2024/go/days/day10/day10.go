@@ -110,25 +110,23 @@ type Coords struct {
 }
 
 func FindTrails(m *common.TwoDMap[int]) int {
-	coords := []map[Coords]int{}
+	trailPaths := []map[Coords]int{}
 	for i, value := range m.Map {
 		if value == 0 {
 			x, y := m.FindPosition(i)
-			coords = append(coords, PossiblePaths(m, x, y, value))
+			trailPaths = append(trailPaths, PossiblePaths(m, x, y, value))
 		}
 	}
-	fmt.Printf("%v\n", coords)
+
 	total := 0
-	// unique := map[int][]Coords{}
-	// for i, c := range coords {
-	// 	unique[i] = []Coords{}
-	// 	for _, cj := range c {
-	// 		if !slices.Contains(c, cj) {
-	// 			total += 1
-	// 			unique[i] = append(unique[i], cj)
-	// 		}
-	// 	}
-	// }
+
+	for _, paths := range trailPaths {
+		keys := make([]Coords, 0, len(paths))
+		for c := range paths {
+			keys = append(keys, c)
+		}
+		total += len(keys)
+	}
 
 	return total
 }
