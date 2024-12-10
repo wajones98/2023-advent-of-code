@@ -2,6 +2,7 @@ package day10
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -30,6 +31,58 @@ func TestLoadInput(t *testing.T) {
 	if strings.ReplaceAll(twoDMap.String(), "\n", "") != strings.ReplaceAll(input, "\n", "") {
 		t.Errorf("\nExpected: \n%s\nGot: \n%s\n", input, twoDMap.String())
 	}
+}
+
+func TestTraverseTrail(t *testing.T) {
+	input := `...0...
+...1...
+...2...
+6543456
+7.....7
+8.....8
+9.....9`
+
+	s := bufio.NewScanner(strings.NewReader(input))
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	tests := []struct {
+		Expected  bool
+		Coords    Coords
+		Direction Direction
+		Value     int
+	}{
+		{
+			Expected:  true,
+			Coords:    Coords{3, 0},
+			Direction: Down,
+			Value:     0,
+		},
+	}
+
+	for _, test := range tests {
+		directionName := ""
+		switch test.Direction {
+		case Up:
+			directionName = "Up"
+		case Down:
+			directionName = "Down"
+		case Left:
+			directionName = "Left"
+		case Right:
+			directionName = "Right"
+		}
+
+		t.Run(fmt.Sprintf("X: %d, Y: %d, Direction: %s, Value: %d", test.Coords.X, test.Coords.Y, directionName, test.Value), func(t *testing.T) {
+			_, ok := TraverseTrail(twoDMap, test.Coords.X, test.Coords.Y, test.Value, test.Direction)
+			if ok != test.Expected {
+				t.Errorf("Expected %t, Got: %t\n", test.Expected, ok)
+			}
+		})
+	}
+
 }
 
 func TestFindTrails(t *testing.T) {

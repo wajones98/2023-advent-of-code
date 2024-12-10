@@ -90,11 +90,23 @@ type Coords struct {
 
 func FindTrails(m *common.TwoDMap[int]) []Coords {
 	coords := []Coords{}
-	// for _, value := range m.Map {
-	//
-	// }
+	for _, value := range m.Map {
+		if value == 0 {
+
+		}
+	}
 
 	return coords
+}
+
+func TraverseTrail(m *common.TwoDMap[int], x, y, value int, direction Direction) (Coords, bool) {
+	nextX, nextY := x+direction.X, y+direction.Y
+	nextValue, err := m.Get(nextX, nextY)
+	if err != nil || nextValue-value != 1 {
+		return Coords{}, false
+	}
+
+	return Coords{}, true
 }
 
 // func FindTrail(x, y, value int, m *common.TwoDMap[int], initial []Coords, index int) []Coords {
