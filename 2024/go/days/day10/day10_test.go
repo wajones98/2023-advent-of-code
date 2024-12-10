@@ -92,9 +92,9 @@ func TestTraverseTrail(t *testing.T) {
 		},
 		{
 			Expected:  false,
-			Coords:    Coords{7, 5},
+			Coords:    Coords{6, 5},
 			Direction: Right,
-			Value:     7,
+			Value:     8,
 		},
 	}
 
