@@ -99,14 +99,53 @@ func FindTrails(m *common.TwoDMap[int]) []Coords {
 	return coords
 }
 
-func TraverseTrail(m *common.TwoDMap[int], x, y, value int, direction Direction) (Coords, bool) {
+func PossiblePaths(m *common.TwoDMap[int], x, y, value int) []Coords {
+	directions := []Direction{Up, Down, Left, Right}
+	coords := []Coords{}
+
+	paths := 0
+
+	// Loop:
+	var helper func(x, y, value int)
+	helper = func(x, y, value int) {
+		for _, d := range directions {
+			newX, newY, newValue := x, y, value
+			found, ok := TraverseTrail(m, newX, newY, newValue, d)
+			if !ok {
+				paths -= 1
+			} else if found != nil {
+				paths -= 1
+				coords = append(coords, *found)
+			}
+			paths += 1
+			x = newX
+			y = newY
+			value = newValue
+		}
+
+		if paths == 0 {
+			return
+		}
+
+		helper(x, y, value)
+	}
+	helper(x, y, value)
+
+	return coords
+}
+
+func TraverseTrail(m *common.TwoDMap[int], x, y, value int, direction Direction) (*Coords, bool) {
 	nextX, nextY := x+direction.X, y+direction.Y
 	nextValue, err := m.Get(nextX, nextY)
 	if err != nil || nextValue-value != 1 {
-		return Coords{}, false
+		return nil, false
 	}
 
-	return Coords{}, true
+	if nextValue == 9 {
+		return &Coords{nextX, nextY}, true
+	}
+
+	return nil, true
 }
 
 // func FindTrail(x, y, value int, m *common.TwoDMap[int], initial []Coords, index int) []Coords {

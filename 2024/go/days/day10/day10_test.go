@@ -125,7 +125,7 @@ func TestFindTrails(t *testing.T) {
 	}
 
 	expected := []Coords{{0, 6}, {6, 6}}
-	actual := FindTrails(twoDMap)
+	actual := PossiblePaths(twoDMap, 0, 3, 0)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
