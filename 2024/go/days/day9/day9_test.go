@@ -2,7 +2,6 @@ package day9
 
 import (
 	"bufio"
-	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -65,12 +64,8 @@ func TestExampleInputPartTwo(t *testing.T) {
 	data := LoadInput(s)
 	expectedData := []int{0, 0, 9, 9, 2, 1, 1, 1, 7, 7, 7, -1, 4, 4, -1, 3, 3, 3, -1, -1, -1, -1, 5, 5, 5, 5, -1, 6, 6, 6, 6, -1, -1, -1, -1, -1, 8, 8, 8, 8, -1, -1}
 
-	// expectedChecksum := 2858
-	CompressPartTwo(data)
-
-	// if expectedChecksum != checksum {
-	// 	t.Errorf("Expected: %d, Got: %d\n", expected, checksum)
-	// }
+	expectedChecksum := 2858
+	checksum := CompressPartTwo(data)
 
 	if len(expectedData) != len(data) {
 		t.Errorf("Expected: %d, Got: %d\n", len(expectedData), len(data))
@@ -83,5 +78,7 @@ func TestExampleInputPartTwo(t *testing.T) {
 		}
 	}
 
-	fmt.Printf("\nExpected: %v\nGot:      %v\n", expectedData, data)
+	if expectedChecksum != checksum {
+		t.Errorf("Expected: %d, Got: %d\n", expectedChecksum, checksum)
+	}
 }

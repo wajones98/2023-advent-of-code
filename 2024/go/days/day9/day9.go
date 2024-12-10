@@ -132,7 +132,6 @@ func LoadInputPartTwo(s *bufio.Scanner) []Block {
 }
 
 func CompressPartTwo(blocks []int) int {
-	checksum := 0
 
 	fmt.Printf("%v\n", blocks)
 	seen := map[int]bool{}
@@ -169,6 +168,16 @@ Loop:
 		// KEEP AT END
 		result := i - blockLength
 		i = result + 1
+	}
+
+	checksum := 0
+
+	for i, b := range blocks {
+		if b == -1 {
+			continue
+		}
+
+		checksum += (b * i)
 	}
 
 	return checksum
