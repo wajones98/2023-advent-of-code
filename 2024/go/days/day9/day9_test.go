@@ -63,7 +63,7 @@ func TestExampleInputPartOne(t *testing.T) {
 func TestExampleInputPartTwo(t *testing.T) {
 	s := bufio.NewScanner(strings.NewReader(Input))
 	data := LoadInput(s)
-	expectedData := []int{0, 0, 9, 9, 2, 1, 1, 1, 7, 7, 7, -1, 4, 4, -1, 3, 3, 3, -1, -1, -1, -1, 5, 5, 5, 5, -1, 6, 6, 6, 6, -1, -1, -1, -1, 1, 8, 8, 8, 8, -1, -1}
+	expectedData := []int{0, 0, 9, 9, 2, 1, 1, 1, 7, 7, 7, -1, 4, 4, -1, 3, 3, 3, -1, -1, -1, -1, 5, 5, 5, 5, -1, 6, 6, 6, 6, -1, -1, -1, -1, -1, 8, 8, 8, 8, -1, -1}
 
 	// expectedChecksum := 2858
 	CompressPartTwo(data)
