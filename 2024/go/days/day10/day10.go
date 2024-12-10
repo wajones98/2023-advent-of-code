@@ -42,17 +42,26 @@ func Part1() (int, error) {
 		return 0, err
 	}
 
-	return FindTrails(twoDMap), nil
+	unique, _ := FindTrails(twoDMap)
+
+	return unique, nil
 }
 
 func Part2() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	_, rating := FindTrails(twoDMap)
+
+	return rating, nil
 }
 
 func LoadInput(s *bufio.Scanner) (*common.TwoDMap[int], error) {
@@ -109,7 +118,7 @@ type Coords struct {
 	X, Y int
 }
 
-func FindTrails(m *common.TwoDMap[int]) int {
+func FindTrails(m *common.TwoDMap[int]) (int, int) {
 	trailPaths := []map[Coords]int{}
 	for i, value := range m.Map {
 		if value == 0 {
@@ -118,17 +127,19 @@ func FindTrails(m *common.TwoDMap[int]) int {
 		}
 	}
 
-	total := 0
+	unique := 0
+	rating := 0
 
 	for _, paths := range trailPaths {
 		keys := make([]Coords, 0, len(paths))
 		for c := range paths {
 			keys = append(keys, c)
+			rating += paths[c]
 		}
-		total += len(keys)
+		unique += len(keys)
 	}
 
-	return total
+	return unique, rating
 }
 
 func PossiblePaths(m *common.TwoDMap[int], x, y, value int) map[Coords]int {
