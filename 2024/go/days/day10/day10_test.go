@@ -2,6 +2,7 @@ package day10
 
 import (
 	"bufio"
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -29,4 +30,24 @@ func TestLoadInput(t *testing.T) {
 	if strings.ReplaceAll(twoDMap.String(), "\n", "") != strings.ReplaceAll(input, "\n", "") {
 		t.Errorf("\nExpected: \n%s\nGot: \n%s\n", input, twoDMap.String())
 	}
+}
+
+func TestFindTrails(t *testing.T) {
+	input := `...0...
+...1...
+...2...
+6543456
+7.....7
+8.....8
+9.....9`
+
+	s := bufio.NewScanner(strings.NewReader(input))
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	FindTrails(twoDMap)
+
+	fmt.Printf("%v\n", twoDMap.String())
 }

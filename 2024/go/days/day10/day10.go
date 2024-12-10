@@ -2,6 +2,7 @@ package day10
 
 import (
 	"bufio"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -63,7 +64,7 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap[int], error) {
 		for x, char := range chars {
 			value, err := strconv.Atoi(char)
 			if err != nil {
-				return nil, err
+				value = -1
 			}
 			err = twoDMap.Put(x, y, value)
 			if err != nil {
@@ -73,4 +74,71 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap[int], error) {
 	}
 
 	return twoDMap, nil
+}
+
+func FindTrails(m *common.TwoDMap[int]) {
+	for i, h := range m.Map {
+		if h == 0 {
+			x, y := m.FindPosition(i)
+			fmt.Printf("FOUND START: X: %d, Y: %d\n", x, y)
+			valid := FindTrail(x, y, h, m, []Coords{})
+			fmt.Printf("%v\n", valid)
+		}
+	}
+}
+
+type Direction = int
+
+const (
+	Up Direction = iota
+	Down
+	Left
+	Right
+)
+
+type Coords struct {
+	X, Y int
+}
+
+func FindTrail(x, y, value int, m *common.TwoDMap[int], coords []Coords) []Coords {
+	for i := range 3 {
+		for {
+			newX, newY, newValue, ok := TraverseTrail(x, y, value, i, m)
+			if !ok {
+				break
+			} else if newValue == 9 {
+				coords = append(coords, Coords{newX, newY})
+				break
+			}
+
+			return FindTrail(newX, newY, newValue, m, coords)
+		}
+	}
+
+	return coords
+}
+
+func TraverseTrail(x, y, currentPointValue int, direction Direction, m *common.TwoDMap[int]) (int, int, int, bool) {
+	var nextPointValue int
+	var diff int
+	var newX, newY int
+
+	switch direction {
+	case Down:
+		newX, newY = x, y+1
+		if newY == m.Height {
+			fmt.Printf("REACHED EDGE OF MAP\n")
+			return -1, -1, -1, false
+		}
+		nextPointValue, _ = m.Get(newX, newY)
+		fmt.Printf("New Point: %d\n", nextPointValue)
+		diff = nextPointValue - currentPointValue
+	}
+
+	if diff != 1 {
+		fmt.Printf("NOT VALID\n")
+		return -1, -1, -1, false
+	}
+
+	return newX, newY, nextPointValue, true
 }
