@@ -17,7 +17,7 @@ func NewTwoDMap[T any](width, height int) *TwoDMap[T] {
 }
 
 func (m *TwoDMap[T]) Put(x, y int, r T) error {
-	err := m.checkBounds(x, y)
+	err := m.CheckBounds(x, y)
 	if err != nil {
 		return err
 	}
@@ -26,7 +26,7 @@ func (m *TwoDMap[T]) Put(x, y int, r T) error {
 }
 
 func (m *TwoDMap[T]) Get(x, y int) (T, error) {
-	err := m.checkBounds(x, y)
+	err := m.CheckBounds(x, y)
 	var empty T
 	if err != nil {
 		return empty, err
@@ -38,10 +38,10 @@ func (m *TwoDMap[T]) getIndex(x, y int) int {
 	return y*m.Width + x
 }
 
-func (m *TwoDMap[T]) checkBounds(x, y int) error {
-	if x > m.Width {
+func (m *TwoDMap[T]) CheckBounds(x, y int) error {
+	if x > m.Width || x < 0 {
 		return fmt.Errorf("%d is out of bounds %d", x, m.Width)
-	} else if y > m.Height {
+	} else if y > m.Height || y < 0 {
 		return fmt.Errorf("%d is out of bounds %d", y, m.Height)
 	}
 
