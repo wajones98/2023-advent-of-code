@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/wajones98/advent-of-code/days/day1"
+	"github.com/wajones98/advent-of-code/days/day10"
 	"github.com/wajones98/advent-of-code/days/day2"
 	"github.com/wajones98/advent-of-code/days/day3"
 	"github.com/wajones98/advent-of-code/days/day4"
@@ -89,6 +90,13 @@ func main() {
 		fmt.Printf("Part 2 Result: %d\n", result.Part2)
 	case 9:
 		result, err := day9.Run()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("Part 1 Result: %d\n", result.Part1)
+		fmt.Printf("Part 2 Result: %d\n", result.Part2)
+	case 10:
+		result, err := day10.Run()
 		if err != nil {
 			panic(err)
 		}
