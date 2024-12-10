@@ -17,16 +17,16 @@ const Input = `89010123
 
 func TestLoadInput(t *testing.T) {
 	input := `0123
-	1234
-	8765
-	9876`
+1234
+8765
+9876`
 
 	s := bufio.NewScanner(strings.NewReader(input))
 	twoDMap, err := LoadInput(s)
 	if err != nil {
 		t.Error(err)
 	}
-	if strings.ReplaceAll(twoDMap.String(), "\n", "") != strings.ReplaceAll(Input, "\n", "") {
-		t.Errorf("\nExpected: \n%s\nGot: \n%s\n", Input, twoDMap.String())
+	if strings.ReplaceAll(twoDMap.String(), "\n", "") != strings.ReplaceAll(input, "\n", "") {
+		t.Errorf("\nExpected: \n%s\nGot: \n%s\n", input, twoDMap.String())
 	}
 }
