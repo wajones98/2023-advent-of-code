@@ -2,7 +2,7 @@ package day10
 
 import (
 	"bufio"
-	"fmt"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -47,7 +47,11 @@ func TestFindTrails(t *testing.T) {
 		t.Error(err)
 	}
 
-	FindTrails(twoDMap)
+	expected := []Coords{{0, 6}, {6, 6}}
+	actual := FindTrails(twoDMap)
 
-	fmt.Printf("%v\n", twoDMap.String())
+	if !reflect.DeepEqual(expected, actual) {
+		t.Errorf("Expected: %v, Got: %v\n", expected, actual)
+	}
+
 }
