@@ -148,7 +148,6 @@ func PossiblePaths(m *common.TwoDMap[int], x, y, value int) map[Coords]int {
 
 	fmt.Printf("Finding possible paths for x: %d, y: %d\n-----------------------------------\n", x, y)
 
-	// Loop:
 	var helper func(x, y, value int)
 	helper = func(x, y, value int) {
 		fmt.Printf("\nError: %v for %d, %d\n", m.CheckBounds(x, y), x, y)
@@ -176,14 +175,6 @@ func PossiblePaths(m *common.TwoDMap[int], x, y, value int) map[Coords]int {
 
 	}
 	helper(x, y, value)
-
-	// newCoords := []Coords{}
-	// for _, c := range coords {
-	// 	err := m.CheckBounds(c.X, c.Y)
-	// 	if err != nil {
-	// 		newCoords = append(newCoords, c)
-	// 	}
-	// }
 
 	return coords
 }
