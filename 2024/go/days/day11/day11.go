@@ -45,13 +45,18 @@ func Part1() (int, error) {
 }
 
 func Part2() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	stones, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	return GetStoneCount(75, stones), nil
 }
 
 func LoadInput(s *bufio.Scanner) ([]int, error) {

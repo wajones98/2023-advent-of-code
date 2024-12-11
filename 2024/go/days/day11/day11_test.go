@@ -74,7 +74,7 @@ func TestGetStoneCount(t *testing.T) {
 		BlinkCount int
 		Expected   int
 	}{
-		{6, 22}, {25, 28159},
+		{6, 22}, {25, 58159},
 	}
 
 	for _, test := range tests {
