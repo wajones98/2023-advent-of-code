@@ -30,13 +30,18 @@ func Run() (*days.Result[int, int], error) {
 }
 
 func Part1() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	stones, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	return GetStoneCount(25, stones), nil
 }
 
 func Part2() (int, error) {
@@ -61,6 +66,14 @@ func LoadInput(s *bufio.Scanner) ([]int, error) {
 		values = append(values, value)
 	}
 	return values, nil
+}
+
+func GetStoneCount(blinks int, stones []int) int {
+	for range blinks {
+		stones = Blink(stones)
+	}
+
+	return len(stones)
 }
 
 func Blink(stones []int) []int {

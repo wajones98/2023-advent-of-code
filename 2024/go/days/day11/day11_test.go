@@ -68,3 +68,22 @@ func TestBlink(t *testing.T) {
 		})
 	}
 }
+
+func TestGetStoneCount(t *testing.T) {
+	tests := []struct {
+		BlinkCount int
+		Expected   int
+	}{
+		{6, 22}, {25, 28159},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%d", test.BlinkCount), func(t *testing.T) {
+			actual := GetStoneCount(test.BlinkCount, Data)
+			if test.Expected != actual {
+				t.Errorf("Expected: %d, Actual: %d\n", test.Expected, actual)
+			}
+		})
+	}
+
+}
