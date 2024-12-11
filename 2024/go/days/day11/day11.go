@@ -2,6 +2,9 @@ package day11
 
 import (
 	"bufio"
+	"strconv"
+	"strings"
+
 	"github.com/wajones98/advent-of-code/days"
 	"github.com/wajones98/advent-of-code/input"
 )
@@ -46,8 +49,15 @@ func Part2() (int, error) {
 }
 
 func LoadInput(s *bufio.Scanner) ([]int, error) {
-	for s.Scan() {
+	s.Scan()
+	parts := strings.Split(s.Text(), " ")
+	values := []int{}
+	for _, part := range parts {
+		value, err := strconv.Atoi(part)
+		if err != nil {
+			return nil, err
+		}
+		values = append(values, value)
 	}
-
-	return []int{}, nil
+	return values, nil
 }
