@@ -2,6 +2,7 @@ package day11
 
 import (
 	"bufio"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -62,7 +63,19 @@ func LoadInput(s *bufio.Scanner) ([]int, error) {
 	return values, nil
 }
 
-func Blink() {}
+func Blink(stones []int) []int {
+	for i := 0; i < len(stones); i++ {
+		stone := stones[i]
+		transformed := TransformStone(stone)
+		stones[i] = transformed[0]
+		if len(transformed) > 1 {
+			i += 1
+			stones = slices.Insert(stones, i, transformed[1])
+		}
+	}
+
+	return stones
+}
 
 func TransformStone(stone int) []int {
 	stones := []int{}
