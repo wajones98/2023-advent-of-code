@@ -2,6 +2,7 @@ package day12
 
 import (
 	"bufio"
+	"slices"
 	"strings"
 
 	"github.com/wajones98/advent-of-code/common"
@@ -76,6 +77,8 @@ type Coords struct {
 
 type Direction = Coords
 
+var Directions = []Direction{Up, Down, Left, Right}
+
 var (
 	Up    Direction = Coords{0, -1}
 	Down            = Coords{0, 1}
@@ -84,13 +87,12 @@ var (
 )
 
 func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
-	directions := []Direction{Up, Down, Left, Right}
 	found := map[Coords]bool{}
 	groups := map[string][][]Coords{}
 
 	var traverseMap func(x, y, groupIndex int, value string)
 	traverseMap = func(x, y, groupIndex int, value string) {
-		for _, d := range directions {
+		for _, d := range Directions {
 			coords := TraverseMap(m, x, y, value, d)
 			if coords == nil {
 				continue
@@ -127,4 +129,17 @@ func TraverseMap(m *common.TwoDMap[string], x, y int, value string, direction Di
 	}
 
 	return &Coords{nextX, nextY}
+}
+
+func CalculatePerimeter(group []Coords) int {
+	sides := 0
+	for _, g := range group {
+		for _, d := range Directions {
+			x, y := g.X+d.X, g.Y+d.Y
+			if !slices.Contains(group, Coords{x, y}) {
+				sides += 1
+			}
+		}
+	}
+	return sides
 }
