@@ -2,6 +2,7 @@ package day12
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -27,7 +28,7 @@ func TestLoadInput(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !reflect.DeepEqual(Data, actual) {
+	if !reflect.DeepEqual(Data, *actual) {
 		t.Errorf("Expected: %v, Actual: %v\n", Data, actual)
 	}
 }
