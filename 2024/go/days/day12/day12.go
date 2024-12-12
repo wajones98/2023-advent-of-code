@@ -2,6 +2,7 @@ package day12
 
 import (
 	"bufio"
+	"fmt"
 	"strings"
 
 	"github.com/wajones98/advent-of-code/common"
@@ -84,23 +85,44 @@ var (
 )
 
 func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
+	// directions := []Direction{Up, Down, Left, Right}
 	found := map[Coords]bool{}
 	groups := map[string][][]Coords{}
-	for i, _ := range m.Map {
+
+	// var traverseMap func(x, y int, value string)
+	// traverseMap = func(x, y int, value string) {
+	// 	for _, d := range directions {
+	// 		coords := TraverseMap(m, x, y, value, d)
+	// 		if coords == nil {
+	// 			continue
+	// 		}
+	//
+	// 		found[*coords] = true
+	// 		newX, newY := x+d.X, y+d.Y
+	// 		nextValue, _ := m.Get(newX, newY)
+	// 		traverseMap(newX, newY, nextValue)
+	// 	}
+	// }
+
+	for i, v := range m.Map {
 		x, y := m.FindPosition(i)
 		if _, ok := found[Coords{x, y}]; ok {
 			continue
+		} else if _, ok := groups[v]; !ok {
+			groups[v] = [][]Coords{}
 		}
+		// traverseMap(x, y, v)
+		fmt.Printf("%d, %d\n", x, y)
 	}
 	return groups
 }
 
-func FindAdjacent(m *common.TwoDMap[string], x, y int, value string, direction Direction) (*Coords, bool) {
+func TraverseMap(m *common.TwoDMap[string], x, y int, value string, direction Direction) *Coords {
 	nextX, nextY := x+direction.X, y+direction.Y
 	nextValue, err := m.Get(nextX, nextY)
 	if err != nil || nextValue != value {
-		return nil, false
+		return nil
 	}
 
-	return &Coords{nextX, nextY}, true
+	return &Coords{nextX, nextY}
 }

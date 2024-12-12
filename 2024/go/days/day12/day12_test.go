@@ -44,6 +44,6 @@ func TestFindPlantGroups(t *testing.T) {
 	actual := FindPlantGroups(&Data)
 
 	if !reflect.DeepEqual(expected, actual) {
-		t.Errorf("Expected: %v, Actual: %v\n", Data, actual)
+		t.Errorf("Expected: %v, Actual: %v\n", expected, actual)
 	}
 }
