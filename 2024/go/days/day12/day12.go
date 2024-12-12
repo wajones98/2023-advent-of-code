@@ -2,7 +2,6 @@ package day12
 
 import (
 	"bufio"
-	"fmt"
 	"strings"
 
 	"github.com/wajones98/advent-of-code/common"
@@ -89,23 +88,8 @@ func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 	found := map[Coords]bool{}
 	groups := map[string][][]Coords{}
 
-	// var traverseMap func(x, y int, value string)
-	// traverseMap = func(x, y int, value string) {
-	// 	for _, d := range directions {
-	// 		coords := TraverseMap(m, x, y, value, d)
-	// 		if coords == nil {
-	// 			continue
-	// 		}
-	//
-	// 		found[*coords] = true
-	// 		newX, newY := x+d.X, y+d.Y
-	// 		nextValue, _ := m.Get(newX, newY)
-	// 		traverseMap(newX, newY, nextValue)
-	// 	}
-	// }
-
-	var traverseMap func(x, y int, value string)
-	traverseMap = func(x, y int, value string) {
+	var traverseMap func(x, y, groupIndex int, value string)
+	traverseMap = func(x, y, groupIndex int, value string) {
 		for _, d := range directions {
 			coords := TraverseMap(m, x, y, value, d)
 			if coords == nil {
@@ -114,9 +98,9 @@ func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 				continue
 			}
 			found[*coords] = true
-
+			groups[value][groupIndex] = append(groups[value][groupIndex], *coords)
 			nextValue, _ := m.Get(coords.X, coords.Y)
-			traverseMap(coords.X, coords.Y, nextValue)
+			traverseMap(coords.X, coords.Y, groupIndex, nextValue)
 		}
 	}
 
@@ -127,8 +111,8 @@ func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 		} else if _, ok := groups[v]; !ok {
 			groups[v] = [][]Coords{}
 		}
-		traverseMap(x, y, v)
-		fmt.Printf("%d, %d\n", x, y)
+		groups[v] = append(groups[v], []Coords{})
+		traverseMap(x, y, len(groups[v])-1, v)
 	}
 	return groups
 }
