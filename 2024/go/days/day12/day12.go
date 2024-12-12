@@ -30,13 +30,20 @@ func Run() (*days.Result[int, int], error) {
 }
 
 func Part1() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	plantGroups := FindPlantGroups(twoDMap)
+
+	return CalculatePrice(plantGroups), nil
 }
 
 func Part2() (int, error) {
@@ -142,4 +149,16 @@ func CalculatePerimeter(group []Coords) int {
 		}
 	}
 	return sides
+}
+
+func CalculatePrice(plants map[string][][]Coords) int {
+	price := 0
+
+	for _, plant := range plants {
+		for _, groups := range plant {
+			price += CalculatePerimeter(groups) * len(groups)
+		}
+	}
+
+	return price
 }
