@@ -74,6 +74,15 @@ type Coords struct {
 	X, Y int
 }
 
+type Direction = Coords
+
+var (
+	Up    Direction = Coords{0, -1}
+	Down            = Coords{0, 1}
+	Left            = Coords{-1, 0}
+	Right           = Coords{1, 0}
+)
+
 func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 	found := map[Coords]bool{}
 	groups := map[string][][]Coords{}
@@ -84,4 +93,14 @@ func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 		}
 	}
 	return groups
+}
+
+func FindAdjacent(m *common.TwoDMap[string], x, y int, value string, direction Direction) (*Coords, bool) {
+	nextX, nextY := x+direction.X, y+direction.Y
+	nextValue, err := m.Get(nextX, nextY)
+	if err != nil || nextValue != value {
+		return nil, false
+	}
+
+	return &Coords{nextX, nextY}, true
 }
