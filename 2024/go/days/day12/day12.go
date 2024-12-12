@@ -164,25 +164,8 @@ func CalculatePerimeter(group []Coords) int {
 }
 
 func CalculateSides(group []Coords) int {
-	// directions := [][]Direction{{Up, Left}, {Up, Right}, {Down, Left}, {Down, Right}}
-	// diagonals := []Direction{UpLeft, UpRight, DownLeft, DownRight}
-	// foundCorners := map[Coords]bool{}
 	sides := 0
 	for _, g := range group {
-		// for _, d := range directions {
-		// 	dOneX, dOneY := g.X+d[0].X, g.Y+d[0].Y
-		// 	dTwoX, dTwoY := g.X+d[1].X, g.Y+d[1].Y
-		// 	if !slices.Contains(group, Coords{dOneX, dOneY}) && !slices.Contains(group, Coords{dTwoX, dTwoY}) {
-		// 		sides += 1
-		// 	}
-		// }
-		// for _, d := range diagonals {
-		// 	x, y := g.X+d.X, g.Y+d.Y
-		// 	if !slices.Contains(group, Coords{x, y}) {
-		// 		sides += 1
-		// 		foundCorners[Coords{x, y}] = true
-		// 	}
-		// }
 
 		surroundingCoords := map[Direction]Coords{
 			Up:        Coords{g.X + Up.X, g.Y + Up.Y},

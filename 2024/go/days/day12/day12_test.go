@@ -126,3 +126,27 @@ func TestCalculateSides(t *testing.T) {
 		})
 	}
 }
+
+func TestCalculatePrice(t *testing.T) {
+	tests := []struct {
+		Input    map[string][][]Coords
+		Expected int
+	}{
+		{
+			Input: map[string][][]Coords{
+				"E": [][]Coords{{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {0, 1}, {0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}, {0, 3}, {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}}},
+				"X": [][]Coords{{{1, 3}, {2, 3}, {3, 3}, {4, 3}}, {{1, 1}, {2, 1}, {3, 1}, {4, 1}}},
+			},
+			Expected: 236,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%v", test.Input), func(t *testing.T) {
+			actual := CalculatePrice(test.Input, true)
+			if test.Expected != actual {
+				t.Errorf("Expected %d, Actual: %d\n", test.Expected, actual)
+			}
+		})
+	}
+}
