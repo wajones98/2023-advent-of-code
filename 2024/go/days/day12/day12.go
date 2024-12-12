@@ -165,6 +165,7 @@ func CalculatePerimeter(group []Coords) int {
 
 func CalculateSides(group []Coords) int {
 	sides := 0
+	foundCorners := map[Coords][]Coords{}
 	for _, g := range group {
 
 		surroundingCoords := map[Direction]Coords{
@@ -178,29 +179,47 @@ func CalculateSides(group []Coords) int {
 			DownRight: Coords{g.X + DownRight.X, g.Y + DownRight.Y},
 		}
 
+		foundCorners[g] = make([]Coords, 0)
+
 		if !slices.Contains(group, surroundingCoords[UpLeft]) && !slices.Contains(group, surroundingCoords[Up]) && !slices.Contains(group, surroundingCoords[Left]) {
 			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[UpLeft])
 		}
 		if !slices.Contains(group, surroundingCoords[UpRight]) && !slices.Contains(group, surroundingCoords[Up]) && !slices.Contains(group, surroundingCoords[Right]) {
 			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[UpRight])
 		}
 		if !slices.Contains(group, surroundingCoords[DownLeft]) && !slices.Contains(group, surroundingCoords[Down]) && !slices.Contains(group, surroundingCoords[Left]) {
 			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[DownLeft])
 		}
 		if !slices.Contains(group, surroundingCoords[DownRight]) && !slices.Contains(group, surroundingCoords[Down]) && !slices.Contains(group, surroundingCoords[Right]) {
 			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[DownRight])
 		}
 		if !slices.Contains(group, surroundingCoords[UpRight]) && (slices.Contains(group, surroundingCoords[Up]) && slices.Contains(group, surroundingCoords[Right])) {
 			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[UpRight])
 		}
 		if !slices.Contains(group, surroundingCoords[UpLeft]) && (slices.Contains(group, surroundingCoords[Up]) && slices.Contains(group, surroundingCoords[Left])) {
 			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[UpLeft])
 		}
 		if !slices.Contains(group, surroundingCoords[DownLeft]) && slices.Contains(group, surroundingCoords[Down]) && slices.Contains(group, surroundingCoords[Left]) {
 			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[DownLeft])
 		}
 		if !slices.Contains(group, surroundingCoords[DownRight]) && slices.Contains(group, surroundingCoords[Down]) && slices.Contains(group, surroundingCoords[Right]) {
 			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[DownRight])
+		}
+		if !slices.Contains(group, surroundingCoords[Up]) && slices.Contains(group, surroundingCoords[UpLeft]) && slices.Contains(group, surroundingCoords[UpRight]) {
+			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[DownRight])
+		}
+		if !slices.Contains(group, surroundingCoords[Down]) && slices.Contains(group, surroundingCoords[DownLeft]) && slices.Contains(group, surroundingCoords[DownRight]) {
+			sides += 1
+			foundCorners[g] = append(foundCorners[g], surroundingCoords[DownRight])
 		}
 	}
 	return sides
