@@ -161,3 +161,31 @@ func TestCalculatePrice(t *testing.T) {
 		})
 	}
 }
+
+func TestFullExample(t *testing.T) {
+	input := `RRRRIICCFF
+RRRRIICCCF
+VVRRRCCFFF
+VVRCCCJFFF
+VVVVCJJCFE
+VVIVCCJJEE
+VVIIICJJEE
+MIIIIIJJEE
+MIIISIJEEE
+MMMISSJEEE`
+
+	s := bufio.NewScanner(strings.NewReader(input))
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		t.Error(err)
+	}
+
+	plantGroups := FindPlantGroups(twoDMap)
+
+	actual := CalculatePrice(plantGroups, true)
+	expected := 1206
+
+	if expected != actual {
+		t.Errorf("Expected %d, Actual: %d\n", expected, actual)
+	}
+}
