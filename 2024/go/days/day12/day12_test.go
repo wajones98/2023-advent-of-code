@@ -85,3 +85,40 @@ func TestCalculatePerimeter(t *testing.T) {
 		})
 	}
 }
+
+func TestCalculateSides(t *testing.T) {
+	tests := []struct {
+		Input    []Coords
+		Expected int
+	}{
+		{
+			Input:    []Coords{{0, 0}, {1, 0}, {2, 0}, {3, 0}},
+			Expected: 4,
+		},
+		{
+			Input:    []Coords{{0, 1}, {0, 2}, {1, 2}, {1, 1}},
+			Expected: 4,
+		},
+		{
+			Input:    []Coords{{2, 1}, {2, 2}, {3, 2}, {3, 3}},
+			Expected: 8,
+		},
+		{
+			Input:    []Coords{{3, 1}},
+			Expected: 4,
+		},
+		{
+			Input:    []Coords{{0, 3}, {1, 3}, {2, 3}},
+			Expected: 4,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%v", Input), func(t *testing.T) {
+			actual := CalculateSides(test.Input)
+			if test.Expected != actual {
+				t.Errorf("Expected %d, Actual: %d\n", test.Expected, actual)
+			}
+		})
+	}
+}

@@ -139,11 +139,26 @@ func TraverseMap(m *common.TwoDMap[string], x, y int, value string, direction Di
 }
 
 func CalculatePerimeter(group []Coords) int {
-	sides := 0
+	edges := 0
 	for _, g := range group {
 		for _, d := range Directions {
 			x, y := g.X+d.X, g.Y+d.Y
 			if !slices.Contains(group, Coords{x, y}) {
+				edges += 1
+			}
+		}
+	}
+	return edges
+}
+
+func CalculateSides(group []Coords) int {
+	directions := [][]Direction{{Up, Left}, {Up, Right}, {Down, Left}, {Down, Right}}
+	sides := 0
+	for _, g := range group {
+		for _, d := range directions {
+			dOneX, dOneY := g.X+d[0].X, g.Y+d[0].Y
+			dTwoX, dTwoY := g.X+d[1].X, g.Y+d[1].Y
+			if !slices.Contains(group, Coords{dOneX, dOneY}) && !slices.Contains(group, Coords{dTwoX, dTwoY}) {
 				sides += 1
 			}
 		}
