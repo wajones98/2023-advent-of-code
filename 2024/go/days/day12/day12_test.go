@@ -34,11 +34,11 @@ func TestLoadInput(t *testing.T) {
 
 func TestFindPlantGroups(t *testing.T) {
 	expected := map[string][][]Coords{
-		"A": [][]Coords{{{1, 0}, {0, 0}, {2, 0}, {3, 0}}},
-		"B": [][]Coords{{{0, 2}, {0, 1}, {1, 1}, {1, 2}}},
-		"C": [][]Coords{{{2, 2}, {2, 1}, {3, 2}, {3, 3}}},
+		"A": [][]Coords{{{0, 0}, {1, 0}, {2, 0}, {3, 0}}},
+		"B": [][]Coords{{{0, 1}, {0, 2}, {1, 2}, {1, 1}}},
+		"C": [][]Coords{{{2, 1}, {2, 2}, {3, 2}, {3, 3}}},
 		"D": [][]Coords{{{3, 1}}},
-		"E": [][]Coords{{{1, 3}, {0, 3}, {2, 3}}},
+		"E": [][]Coords{{{0, 3}, {1, 3}, {2, 3}}},
 	}
 
 	actual := FindPlantGroups(&Data)

@@ -106,12 +106,14 @@ func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 
 	for i, v := range m.Map {
 		x, y := m.FindPosition(i)
-		if _, ok := found[Coords{x, y}]; ok {
+		coords := Coords{x, y}
+		if _, ok := found[coords]; ok {
 			continue
 		} else if _, ok := groups[v]; !ok {
 			groups[v] = [][]Coords{}
 		}
-		groups[v] = append(groups[v], []Coords{})
+		found[Coords{x, y}] = true
+		groups[v] = append(groups[v], []Coords{coords})
 		traverseMap(x, y, len(groups[v])-1, v)
 	}
 	return groups
