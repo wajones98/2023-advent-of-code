@@ -69,3 +69,19 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap[string], error) {
 
 	return twoDMap, nil
 }
+
+type Coords struct {
+	X, Y int
+}
+
+func FindGroups(m *common.TwoDMap[string]) map[string][]Coords {
+	found := map[Coords]bool{}
+	groups := map[string][]Coords{}
+	for i, _ := range m.Map {
+		x, y := m.FindPosition(i)
+		if _, ok := found[Coords{x, y}]; ok {
+			continue
+		}
+	}
+	return groups
+}
