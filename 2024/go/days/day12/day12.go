@@ -2,7 +2,6 @@ package day12
 
 import (
 	"bufio"
-	"fmt"
 	"slices"
 	"strings"
 
@@ -44,17 +43,24 @@ func Part1() (int, error) {
 
 	plantGroups := FindPlantGroups(twoDMap)
 
-	return CalculatePrice(plantGroups), nil
+	return CalculatePrice(plantGroups, false), nil
 }
 
 func Part2() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	twoDMap, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	plantGroups := FindPlantGroups(twoDMap)
+
+	return CalculatePrice(plantGroups, true), nil
 }
 
 func LoadInput(s *bufio.Scanner) (*common.TwoDMap[string], error) {
@@ -213,28 +219,22 @@ func CalculateSides(group []Coords) int {
 		if !slices.Contains(group, surroundingCoords[DownRight]) && slices.Contains(group, surroundingCoords[Down]) && slices.Contains(group, surroundingCoords[Right]) {
 			sides += 1
 		}
-
-		if g.X == 3 && g.Y == 2 {
-			fmt.Printf("%v\n", surroundingCoords[DownLeft])
-			fmt.Printf("%v\n", surroundingCoords[Left])
-			fmt.Printf("%v\n", surroundingCoords[Down])
-			fmt.Printf("%v\n", group)
-			fmt.Printf("%t\n", !slices.Contains(group, surroundingCoords[DownLeft]))
-			fmt.Printf("%t\n", slices.Contains(group, surroundingCoords[Down]))
-			fmt.Printf("%t\n", slices.Contains(group, surroundingCoords[Left]))
-			fmt.Printf("%t\n", !slices.Contains(group, surroundingCoords[DownLeft]) && slices.Contains(group, surroundingCoords[Down]) && slices.Contains(group, surroundingCoords[Left]))
-		}
-
 	}
 	return sides
 }
 
-func CalculatePrice(plants map[string][][]Coords) int {
+func CalculatePrice(plants map[string][][]Coords, withDiscount bool) int {
 	price := 0
 
 	for _, plant := range plants {
 		for _, groups := range plant {
-			price += CalculatePerimeter(groups) * len(groups)
+			var sides int
+			if withDiscount {
+				sides = CalculateSides(groups)
+			} else {
+				sides = CalculatePerimeter(groups)
+			}
+			price += sides * len(groups)
 		}
 	}
 
