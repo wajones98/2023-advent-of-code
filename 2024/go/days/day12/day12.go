@@ -74,9 +74,9 @@ type Coords struct {
 	X, Y int
 }
 
-func FindPlantGroups(m *common.TwoDMap[string]) map[string][]Coords {
+func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 	found := map[Coords]bool{}
-	groups := map[string][]Coords{}
+	groups := map[string][][]Coords{}
 	for i, _ := range m.Map {
 		x, y := m.FindPosition(i)
 		if _, ok := found[Coords{x, y}]; ok {

@@ -31,3 +31,19 @@ func TestLoadInput(t *testing.T) {
 		t.Errorf("Expected: %v, Actual: %v\n", Data, actual)
 	}
 }
+
+func TestFindPlantGroups(t *testing.T) {
+	expected := map[string][][]Coords{
+		"A": [][]Coords{{{0, 0}, {1, 0}, {2, 0}, {3, 0}}},
+		"B": [][]Coords{{{0, 1}, {1, 1}, {0, 2}, {1, 2}}},
+		"C": [][]Coords{{{2, 1}, {2, 2}, {3, 2}, {3, 3}}},
+		"D": [][]Coords{{{1, 3}}},
+		"E": [][]Coords{{{3, 0}, {1, 3}, {2, 3}}},
+	}
+
+	actual := FindPlantGroups(&Data)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Errorf("Expected: %v, Actual: %v\n", Data, actual)
+	}
+}
