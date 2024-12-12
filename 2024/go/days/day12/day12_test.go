@@ -77,7 +77,7 @@ func TestCalculatePerimeter(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		t.Run(fmt.Sprintf("%v", Input), func(t *testing.T) {
+		t.Run(fmt.Sprintf("%v", test.Input), func(t *testing.T) {
 			actual := CalculatePerimeter(test.Input)
 			if test.Expected != actual {
 				t.Errorf("Expected %d, Actual: %d\n", test.Expected, actual)
@@ -114,7 +114,7 @@ func TestCalculateSides(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		t.Run(fmt.Sprintf("%v", Input), func(t *testing.T) {
+		t.Run(fmt.Sprintf("%v", test.Input), func(t *testing.T) {
 			actual := CalculateSides(test.Input)
 			if test.Expected != actual {
 				t.Errorf("Expected %d, Actual: %d\n", test.Expected, actual)
