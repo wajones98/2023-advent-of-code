@@ -2,7 +2,6 @@ package day12
 
 import (
 	"bufio"
-	"fmt"
 	"reflect"
 	"strings"
 	"testing"
