@@ -85,7 +85,7 @@ var (
 )
 
 func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
-	// directions := []Direction{Up, Down, Left, Right}
+	directions := []Direction{Up, Down, Left, Right}
 	found := map[Coords]bool{}
 	groups := map[string][][]Coords{}
 
@@ -104,6 +104,22 @@ func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 	// 	}
 	// }
 
+	var traverseMap func(x, y int, value string)
+	traverseMap = func(x, y int, value string) {
+		for _, d := range directions {
+			coords := TraverseMap(m, x, y, value, d)
+			if coords == nil {
+				continue
+			} else if _, ok := found[*coords]; ok {
+				continue
+			}
+			found[*coords] = true
+
+			nextValue, _ := m.Get(coords.X, coords.Y)
+			traverseMap(coords.X, coords.Y, nextValue)
+		}
+	}
+
 	for i, v := range m.Map {
 		x, y := m.FindPosition(i)
 		if _, ok := found[Coords{x, y}]; ok {
@@ -111,7 +127,7 @@ func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 		} else if _, ok := groups[v]; !ok {
 			groups[v] = [][]Coords{}
 		}
-		// traverseMap(x, y, v)
+		traverseMap(x, y, v)
 		fmt.Printf("%d, %d\n", x, y)
 	}
 	return groups
