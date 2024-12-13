@@ -107,7 +107,7 @@ var (
 
 func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 	found := map[Coords]bool{}
-	groups := map[string][][]Coords{}
+	region := map[string][][]Coords{}
 
 	var traverseMap func(x, y, groupIndex int, value string)
 	traverseMap = func(x, y, groupIndex int, value string) {
@@ -119,7 +119,7 @@ func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 				continue
 			}
 			found[*coords] = true
-			groups[value][groupIndex] = append(groups[value][groupIndex], *coords)
+			region[value][groupIndex] = append(region[value][groupIndex], *coords)
 			nextValue, _ := m.Get(coords.X, coords.Y)
 			traverseMap(coords.X, coords.Y, groupIndex, nextValue)
 		}
@@ -130,14 +130,14 @@ func FindPlantGroups(m *common.TwoDMap[string]) map[string][][]Coords {
 		coords := Coords{x, y}
 		if _, ok := found[coords]; ok {
 			continue
-		} else if _, ok := groups[v]; !ok {
-			groups[v] = [][]Coords{}
+		} else if _, ok := region[v]; !ok {
+			region[v] = [][]Coords{}
 		}
 		found[Coords{x, y}] = true
-		groups[v] = append(groups[v], []Coords{coords})
-		traverseMap(x, y, len(groups[v])-1, v)
+		region[v] = append(region[v], []Coords{coords})
+		traverseMap(x, y, len(region[v])-1, v)
 	}
-	return groups
+	return region
 }
 
 func TraverseMap(m *common.TwoDMap[string], x, y int, value string, direction Direction) *Coords {
@@ -150,12 +150,12 @@ func TraverseMap(m *common.TwoDMap[string], x, y int, value string, direction Di
 	return &Coords{nextX, nextY}
 }
 
-func CalculatePerimeter(group []Coords) int {
+func CalculatePerimeter(region []Coords) int {
 	edges := 0
-	for _, g := range group {
+	for _, g := range region {
 		for _, d := range Directions {
 			x, y := g.X+d.X, g.Y+d.Y
-			if !slices.Contains(group, Coords{x, y}) {
+			if !slices.Contains(region, Coords{x, y}) {
 				edges += 1
 			}
 		}
@@ -163,54 +163,9 @@ func CalculatePerimeter(group []Coords) int {
 	return edges
 }
 
-func CalculateSides(group []Coords) int {
+func CalculateSides(region []Coords) int {
 	sides := 0
-	for _, g := range group {
 
-		surroundingCoords := map[Direction]Coords{
-			Up:        Coords{g.X + Up.X, g.Y + Up.Y},
-			Down:      Coords{g.X + Down.X, g.Y + Down.Y},
-			Left:      Coords{g.X + Left.X, g.Y + Left.Y},
-			Right:     Coords{g.X + Right.X, g.Y + Right.Y},
-			UpLeft:    Coords{g.X + UpLeft.X, g.Y + UpLeft.Y},
-			UpRight:   Coords{g.X + UpRight.X, g.Y + UpRight.Y},
-			DownLeft:  Coords{g.X + DownLeft.X, g.Y + DownLeft.Y},
-			DownRight: Coords{g.X + DownRight.X, g.Y + DownRight.Y},
-		}
-
-		if !slices.Contains(group, surroundingCoords[UpLeft]) && !slices.Contains(group, surroundingCoords[Up]) && !slices.Contains(group, surroundingCoords[Left]) {
-			sides += 1
-		}
-		if !slices.Contains(group, surroundingCoords[UpRight]) && !slices.Contains(group, surroundingCoords[Up]) && !slices.Contains(group, surroundingCoords[Right]) {
-			sides += 1
-		}
-		if !slices.Contains(group, surroundingCoords[DownLeft]) && !slices.Contains(group, surroundingCoords[Down]) && !slices.Contains(group, surroundingCoords[Left]) {
-			sides += 1
-		}
-		if !slices.Contains(group, surroundingCoords[DownRight]) && !slices.Contains(group, surroundingCoords[Down]) && !slices.Contains(group, surroundingCoords[Right]) {
-			sides += 1
-		}
-		if !slices.Contains(group, surroundingCoords[UpRight]) && (slices.Contains(group, surroundingCoords[Up]) && slices.Contains(group, surroundingCoords[Right])) {
-			sides += 1
-		}
-		if !slices.Contains(group, surroundingCoords[UpLeft]) && (slices.Contains(group, surroundingCoords[Up]) && slices.Contains(group, surroundingCoords[Left])) {
-			sides += 1
-		}
-		if !slices.Contains(group, surroundingCoords[DownLeft]) && slices.Contains(group, surroundingCoords[Down]) && slices.Contains(group, surroundingCoords[Left]) {
-			sides += 1
-		}
-		if !slices.Contains(group, surroundingCoords[DownRight]) && slices.Contains(group, surroundingCoords[Down]) && slices.Contains(group, surroundingCoords[Right]) {
-			sides += 1
-		}
-
-		upTwice := surroundingCoords[Up]
-		upTwice.X += Up.X
-		upTwice.Y += Up.Y
-
-		if !slices.Contains(group, surroundingCoords[Up]) && slices.Contains(group, surroundingCoords[UpLeft]) && slices.Contains(group, surroundingCoords[UpRight]) && slices.Contains(group, upTwice) {
-			sides += 1
-		}
-	}
 	return sides
 }
 
@@ -218,14 +173,14 @@ func CalculatePrice(plants map[string][][]Coords, withDiscount bool) int {
 	price := 0
 
 	for _, plant := range plants {
-		for _, groups := range plant {
+		for _, region := range plant {
 			var sides int
 			if withDiscount {
-				sides = CalculateSides(groups)
+				sides = CalculateSides(region)
 			} else {
-				sides = CalculatePerimeter(groups)
+				sides = CalculatePerimeter(region)
 			}
-			price += sides * len(groups)
+			price += sides * len(region)
 		}
 	}
 
