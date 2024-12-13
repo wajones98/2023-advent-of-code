@@ -194,9 +194,9 @@ MMMISSJEEE`
 		t.Error(err)
 	}
 
-	plantGroups := FindPlantGroups(twoDMap)
+	plantRegions := FindPlantGroups(twoDMap)
 
-	actual := CalculatePrice(plantGroups, true)
+	actual := CalculatePrice(plantRegions, true)
 	expected := 1206
 
 	if expected != actual {
