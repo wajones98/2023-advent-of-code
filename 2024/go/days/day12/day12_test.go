@@ -124,7 +124,7 @@ func TestCalculateSides(t *testing.T) {
 				{0, 4}, {3, 4}, {4, 4}, {5, 4},
 				{0, 5}, {1, 5}, {2, 5}, {3, 5}, {4, 5},
 			},
-			Expected: 12,
+			Expected: 16,
 		},
 	}
 

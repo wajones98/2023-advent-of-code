@@ -2,7 +2,6 @@ package day12
 
 import (
 	"bufio"
-	"fmt"
 	"slices"
 	"strings"
 
@@ -174,7 +173,7 @@ func CalculatePerimeter(region []Coords[int]) int {
 func CalculateSides(region []Coords[int]) int {
 	sides := 0
 
-	corners := make([]Coords[float64], len(region)*4)
+	corners := []Coords[float64]{}
 	cornerDirections := []Corner{TopLeft, TopRight, BottomLeft, BottomRight}
 	for _, p := range region {
 		for _, cd := range cornerDirections {
@@ -188,7 +187,35 @@ func CalculateSides(region []Coords[int]) int {
 		}
 	}
 
-	fmt.Printf("%v\n", corners)
+	for _, c := range corners {
+		inRegion := []int{}
+		for _, cd := range cornerDirections {
+			coord := Coords[int]{
+				X: int(c.X + cd.X),
+				Y: int(c.Y + cd.Y),
+			}
+			if slices.Contains(region, coord) {
+				inRegion = append(inRegion, 1)
+			} else {
+				inRegion = append(inRegion, 0)
+			}
+		}
+		sum := 0
+		for _, ir := range inRegion {
+			sum += ir
+		}
+
+		sumDiagLeftRight := inRegion[0] + inRegion[3]
+		sumDiagRightLeft := inRegion[1] + inRegion[2]
+
+		if sum == 1 || sum == 3 {
+			sides += 1
+		} else if sumDiagLeftRight == 2 && sumDiagRightLeft == 0 {
+			sides += 2
+		} else if sumDiagLeftRight == 0 && sumDiagRightLeft == 2 {
+			sides += 2
+		}
+	}
 
 	return sides
 }
