@@ -34,12 +34,12 @@ func TestLoadInput(t *testing.T) {
 }
 
 func TestFindPlantGroups(t *testing.T) {
-	expected := map[string][][]Coords{
-		"A": [][]Coords{{{0, 0}, {1, 0}, {2, 0}, {3, 0}}},
-		"B": [][]Coords{{{0, 1}, {0, 2}, {1, 2}, {1, 1}}},
-		"C": [][]Coords{{{2, 1}, {2, 2}, {3, 2}, {3, 3}}},
-		"D": [][]Coords{{{3, 1}}},
-		"E": [][]Coords{{{0, 3}, {1, 3}, {2, 3}}},
+	expected := map[string][][]Coords[int]{
+		"A": [][]Coords[int]{{{0, 0}, {1, 0}, {2, 0}, {3, 0}}},
+		"B": [][]Coords[int]{{{0, 1}, {0, 2}, {1, 2}, {1, 1}}},
+		"C": [][]Coords[int]{{{2, 1}, {2, 2}, {3, 2}, {3, 3}}},
+		"D": [][]Coords[int]{{{3, 1}}},
+		"E": [][]Coords[int]{{{0, 3}, {1, 3}, {2, 3}}},
 	}
 
 	actual := FindPlantGroups(&Data)
@@ -51,27 +51,27 @@ func TestFindPlantGroups(t *testing.T) {
 
 func TestCalculatePerimeter(t *testing.T) {
 	tests := []struct {
-		Input    []Coords
+		Input    []Coords[int]
 		Expected int
 	}{
 		{
-			Input:    []Coords{{0, 0}, {1, 0}, {2, 0}, {3, 0}},
+			Input:    []Coords[int]{{0, 0}, {1, 0}, {2, 0}, {3, 0}},
 			Expected: 10,
 		},
 		{
-			Input:    []Coords{{0, 1}, {0, 2}, {1, 2}, {1, 1}},
+			Input:    []Coords[int]{{0, 1}, {0, 2}, {1, 2}, {1, 1}},
 			Expected: 8,
 		},
 		{
-			Input:    []Coords{{2, 1}, {2, 2}, {3, 2}, {3, 3}},
+			Input:    []Coords[int]{{2, 1}, {2, 2}, {3, 2}, {3, 3}},
 			Expected: 10,
 		},
 		{
-			Input:    []Coords{{3, 1}},
+			Input:    []Coords[int]{{3, 1}},
 			Expected: 4,
 		},
 		{
-			Input:    []Coords{{0, 3}, {1, 3}, {2, 3}},
+			Input:    []Coords[int]{{0, 3}, {1, 3}, {2, 3}},
 			Expected: 8,
 		},
 	}
@@ -88,35 +88,35 @@ func TestCalculatePerimeter(t *testing.T) {
 
 func TestCalculateSides(t *testing.T) {
 	tests := []struct {
-		Input    []Coords
+		Input    []Coords[int]
 		Expected int
 	}{
 		{
-			Input:    []Coords{{0, 0}, {1, 0}, {2, 0}, {3, 0}},
+			Input:    []Coords[int]{{0, 0}, {1, 0}, {2, 0}, {3, 0}},
 			Expected: 4,
 		},
 		{
-			Input:    []Coords{{0, 1}, {0, 2}, {1, 2}, {1, 1}},
+			Input:    []Coords[int]{{0, 1}, {0, 2}, {1, 2}, {1, 1}},
 			Expected: 4,
 		},
 		{
-			Input:    []Coords{{2, 1}, {2, 2}, {3, 2}, {3, 3}},
+			Input:    []Coords[int]{{2, 1}, {2, 2}, {3, 2}, {3, 3}},
 			Expected: 8,
 		},
 		{
-			Input:    []Coords{{3, 1}},
+			Input:    []Coords[int]{{3, 1}},
 			Expected: 4,
 		},
 		{
-			Input:    []Coords{{0, 3}, {1, 3}, {2, 3}},
+			Input:    []Coords[int]{{0, 3}, {1, 3}, {2, 3}},
 			Expected: 4,
 		},
 		{
-			Input:    []Coords{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {0, 1}, {0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}, {0, 3}, {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}},
+			Input:    []Coords[int]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {0, 1}, {0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}, {0, 3}, {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}},
 			Expected: 12,
 		},
 		{
-			Input: []Coords{
+			Input: []Coords[int]{
 				{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0},
 				{0, 1}, {1, 1}, {2, 1}, {5, 1},
 				{0, 2}, {1, 2}, {2, 2}, {5, 2},
@@ -140,19 +140,19 @@ func TestCalculateSides(t *testing.T) {
 
 func TestCalculatePrice(t *testing.T) {
 	tests := []struct {
-		Input    map[string][][]Coords
+		Input    map[string][][]Coords[int]
 		Expected int
 	}{
 		{
-			Input: map[string][][]Coords{
-				"E": [][]Coords{{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {0, 1}, {0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}, {0, 3}, {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}}},
-				"X": [][]Coords{{{1, 3}, {2, 3}, {3, 3}, {4, 3}}, {{1, 1}, {2, 1}, {3, 1}, {4, 1}}},
+			Input: map[string][][]Coords[int]{
+				"E": [][]Coords[int]{{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {0, 1}, {0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}, {0, 3}, {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}}},
+				"X": [][]Coords[int]{{{1, 3}, {2, 3}, {3, 3}, {4, 3}}, {{1, 1}, {2, 1}, {3, 1}, {4, 1}}},
 			},
 			Expected: 236,
 		},
 		{
-			Input: map[string][][]Coords{
-				"A": [][]Coords{
+			Input: map[string][][]Coords[int]{
+				"A": [][]Coords[int]{
 					{
 						{1, 1}, {2, 1}, {3, 1},
 						{1, 2}, {3, 2},
