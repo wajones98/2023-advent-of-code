@@ -121,6 +121,18 @@ func TestPossibleCombinations(t *testing.T) {
 				80: 40,
 			},
 		},
+		{
+			Input: PossibleCombinationsInput{
+				Location: 5400,
+				A:        34,
+				B:        67,
+			},
+			Expected: map[int]int{
+				13:  74,
+				80:  40,
+				147: 6,
+			},
+		},
 	}
 
 	for _, test := range tests {
