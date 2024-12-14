@@ -97,7 +97,7 @@ func ParseLine(line, delimeter string) Coords {
 
 func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 	combinations := map[int]int{}
-	for a := range 200 {
+	for a := range 100 {
 		if math.Mod(float64(location)-(float64(x)*float64(a)), float64(y)) != 0 {
 			continue
 		}
