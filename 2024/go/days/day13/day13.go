@@ -34,13 +34,18 @@ func Run() (*days.Result[int, int], error) {
 }
 
 func Part1() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	prizes, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	return TotalTokens(prizes), nil
 }
 
 func Part2() (int, error) {
@@ -101,13 +106,14 @@ func ParseLine(line, delimeter string) Coords {
 
 func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 	combinations := map[int]int{}
-	for a := range 200 {
-		if math.Mod(float64(location)-(float64(x)*float64(a)), float64(y)) != 0 {
-			continue
-		}
+	maxIterations := location / gcd(x, y) * 2
+	for a := range maxIterations {
+		// if math.Mod(float64(location)-(float64(x)*float64(a)), float64(y)) != 0 {
+		// 	continue
+		// }
 
-		b := (float64(location) - (float64(x) * float64(a))) / float64(y)
-		if b <= 0 {
+		b := (location - x*a) / y
+		if b < 0 || a*x+b*y != location {
 			continue
 		}
 		combinations[a] = int(b)
@@ -115,18 +121,29 @@ func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 	return combinations, len(combinations) > 0
 }
 
+func gcd(a, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
+
 func FindCheapestCombination(xCombinations, yCombinations map[int]int) int {
 	cheapest := math.MaxInt
 
 	for a, b := range xCombinations {
-		if _, ok := yCombinations[a]; ok {
+		if yb, ok := yCombinations[a]; ok && yb == b {
 			cost := (a * ATokenCost) + (b * BTokenCost)
 			if cost < cheapest {
 				cheapest = cost
 			}
 		}
 	}
-
+	if cheapest == math.MaxInt {
+		return 0
+	}
 	return cheapest
 }
 
