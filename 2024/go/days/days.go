@@ -90,18 +90,18 @@ func TestLoadInput(t *testing.T) {
 func ScaffoldDay(day int) error {
 	dayName := fmt.Sprintf("day%d", day)
 
-	err := os.Mkdir(dayName, os.ModePerm)
+	err := os.Mkdir("days/"+dayName, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	fileName := fmt.Sprintf("%s/%s.go", dayName, dayName)
+	fileName := fmt.Sprintf("days/%s/%s.go", dayName, dayName)
 	err = os.WriteFile(fileName, []byte(fmt.Sprintf(FileTemplate, day, day)), 0644)
 	if err != nil {
 		return err
 	}
 
-	testFileName := fmt.Sprintf("%s/%s_test.go", dayName, dayName)
+	testFileName := fmt.Sprintf("days/%s/%s_test.go", dayName, dayName)
 	err = os.WriteFile(testFileName, []byte(fmt.Sprintf(TestFileTemplate, day)), 0644)
 	if err != nil {
 		return err

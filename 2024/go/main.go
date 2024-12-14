@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/wajones98/advent-of-code/days"
 	"github.com/wajones98/advent-of-code/days/day1"
 	"github.com/wajones98/advent-of-code/days/day10"
 	"github.com/wajones98/advent-of-code/days/day11"
@@ -22,8 +23,21 @@ import (
 
 func main() {
 	args := os.Args[1:]
-	if len(args) != 1 {
-		log.Fatalf("Expected 1 argument. Got %d args", len(args))
+	if len(args) > 2 {
+		log.Fatalf("Expected 2 or less arguments. Got %d args", len(args))
+	}
+
+	if args[0] == "create" {
+		arg, err := strconv.Atoi(args[1])
+		if err != nil {
+			log.Fatalf("Expected argument to be integer, got %s", args[0])
+		}
+
+		err = days.ScaffoldDay(arg)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
 	}
 
 	arg, err := strconv.Atoi(args[0])
