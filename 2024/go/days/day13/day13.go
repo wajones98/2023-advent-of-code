@@ -65,13 +65,25 @@ func LoadInput(s *bufio.Scanner) ([]Prize, error) {
 			continue
 		}
 
-		buttonALine := line
+		buttonA := ParseButton(line)
 		s.Scan()
-		buttonBLine := s.Text()
+		buttonB := ParseButton(s.Text())
 		s.Scan()
-		prizeLine := s.Text()
+		prizeLocation := ParsePrize(s.Text())
 
-		fmt.Printf("%s\n%s\n%s\n", buttonALine, buttonBLine, prizeLine)
+		prizes = append(prizes, Prize{
+			Location: prizeLocation,
+			ButtonA:  buttonA,
+			ButtonB:  buttonB,
+		})
 	}
 	return prizes, nil
+}
+
+func ParseButton(line string) Coords {
+	return Coords{}
+}
+
+func ParsePrize(line string) Coords {
+	return Coords{}
 }
