@@ -95,13 +95,21 @@ func TestLoadInput(t *testing.T) {
 	}
 }
 
+type PossibleCombinationsInput struct {
+	Location, A, B int
+}
+
 func TestPossibleCombinations(t *testing.T) {
 	tests := []struct {
-		Input    Prize
+		Input    PossibleCombinationsInput
 		Expected map[int]int
 	}{
 		{
-			Input: Data[0],
+			Input: PossibleCombinationsInput{
+				Location: 8400,
+				A:        94,
+				B:        22,
+			},
 			Expected: map[int]int{
 				80: 40,
 			},
@@ -110,7 +118,7 @@ func TestPossibleCombinations(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("%v", test.Input), func(t *testing.T) {
-			actual, err := PossibleCombinations(test.Input)
+			actual, err := PossibleCombinations(test.Input.Location, test.Input.A, test.Input.B)
 			if err != nil {
 				t.Error(err)
 			}

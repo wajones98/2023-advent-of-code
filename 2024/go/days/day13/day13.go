@@ -94,6 +94,7 @@ func ParseLine(line, delimeter string) Coords {
 	}
 }
 
-func PossibleCombinations(prize Prize) (map[int]int, error) {
-	return map[int]int{}, nil
+func PossibleCombinations(location, a, b int) (map[int]int, error) {
+	combinations := map[int]int{}
+	return combinations, nil
 }
