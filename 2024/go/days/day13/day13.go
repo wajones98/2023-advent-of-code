@@ -3,6 +3,8 @@ package day13
 import (
 	"bufio"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/wajones98/advent-of-code/days"
 	"github.com/wajones98/advent-of-code/input"
@@ -81,7 +83,16 @@ func LoadInput(s *bufio.Scanner) ([]Prize, error) {
 }
 
 func ParseButton(line string) Coords {
-	return Coords{}
+	parts := strings.Split(line, ":")
+	parts = strings.Split(parts[1], ",")
+
+	x, _ := strconv.Atoi(strings.Split(parts[0], "+")[1])
+	y, _ := strconv.Atoi(strings.Split(parts[1], "+")[1])
+
+	return Coords{
+		X: x,
+		Y: y,
+	}
 }
 
 func ParsePrize(line string) Coords {
