@@ -2,12 +2,13 @@ package day13
 
 import (
 	"bufio"
+	"fmt"
 
 	"github.com/wajones98/advent-of-code/days"
 	"github.com/wajones98/advent-of-code/input"
 )
 
-const Day int = 13 
+const Day int = 13
 
 func Run() (*days.Result[int, int], error) {
 	pOne, err := Part1()
@@ -46,5 +47,31 @@ func Part2() (int, error) {
 	return 0, nil
 }
 
-func LoadInput(s *bufio.Scanner) (_, error) {
+type Coords struct {
+	X, Y int
+}
+
+type Prize struct {
+	Location,
+	ButtonA,
+	ButtonB Coords
+}
+
+func LoadInput(s *bufio.Scanner) ([]Prize, error) {
+	prizes := []Prize{}
+	for s.Scan() {
+		line := s.Text()
+		if line == "" {
+			continue
+		}
+
+		buttonALine := line
+		s.Scan()
+		buttonBLine := s.Text()
+		s.Scan()
+		prizeLine := s.Text()
+
+		fmt.Printf("%s\n%s\n%s\n", buttonALine, buttonBLine, prizeLine)
+	}
+	return prizes, nil
 }
