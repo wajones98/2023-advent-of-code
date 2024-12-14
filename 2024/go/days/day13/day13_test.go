@@ -150,7 +150,29 @@ func TestFindCheapestCombinations(t *testing.T) {
 		Input     []map[int]int
 		ExpectedA int
 		ExpectedB int
-	}{}
+	}{
+		{
+			Input: []map[int]int{
+				{
+					3:  369,
+					14: 322,
+					25: 275,
+					36: 228,
+					47: 181,
+					58: 134,
+					69: 87,
+					80: 40,
+				},
+				{
+					13:  74,
+					80:  40,
+					147: 6,
+				},
+			},
+			ExpectedA: 80,
+			ExpectedB: 40,
+		},
+	}
 
 	for _, test := range tests {
 		actualA, actualB := FindCheapestCombination(test.Input[0], test.Input[0])

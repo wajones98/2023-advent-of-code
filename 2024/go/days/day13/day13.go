@@ -107,7 +107,6 @@ func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 		if b < 0 {
 			continue
 		}
-		fmt.Printf("%d | %f \n", a, b)
 		combinations[a] = int(b)
 	}
 	return combinations, len(combinations) > 0
