@@ -112,3 +112,15 @@ func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 	}
 	return combinations, len(combinations) > 0
 }
+
+func FindCheapestCombination(xCombinations, yCombinations map[int]int) (int, int) {
+	matches := map[int]int{}
+	for k, v := range xCombinations {
+		if _, ok := yCombinations[k]; ok {
+			matches[k] = v
+		}
+	}
+
+	fmt.Printf("%v\n", matches)
+	return 0, 0
+}

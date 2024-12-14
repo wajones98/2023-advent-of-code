@@ -144,3 +144,19 @@ func TestPossibleCombinations(t *testing.T) {
 		})
 	}
 }
+
+func TestFindCheapestCombinations(t *testing.T) {
+	tests := []struct {
+		Input     []map[int]int
+		ExpectedA int
+		ExpectedB int
+	}{}
+
+	for _, test := range tests {
+		actualA, actualB := FindCheapestCombination(test.Input[0], test.Input[0])
+		if test.ExpectedA != actualA || test.ExpectedB != actualB {
+			t.Errorf("Expected A: %d, Actual A: %d\n", test.ExpectedA, actualA)
+			t.Errorf("Expected B: %d, Actual B: %d\n", test.ExpectedB, actualB)
+		}
+	}
+}
