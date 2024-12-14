@@ -111,6 +111,13 @@ func TestPossibleCombinations(t *testing.T) {
 				B:        22,
 			},
 			Expected: map[int]int{
+				3:  369,
+				14: 322,
+				25: 275,
+				36: 228,
+				47: 181,
+				58: 134,
+				69: 87,
 				80: 40,
 			},
 		},
@@ -118,12 +125,9 @@ func TestPossibleCombinations(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("%v", test.Input), func(t *testing.T) {
-			actual, err := PossibleCombinations(test.Input.Location, test.Input.A, test.Input.B)
-			if err != nil {
-				t.Error(err)
-			}
+			actual, _ := PossibleCombinations(test.Input.Location, test.Input.A, test.Input.B)
 			if !reflect.DeepEqual(test.Expected, actual) {
-				t.Errorf("Expected: %v\n, Actual: %v\n", test.Expected, actual)
+				t.Errorf("Expected: %v, Actual: %v\n", test.Expected, actual)
 			}
 		})
 	}

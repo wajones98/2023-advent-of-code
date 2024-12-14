@@ -2,6 +2,8 @@ package day13
 
 import (
 	"bufio"
+	"fmt"
+	"math"
 	"strconv"
 	"strings"
 
@@ -94,7 +96,19 @@ func ParseLine(line, delimeter string) Coords {
 	}
 }
 
-func PossibleCombinations(location, a, b int) (map[int]int, error) {
+func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 	combinations := map[int]int{}
-	return combinations, nil
+	for a := range 200 {
+		if math.Mod(float64(location)-(float64(x)*float64(a)), float64(y)) != 0 {
+			continue
+		}
+
+		b := (float64(location) - (float64(x) * float64(a))) / float64(y)
+		if b < 0 {
+			continue
+		}
+		fmt.Printf("%d | %f \n", a, b)
+		combinations[a] = int(b)
+	}
+	return combinations, len(combinations) > 0
 }
