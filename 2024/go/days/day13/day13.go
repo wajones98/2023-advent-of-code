@@ -10,7 +10,11 @@ import (
 	"github.com/wajones98/advent-of-code/input"
 )
 
-const Day int = 13
+const (
+	Day        int = 13
+	ATokenCost     = 3
+	BTokenCost     = 1
+)
 
 func Run() (*days.Result[int, int], error) {
 	pOne, err := Part1()
@@ -97,7 +101,7 @@ func ParseLine(line, delimeter string) Coords {
 
 func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 	combinations := map[int]int{}
-	for a := range 100 {
+	for a := range 200 {
 		if math.Mod(float64(location)-(float64(x)*float64(a)), float64(y)) != 0 {
 			continue
 		}
@@ -111,19 +115,19 @@ func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 	return combinations, len(combinations) > 0
 }
 
-func FindCheapestCombination(xCombinations, yCombinations map[int]int) (int, int) {
-	cheapestA, cheapestB := math.MaxInt, math.MaxInt
+func FindCheapestCombination(xCombinations, yCombinations map[int]int) int {
+	cheapest := math.MaxInt
 
-	for k, v := range xCombinations {
-		if _, ok := yCombinations[k]; ok {
-			if v < cheapestB {
-				cheapestA = k
-				cheapestB = v
+	for a, b := range xCombinations {
+		if _, ok := yCombinations[a]; ok {
+			cost := (a * ATokenCost) + (b * BTokenCost)
+			if cost < cheapest {
+				cheapest = cost
 			}
 		}
 	}
 
-	return cheapestA, cheapestB
+	return cheapest
 }
 
 func FindTokenCost(prize Prize) int {
@@ -137,6 +141,5 @@ func FindTokenCost(prize Prize) int {
 		return 0
 	}
 
-	a, b := FindCheapestCombination(xCombinations, yCombinations)
-	return a + b
+	return FindCheapestCombination(xCombinations, yCombinations)
 }
