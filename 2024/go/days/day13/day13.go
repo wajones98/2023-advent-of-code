@@ -2,7 +2,6 @@ package day13
 
 import (
 	"bufio"
-	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -113,13 +112,16 @@ func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 }
 
 func FindCheapestCombination(xCombinations, yCombinations map[int]int) (int, int) {
-	matches := map[int]int{}
+	cheapestA, cheapestB := math.MaxInt, math.MaxInt
+
 	for k, v := range xCombinations {
 		if _, ok := yCombinations[k]; ok {
-			matches[k] = v
+			if v < cheapestB {
+				cheapestA = k
+				cheapestB = v
+			}
 		}
 	}
 
-	fmt.Printf("%v\n", matches)
-	return 0, 0
+	return cheapestA, cheapestB
 }
