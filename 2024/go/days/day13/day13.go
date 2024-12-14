@@ -2,7 +2,6 @@ package day13
 
 import (
 	"bufio"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -67,11 +66,11 @@ func LoadInput(s *bufio.Scanner) ([]Prize, error) {
 			continue
 		}
 
-		buttonA := ParseButton(line)
+		buttonA := ParseLine(line, "+")
 		s.Scan()
-		buttonB := ParseButton(s.Text())
+		buttonB := ParseLine(s.Text(), "+")
 		s.Scan()
-		prizeLocation := ParsePrize(s.Text())
+		prizeLocation := ParseLine(s.Text(), "=")
 
 		prizes = append(prizes, Prize{
 			Location: prizeLocation,
@@ -82,19 +81,15 @@ func LoadInput(s *bufio.Scanner) ([]Prize, error) {
 	return prizes, nil
 }
 
-func ParseButton(line string) Coords {
+func ParseLine(line, delimeter string) Coords {
 	parts := strings.Split(line, ":")
 	parts = strings.Split(parts[1], ",")
 
-	x, _ := strconv.Atoi(strings.Split(parts[0], "+")[1])
-	y, _ := strconv.Atoi(strings.Split(parts[1], "+")[1])
+	x, _ := strconv.Atoi(strings.Split(parts[0], delimeter)[1])
+	y, _ := strconv.Atoi(strings.Split(parts[1], delimeter)[1])
 
 	return Coords{
 		X: x,
 		Y: y,
 	}
-}
-
-func ParsePrize(line string) Coords {
-	return Coords{}
 }
