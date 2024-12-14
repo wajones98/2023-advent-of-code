@@ -125,3 +125,18 @@ func FindCheapestCombination(xCombinations, yCombinations map[int]int) (int, int
 
 	return cheapestA, cheapestB
 }
+
+func FindTokenCost(prize Prize) int {
+	xCombinations, ok := PossibleCombinations(prize.Location.X, prize.ButtonA.X, prize.ButtonA.Y)
+	if !ok {
+		return 0
+	}
+
+	yCombinations, ok := PossibleCombinations(prize.Location.X, prize.ButtonA.X, prize.ButtonA.Y)
+	if !ok {
+		return 0
+	}
+
+	a, b := FindCheapestCombination(xCombinations, yCombinations)
+	return a + b
+}
