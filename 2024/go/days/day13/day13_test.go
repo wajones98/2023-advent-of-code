@@ -98,8 +98,15 @@ func TestLoadInput(t *testing.T) {
 func TestPossibleCombinations(t *testing.T) {
 	tests := []struct {
 		Input    Prize
-		Expected []map[int]int
-	}{}
+		Expected map[int]int
+	}{
+		{
+			Input: Data[0],
+			Expected: map[int]int{
+				80: 40,
+			},
+		},
+	}
 
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("%v", test.Input), func(t *testing.T) {
