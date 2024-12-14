@@ -108,7 +108,7 @@ func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 		}
 
 		b := (float64(location) - (float64(x) * float64(a))) / float64(y)
-		if b < 0 {
+		if b <= 0 {
 			continue
 		}
 		combinations[a] = int(b)
@@ -138,7 +138,7 @@ func FindTokenCost(prize Prize) int {
 		return 0
 	}
 
-	yCombinations, ok := PossibleCombinations(prize.Location.Y, prize.ButtonA.Y, prize.ButtonA.Y)
+	yCombinations, ok := PossibleCombinations(prize.Location.Y, prize.ButtonA.Y, prize.ButtonB.Y)
 	if !ok {
 		return 0
 	}
