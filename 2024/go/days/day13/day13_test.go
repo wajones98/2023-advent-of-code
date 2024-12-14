@@ -180,13 +180,33 @@ func TestFindCheapestCombinations(t *testing.T) {
 	}
 }
 
-// func TestFindTokenCost(t *testing.T) {
-// 	tests := []struct {
-// 		Input    Prize
-// 		Expected int
-// 	}{
-// 		{
-// 			Input: Data[0],
-// 		},
-// 	}
-// }
+func TestFindTokenCost(t *testing.T) {
+	tests := []struct {
+		Input    Prize
+		Expected int
+	}{
+		{
+			Input:    Data[0],
+			Expected: 280,
+		},
+		{
+			Input:    Data[1],
+			Expected: 0,
+		},
+		{
+			Input:    Data[2],
+			Expected: 200,
+		},
+		{
+			Input:    Data[3],
+			Expected: 0,
+		},
+	}
+
+	for _, test := range tests {
+		actual := FindTokenCost(test.Input)
+		if test.Expected != actual {
+			t.Errorf("Expected: %d, Actual: %d\n", test.Expected, actual)
+		}
+	}
+}

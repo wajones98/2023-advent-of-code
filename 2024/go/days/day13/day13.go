@@ -2,6 +2,7 @@ package day13
 
 import (
 	"bufio"
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -121,6 +122,7 @@ func FindCheapestCombination(xCombinations, yCombinations map[int]int) int {
 	for a, b := range xCombinations {
 		if _, ok := yCombinations[a]; ok {
 			cost := (a * ATokenCost) + (b * BTokenCost)
+			fmt.Printf("A: %d, B: %d = %d\n", a, b, cost)
 			if cost < cheapest {
 				cheapest = cost
 			}
@@ -131,15 +133,17 @@ func FindCheapestCombination(xCombinations, yCombinations map[int]int) int {
 }
 
 func FindTokenCost(prize Prize) int {
-	xCombinations, ok := PossibleCombinations(prize.Location.X, prize.ButtonA.X, prize.ButtonA.Y)
+	xCombinations, ok := PossibleCombinations(prize.Location.X, prize.ButtonA.X, prize.ButtonB.X)
 	if !ok {
 		return 0
 	}
 
-	yCombinations, ok := PossibleCombinations(prize.Location.X, prize.ButtonA.X, prize.ButtonA.Y)
+	yCombinations, ok := PossibleCombinations(prize.Location.Y, prize.ButtonA.Y, prize.ButtonA.Y)
 	if !ok {
 		return 0
 	}
 
-	return FindCheapestCombination(xCombinations, yCombinations)
+	temp := FindCheapestCombination(xCombinations, yCombinations)
+	fmt.Printf("%d\n", temp)
+	return temp
 }
