@@ -210,3 +210,11 @@ func TestFindTokenCost(t *testing.T) {
 		}
 	}
 }
+
+func TestTotalTokens(t *testing.T) {
+	expected := 480
+	actual := TotalTokens(Data)
+	if expected != actual {
+		t.Errorf("Expected: %d, Actual: %d\n", expected, actual)
+	}
+}

@@ -145,3 +145,12 @@ func FindTokenCost(prize Prize) int {
 
 	return FindCheapestCombination(xCombinations, yCombinations)
 }
+
+func TotalTokens(prizes []Prize) int {
+	total := 0
+	for _, prize := range prizes {
+		total += FindTokenCost(prize)
+	}
+
+	return total
+}
