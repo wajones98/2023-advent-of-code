@@ -143,7 +143,5 @@ func FindTokenCost(prize Prize) int {
 		return 0
 	}
 
-	temp := FindCheapestCombination(xCombinations, yCombinations)
-	fmt.Printf("%d\n", temp)
-	return temp
+	return FindCheapestCombination(xCombinations, yCombinations)
 }
