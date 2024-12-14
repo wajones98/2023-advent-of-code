@@ -2,6 +2,7 @@ package day13
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -91,5 +92,24 @@ func TestLoadInput(t *testing.T) {
 
 	if !reflect.DeepEqual(Data, actual) {
 		t.Errorf("Expected: %v, Actual: %v\\n", Data, actual)
+	}
+}
+
+func TestPossibleCombinations(t *testing.T) {
+	tests := []struct {
+		Input    Prize
+		Expected []map[int]int
+	}{}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%v", test.Input), func(t *testing.T) {
+			actual, err := PossibleCombinations(test.Input)
+			if err != nil {
+				t.Error(err)
+			}
+			if !reflect.DeepEqual(test.Expected, actual) {
+				t.Errorf("Expected: %v\n, Actual: %v\n", test.Expected, actual)
+			}
+		})
 	}
 }
