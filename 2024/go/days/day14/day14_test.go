@@ -28,7 +28,7 @@ var Data = []Robot{
 
 func TestLoadInput(t *testing.T) {
 	s := bufio.NewScanner(strings.NewReader(Input))
-	actual, err := LoadInput(s, 11, 7)
+	actual, err := LoadInput(s)
 	if err != nil {
 		t.Error(err)
 	}

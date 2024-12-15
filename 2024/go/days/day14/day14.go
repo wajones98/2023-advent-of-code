@@ -30,13 +30,21 @@ func Run() (*days.Result[int, int], error) {
 }
 
 func Part1() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	width := 101
+	height := 103
+
+	robots, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	return SafetyScore(robots, width, height), nil
 }
 
 func Part2() (int, error) {
@@ -70,7 +78,7 @@ type Robot struct {
 // 	fmt.Printf("\n")
 // }
 
-func LoadInput(s *bufio.Scanner, width, height int) ([]Robot, error) {
+func LoadInput(s *bufio.Scanner) ([]Robot, error) {
 	robots := []Robot{}
 	for s.Scan() {
 		pv := strings.Split(s.Text(), " ")
