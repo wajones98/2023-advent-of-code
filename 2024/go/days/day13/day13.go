@@ -49,13 +49,18 @@ func Part1() (int, error) {
 }
 
 func Part2() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	prizes, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	return TotalTokens(prizes, 10000000000000), nil
 }
 
 type Coords struct {
