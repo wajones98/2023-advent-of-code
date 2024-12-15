@@ -150,18 +150,12 @@ func (r *Robot) MoveRobot(width, height int) {
 	}
 }
 
-//	func SafetyScore(robots []Robot, width, height int) int {
-//		middleHeight := FindMiddle(height)
-//		middleWidth := FindMiddle(width)
-//	}
-func FindMiddle(length int) []int {
-	middleValues := []int{}
-	if length%2 == 0 {
-		half := length / 2
-		middleValues = append(middleValues, half-1, half)
-	} else {
-		half := (length - 1) / 2
-		middleValues = append(middleValues, half)
-	}
-	return middleValues
+// func SafetyScore(robots []Robot, width, height int) int {
+// 	hm := FindMiddle(height)
+// 	mw := FindMiddle(width)
+//
+// }
+
+func FindMiddle(length int) int {
+	return (length - 1) / 2
 }

@@ -108,20 +108,15 @@ func TestMoveRobots(t *testing.T) {
 
 func TestFindMiddle(t *testing.T) {
 	tests := []struct {
-		Input    int
-		Expected []int
+		Input, Expected int
 	}{
 		{
 			Input:    7,
-			Expected: []int{3},
+			Expected: 3,
 		},
 		{
 			Input:    11,
-			Expected: []int{5},
-		},
-		{
-			Input:    10,
-			Expected: []int{4, 5},
+			Expected: 5,
 		},
 	}
 
