@@ -136,7 +136,7 @@ func PrintRobots(robots []Robot, width, height int, includeCount bool) string {
 				if includeCount {
 					result += fmt.Sprintf("%d ", total)
 				} else {
-					result += fmt.Sprintf("* ")
+					result += "* "
 				}
 			} else {
 				result += ". "
