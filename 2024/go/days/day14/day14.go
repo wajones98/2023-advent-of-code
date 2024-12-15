@@ -2,12 +2,9 @@ package day14
 
 import (
 	"bufio"
-	"fmt"
-	"slices"
 	"strconv"
 	"strings"
 
-	"github.com/wajones98/advent-of-code/common"
 	"github.com/wajones98/advent-of-code/days"
 	"github.com/wajones98/advent-of-code/input"
 )
@@ -52,29 +49,28 @@ func Part2() (int, error) {
 }
 
 type Robot struct {
-	X, Y int
+	PX, PY, VX, VY int
 }
 
-func PrintMap(m *common.TwoDMap[[]Robot]) {
-	fmt.Print("\033[H\033[2J")
+// func PrintMap(m *common.TwoDMap[[]Robot]) {
+// 	fmt.Print("\033[H\033[2J")
+//
+// 	for i, c := range m.Map {
+// 		if len(c) > 0 {
+// 			fmt.Printf("%d ", len(c))
+// 		} else {
+// 			fmt.Print(". ")
+// 		}
+// 		x := (i + 1) % int(m.Width)
+// 		if x == 0 {
+// 			fmt.Printf("\n")
+// 		}
+// 	}
+// 	fmt.Printf("\n")
+// }
 
-	for i, c := range m.Map {
-		if len(c) > 0 {
-			fmt.Printf("%d ", len(c))
-		} else {
-			fmt.Print(". ")
-		}
-		x := (i + 1) % int(m.Width)
-		if x == 0 {
-			fmt.Printf("\n")
-		}
-	}
-	fmt.Printf("\n")
-}
-
-func LoadInput(s *bufio.Scanner, width, height int) (*common.TwoDMap[[]Robot], error) {
-	twoDMap := common.NewTwoDMap[[]Robot](width, height)
-
+func LoadInput(s *bufio.Scanner, width, height int) ([]Robot, error) {
+	robots := []Robot{}
 	for s.Scan() {
 		pv := strings.Split(s.Text(), " ")
 
@@ -99,47 +95,38 @@ func LoadInput(s *bufio.Scanner, width, height int) (*common.TwoDMap[[]Robot], e
 			return nil, err
 		}
 
-		r, err := twoDMap.Get(px, py)
-		if err != nil {
-			return nil, err
-		}
-		r = append(r, Robot{vx, vy})
-
-		err = twoDMap.Put(px, py, r)
-		if err != nil {
-			return nil, err
-		}
+		robots = append(robots, Robot{
+			px, py, vx, vy,
+		})
 	}
 
-	return twoDMap, nil
+	return robots, nil
 }
 
-func MoveRobots(m *common.TwoDMap[[]Robot]) {
-	for rsi, rs := range m.Map {
-		px, py := m.FindPosition(rsi)
-		for ri, r := range rs {
-			px, py = MoveRobot(r, px, py, m.Width, m.Height)
-			m.Map[rsi] = slices.Delete(rs, ri, ri)
-			existingRobots, _ := m.Get(px, py)
-			_ = m.Put(px, py, append(existingRobots, r))
-		}
-	}
-}
+// func MoveRobots(m *common.TwoDMap[[]Robot]) {
+// 	for rsi, rs := range m.Map {
+// 		px, py := m.FindPosition(rsi)
+// 		for ri, r := range rs {
+// 			px, py = MoveRobot(r, px, py, m.Width, m.Height)
+// 			m.Map[rsi] = slices.Delete(rs, ri, ri+1)
+// 			existingRobots, _ := m.Get(px, py)
+// 			_ = m.Put(px, py, append(existingRobots, r))
+// 		}
+// 	}
+// }
 
-func MoveRobot(robot Robot, px, py, width, height int) (x int, y int) {
-	px += robot.X
-	if px > width {
-		px = px - width
-	} else if px < 0 {
-		px = width + px
-	}
-
-	py += robot.Y
-	if py > height {
-		py = py - height
-	} else if py < 0 {
-		py = height + py
+func (r *Robot) MoveRobot(width, height int) {
+	r.PX += r.VX
+	if r.PX > width {
+		r.PX -= width
+	} else if r.PX < 0 {
+		r.PX += width
 	}
 
-	return px, py
+	r.PY += r.VY
+	if r.PY > height {
+		r.PY -= height
+	} else if r.PY < 0 {
+		r.PY += height
+	}
 }

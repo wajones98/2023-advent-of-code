@@ -6,8 +6,6 @@ import (
 	"reflect"
 	"strings"
 	"testing"
-
-	"github.com/wajones98/advent-of-code/common"
 )
 
 const Input = `p=0,4 v=3,-3
@@ -23,18 +21,9 @@ p=7,3 v=-1,2
 p=2,4 v=2,-3
 p=9,5 v=-3,-3`
 
-var Data = common.TwoDMap[[]Robot]{
-	Width:  11,
-	Height: 7,
-	Map: [][]Robot{
-		{{1, 3}}, {}, {{2, -1}}, {{-2, -2}, {-1, -2}}, {}, {}, {}, {}, {}, {}, {},
-		{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-		{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-		{}, {}, {}, {}, {}, {}, {{-1, -3}}, {{-1, 2}}, {}, {{2, 3}}, {{-1, 2}},
-		{{3, -3}}, {}, {{2, -3}}, {}, {}, {}, {}, {}, {}, {}, {},
-		{}, {}, {}, {}, {}, {}, {}, {}, {}, {{-3, -3}}, {},
-		{}, {}, {}, {}, {}, {}, {}, {{-1, -3}}, {}, {}, {},
-	},
+var Data = []Robot{
+	{0, 4, 3, -3}, {6, 3, -1, -3}, {10, 3, -1, 2}, {2, 0, 2, -1}, {0, 0, 1, 3}, {3, 0, -2, -2},
+	{7, 6, -1, -3}, {3, 0, -1, -2}, {9, 3, 2, 3}, {7, 3, -1, 2}, {2, 4, 2, -3}, {9, 5, -3, -3},
 }
 
 func TestLoadInput(t *testing.T) {
@@ -44,70 +33,52 @@ func TestLoadInput(t *testing.T) {
 		t.Error(err)
 	}
 
-	if Data.Width != actual.Width {
-		t.Errorf("\nExpected: %v\nActual: %v\n", Data.Width, actual.Width)
+	if len(Data) != len(actual) {
+		t.Errorf("\nExpected: %v\nActual: %v\n", len(Data), len(actual))
 	}
 
-	if Data.Height != actual.Height {
-		t.Errorf("\nExpected: %v\nActual: %v\n", Data.Height, actual.Height)
-	}
-
-	if len(Data.Map) != len(actual.Map) {
-		t.Errorf("\nExpected: %v\nActual: %v\n", len(Data.Map), len(actual.Map))
-	}
-
-	for i, v := range actual.Map {
-		if len(v) != len(Data.Map[i]) && !reflect.DeepEqual(Data.Map[i], v) {
-			t.Errorf("\nExpected: %v\nActual: %v\n", Data.Map[i], v)
+	for i, v := range actual {
+		if !reflect.DeepEqual(Data[i], v) {
+			t.Errorf("\nExpected: %v\nActual: %v\n", Data[i], v)
 		}
 	}
 }
 
 func TestMoveRobot(t *testing.T) {
 	tests := []struct {
-		Robot                           Robot
-		PX, EPX, PY, EPY, Width, Height int
+		Robot                   Robot
+		EPX, EPY, Width, Height int
 	}{
 		{
-			Robot:  Robot{2, -3},
-			PX:     2,
-			PY:     4,
+			Robot:  Robot{2, 4, 2, -3},
 			EPX:    4,
 			EPY:    1,
 			Width:  11,
 			Height: 7,
 		},
 		{
-			Robot:  Robot{2, -3},
-			PX:     4,
-			PY:     1,
+			Robot:  Robot{4, 1, 2, -3},
 			EPX:    6,
 			EPY:    5,
 			Width:  11,
 			Height: 7,
 		},
 		{
-			Robot:  Robot{2, -3},
-			PX:     6,
-			PY:     5,
+			Robot:  Robot{6, 5, 2, -3},
 			EPX:    8,
 			EPY:    2,
 			Width:  11,
 			Height: 7,
 		},
 		{
-			Robot:  Robot{2, -3},
-			PX:     8,
-			PY:     2,
+			Robot:  Robot{8, 2, 2, -3},
 			EPX:    10,
 			EPY:    6,
 			Width:  11,
 			Height: 7,
 		},
 		{
-			Robot:  Robot{2, -3},
-			PX:     10,
-			PY:     6,
+			Robot:  Robot{10, 6, 2, -3},
 			EPX:    1,
 			EPY:    3,
 			Width:  11,
@@ -116,11 +87,26 @@ func TestMoveRobot(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		t.Run(fmt.Sprintf("%v - Starting -> X: %d, Y: %d", test.Robot, test.PX, test.PY), func(t *testing.T) {
-			apx, apy := MoveRobot(test.Robot, test.PX, test.PY, test.Width, test.Height)
-			if apx != test.EPX || apy != test.EPY {
-				t.Errorf("Expected X: %d, Actual X: %d\nExpected Y: %d, Actual Y: %d", test.EPX, apx, test.EPY, apy)
+		t.Run(fmt.Sprintf("%v", test.Robot), func(t *testing.T) {
+			test.Robot.MoveRobot(test.Width, test.Height)
+			if test.Robot.PX != test.EPX || test.Robot.PY != test.EPY {
+				t.Errorf("Expected X: %d, Actual X: %d\nExpected Y: %d, Actual Y: %d", test.EPX, test.Robot.PX, test.EPY, test.Robot.PY)
 			}
 		})
 	}
 }
+
+//
+// func TestMoveRobots(t *testing.T) {
+// 	data := &common.TwoDMap[[]Robot]{
+// 		Width:  11,
+// 		Height: 7,
+// 		Map:    make([][]Robot, 11*7),
+// 	}
+// 	copy(data.Map, Data.Map)
+//
+// 	for range 10 {
+// 		MoveRobots(data)
+// 	}
+// 	PrintMap(data)
+// }
