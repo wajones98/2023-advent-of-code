@@ -114,7 +114,7 @@ func LoadInput(s *bufio.Scanner, width, height int) (*common.TwoDMap[[]Robot], e
 	return twoDMap, nil
 }
 
-func Patrol(m *common.TwoDMap[[]Robot]) {
+func MoveRobots(m *common.TwoDMap[[]Robot]) {
 	for rsi, rs := range m.Map {
 		px, py := m.FindPosition(rsi)
 		for ri, r := range rs {
