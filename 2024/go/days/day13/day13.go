@@ -45,7 +45,7 @@ func Part1() (int, error) {
 		return 0, err
 	}
 
-	return TotalTokens(prizes), nil
+	return TotalTokens(prizes, 0), nil
 }
 
 func Part2() (int, error) {
@@ -108,10 +108,6 @@ func PossibleCombinations(location, x, y int) (map[int]int, bool) {
 	combinations := map[int]int{}
 	maxIterations := location / gcd(x, y) * 2
 	for a := range maxIterations {
-		// if math.Mod(float64(location)-(float64(x)*float64(a)), float64(y)) != 0 {
-		// 	continue
-		// }
-
 		b := (location - x*a) / y
 		if b < 0 || a*x+b*y != location {
 			continue
@@ -147,24 +143,15 @@ func FindCheapestCombination(xCombinations, yCombinations map[int]int) int {
 	return cheapest
 }
 
-func FindTokenCost(prize Prize) int {
-	xCombinations, ok := PossibleCombinations(prize.Location.X, prize.ButtonA.X, prize.ButtonB.X)
-	if !ok {
-		return 0
-	}
+func FindTokenCost(prize Prize, offset int) int {
 
-	yCombinations, ok := PossibleCombinations(prize.Location.Y, prize.ButtonA.Y, prize.ButtonB.Y)
-	if !ok {
-		return 0
-	}
-
-	return FindCheapestCombination(xCombinations, yCombinations)
+	return 0
 }
 
-func TotalTokens(prizes []Prize) int {
+func TotalTokens(prizes []Prize, offset int) int {
 	total := 0
 	for _, prize := range prizes {
-		total += FindTokenCost(prize)
+		total += FindTokenCost(prize, offset)
 	}
 
 	return total

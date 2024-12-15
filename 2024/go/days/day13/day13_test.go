@@ -184,27 +184,52 @@ func TestFindTokenCost(t *testing.T) {
 	tests := []struct {
 		Input    Prize
 		Expected int
+		Offset   int
 	}{
 		{
 			Input:    Data[0],
 			Expected: 280,
+			Offset:   0,
 		},
 		{
 			Input:    Data[1],
 			Expected: 0,
+			Offset:   0,
 		},
 		{
 			Input:    Data[2],
 			Expected: 200,
+			Offset:   0,
 		},
 		{
 			Input:    Data[3],
 			Expected: 0,
+			Offset:   0,
+		},
+		{
+			Input:    Data[0],
+			Expected: 280,
+			Offset:   10000000000000,
+		},
+		{
+			Input:    Data[1],
+			Expected: 0,
+			Offset:   10000000000000,
+		},
+		{
+			Input:    Data[2],
+			Expected: 200,
+			Offset:   10000000000000,
+		},
+		{
+			Input:    Data[3],
+			Expected: 0,
+			Offset:   10000000000000,
 		},
 	}
 
 	for _, test := range tests {
-		actual := FindTokenCost(test.Input)
+		actual := FindTokenCost(test.Input, test.Offset)
 		if test.Expected != actual {
 			t.Errorf("Expected: %d, Actual: %d\n", test.Expected, actual)
 		}
@@ -213,7 +238,7 @@ func TestFindTokenCost(t *testing.T) {
 
 func TestTotalTokens(t *testing.T) {
 	expected := 480
-	actual := TotalTokens(Data)
+	actual := TotalTokens(Data, 0)
 	if expected != actual {
 		t.Errorf("Expected: %d, Actual: %d\n", expected, actual)
 	}
