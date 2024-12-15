@@ -2,7 +2,6 @@ package day15
 
 import (
 	"bufio"
-	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -24,22 +23,28 @@ const Input = `########
 var TwoDMap = &common.TwoDMap[Tile]{
 	Width:  8,
 	Height: 8,
-	Map:    []Tile{Wall},
+	Map: []Tile{
+		Wall, Wall, Wall, Wall, Wall, Wall, Wall, Wall,
+		Wall, Empty, Empty, Box, Empty, Box, Empty, Wall,
+		Wall, Wall, Robot, Empty, Box, Empty, Empty, Wall,
+		Wall, Empty, Empty, Empty, Box, Empty, Empty, Wall,
+		Wall, Empty, Wall, Empty, Box, Empty, Empty, Wall,
+		Wall, Empty, Empty, Empty, Box, Empty, Empty, Wall,
+		Wall, Empty, Empty, Empty, Empty, Empty, Empty, Wall,
+		Wall, Wall, Wall, Wall, Wall, Wall, Wall, Wall,
+	},
 }
 
 const Moves = ""
 
 func TestLoadInput(t *testing.T) {
 	s := bufio.NewScanner(strings.NewReader(Input))
-	actual, moves, err := LoadInput(s)
+	actual, _, err := LoadInput(s)
 	if err != nil {
 		t.Error(err)
 	}
 
-	fmt.Printf("Moves: %s\n", moves)
-	fmt.Printf("Map: %s\n", actual)
-
-	if !reflect.DeepEqual(Data, *actual) {
-		t.Errorf("Expected: %v, Actual: %v\\n", Data, actual)
+	if !reflect.DeepEqual(*TwoDMap, *actual) {
+		t.Errorf("\nExpected:\n%v\nActual:\n%v\n", TwoDMap, actual)
 	}
 }

@@ -53,6 +53,7 @@ const (
 	Wall  Tile = '#'
 	Robot      = '@'
 	Box        = 'O'
+	Empty      = '.'
 )
 
 func LoadInput(s *bufio.Scanner) (*common.TwoDMap[Tile], string, error) {
