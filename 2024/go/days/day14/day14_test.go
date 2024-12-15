@@ -99,9 +99,9 @@ func TestMoveRobot(t *testing.T) {
 func TestMoveRobots(t *testing.T) {
 	data := make([]Robot, len(Data))
 	copy(data, Data)
-	PrintRobots(data, 11, 7)
+	fmt.Printf("%s\n", PrintRobots(data, 11, 7, true))
 	MoveRobots(data, 100, 11, 7)
-	PrintRobots(data, 11, 7)
+	fmt.Printf("%s\n", PrintRobots(data, 11, 7, true))
 }
 
 func TestFindMiddle(t *testing.T) {

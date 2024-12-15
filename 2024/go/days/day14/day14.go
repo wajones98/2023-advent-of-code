@@ -122,7 +122,7 @@ func MoveRobots(rs []Robot, times, width, height int) {
 	}
 }
 
-func PrintRobots(robots []Robot, width, height int) {
+func PrintRobots(robots []Robot, width, height int, includeCount bool) string {
 	result := ""
 	for y := range height {
 		for x := range width {
@@ -133,7 +133,11 @@ func PrintRobots(robots []Robot, width, height int) {
 				}
 			}
 			if total > 0 {
-				result += fmt.Sprintf("%d ", total)
+				if includeCount {
+					result += fmt.Sprintf("%d ", total)
+				} else {
+					result += fmt.Sprintf("* ")
+				}
 			} else {
 				result += ". "
 			}
@@ -143,7 +147,7 @@ func PrintRobots(robots []Robot, width, height int) {
 			}
 		}
 	}
-	fmt.Printf("%v\n", result)
+	return result
 }
 
 func (r *Robot) MoveRobot(width, height int) {
