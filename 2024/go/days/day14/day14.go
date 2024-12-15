@@ -136,14 +136,14 @@ func PrintRobots(robots []Robot, width, height int) {
 
 func (r *Robot) MoveRobot(width, height int) {
 	r.PX += r.VX
-	if r.PX > width {
+	if r.PX >= width {
 		r.PX -= width
 	} else if r.PX < 0 {
 		r.PX += width
 	}
 
 	r.PY += r.VY
-	if r.PY > height {
+	if r.PY >= height {
 		r.PY -= height
 	} else if r.PY < 0 {
 		r.PY += height
