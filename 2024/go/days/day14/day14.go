@@ -3,6 +3,7 @@ package day14
 import (
 	"bufio"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -111,4 +112,34 @@ func LoadInput(s *bufio.Scanner, width, height int) (*common.TwoDMap[[]Robot], e
 	}
 
 	return twoDMap, nil
+}
+
+func Patrol(m *common.TwoDMap[[]Robot]) {
+	for rsi, rs := range m.Map {
+		px, py := m.FindPosition(rsi)
+		for ri, r := range rs {
+			px, py = MoveRobot(r, px, py, m.Width, m.Height)
+			m.Map[rsi] = slices.Delete(rs, ri, ri)
+			existingRobots, _ := m.Get(px, py)
+			_ = m.Put(px, py, append(existingRobots, r))
+		}
+	}
+}
+
+func MoveRobot(robot Robot, px, py, width, height int) (x int, y int) {
+	px += robot.X
+	if px > width {
+		px = px - width
+	} else if px < 0 {
+		px = width - px
+	}
+
+	py += robot.Y
+	if py > height {
+		py = py - height
+	} else if py < 0 {
+		py = height - py
+	}
+
+	return px, py
 }
