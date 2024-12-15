@@ -2,6 +2,7 @@ package day14
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -59,5 +60,21 @@ func TestLoadInput(t *testing.T) {
 		if len(v) != len(Data.Map[i]) && !reflect.DeepEqual(Data.Map[i], v) {
 			t.Errorf("\nExpected: %v\nActual: %v\n", Data.Map[i], v)
 		}
+	}
+}
+
+func TestMoveRobot(t *testing.T) {
+	tests := []struct {
+		Robot                           Robot
+		PX, EPX, PY, EPY, Width, Height int
+	}{}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%v - Starting -> X: %d, Y: %d", test.Robot, test.PX, test.PY), func(t *testing.T) {
+			apx, apy := MoveRobot(test.Robot, test.PX, test.PY, test.Width, test.Height)
+			if apx != test.EPX || apy != test.EPY {
+				t.Errorf("Expected X: %d, Actual X: %d\nExpected Y: %d, Actual Y: %d", test.EPX, apx, test.EPY, apy)
+			}
+		})
 	}
 }
