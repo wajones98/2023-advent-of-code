@@ -2,6 +2,7 @@ package day14
 
 import (
 	"bufio"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -51,6 +52,23 @@ func Part2() (int, error) {
 
 type Robot struct {
 	X, Y int
+}
+
+func PrintMap(m *common.TwoDMap[[]Robot]) {
+	fmt.Print("\033[H\033[2J")
+
+	for i, c := range m.Map {
+		if len(c) > 0 {
+			fmt.Printf("%d ", len(c))
+		} else {
+			fmt.Print(". ")
+		}
+		x := (i + 1) % int(m.Width)
+		if x == 0 {
+			fmt.Printf("\n")
+		}
+	}
+	fmt.Printf("\n")
 }
 
 func LoadInput(s *bufio.Scanner, width, height int) (*common.TwoDMap[[]Robot], error) {
