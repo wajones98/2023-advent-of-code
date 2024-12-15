@@ -67,7 +67,17 @@ func TestMoveRobot(t *testing.T) {
 	tests := []struct {
 		Robot                           Robot
 		PX, EPX, PY, EPY, Width, Height int
-	}{}
+	}{
+		{
+			Robot:  Robot{2, -3},
+			PX:     2,
+			PY:     4,
+			EPX:    4,
+			EPY:    1,
+			Width:  11,
+			Height: 7,
+		},
+	}
 
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("%v - Starting -> X: %d, Y: %d", test.Robot, test.PX, test.PY), func(t *testing.T) {
