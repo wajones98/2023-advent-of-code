@@ -48,12 +48,18 @@ func Part2() (int, error) {
 }
 
 type Tile rune
+type Move rune
 
 const (
 	Wall  Tile = '#'
 	Robot      = '@'
 	Box        = 'O'
 	Empty      = '.'
+
+	Left  Move = '<'
+	Right      = '>'
+	Up         = '^'
+	Down       = 'V'
 )
 
 func LoadInput(s *bufio.Scanner) (*common.TwoDMap[Tile], string, error) {
