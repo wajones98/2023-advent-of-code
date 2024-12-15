@@ -144,8 +144,16 @@ func FindCheapestCombination(xCombinations, yCombinations map[int]int) int {
 }
 
 func FindTokenCost(prize Prize, offset int) int {
-
-	return 0
+	prize.Location.X += offset
+	prize.Location.Y += offset
+	det := prize.ButtonA.X*prize.ButtonB.Y - prize.ButtonA.Y*prize.ButtonB.X
+	a := (prize.Location.X*prize.ButtonB.Y - prize.Location.Y*prize.ButtonB.X) / det
+	b := (prize.Location.Y*prize.ButtonA.X - prize.Location.X*prize.ButtonA.Y) / det
+	if prize.ButtonA.X*a+prize.ButtonB.X*b == prize.Location.X && prize.ButtonA.Y*a+prize.ButtonB.Y*b == prize.Location.Y {
+		return a*ATokenCost + b
+	} else {
+		return 0
+	}
 }
 
 func TotalTokens(prizes []Prize, offset int) int {

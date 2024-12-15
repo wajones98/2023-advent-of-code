@@ -208,22 +208,22 @@ func TestFindTokenCost(t *testing.T) {
 		},
 		{
 			Input:    Data[0],
-			Expected: 280,
+			Expected: 0,
 			Offset:   10000000000000,
 		},
 		{
 			Input:    Data[1],
-			Expected: 0,
+			Expected: 459236326669,
 			Offset:   10000000000000,
 		},
 		{
 			Input:    Data[2],
-			Expected: 200,
+			Expected: 0,
 			Offset:   10000000000000,
 		},
 		{
 			Input:    Data[3],
-			Expected: 0,
+			Expected: 416082282239,
 			Offset:   10000000000000,
 		},
 	}
