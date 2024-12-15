@@ -96,17 +96,12 @@ func TestMoveRobot(t *testing.T) {
 	}
 }
 
-//
-// func TestMoveRobots(t *testing.T) {
-// 	data := &common.TwoDMap[[]Robot]{
-// 		Width:  11,
-// 		Height: 7,
-// 		Map:    make([][]Robot, 11*7),
-// 	}
-// 	copy(data.Map, Data.Map)
-//
-// 	for range 10 {
-// 		MoveRobots(data)
-// 	}
-// 	PrintMap(data)
-// }
+func TestMoveRobots(t *testing.T) {
+	data := make([]Robot, len(Data))
+	copy(data, Data)
+	PrintRobots(data, 11, 7)
+	for range 100 {
+		MoveRobots(data, 11, 7)
+	}
+	PrintRobots(data, 11, 7)
+}

@@ -2,6 +2,7 @@ package day14
 
 import (
 	"bufio"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -103,17 +104,35 @@ func LoadInput(s *bufio.Scanner, width, height int) ([]Robot, error) {
 	return robots, nil
 }
 
-// func MoveRobots(m *common.TwoDMap[[]Robot]) {
-// 	for rsi, rs := range m.Map {
-// 		px, py := m.FindPosition(rsi)
-// 		for ri, r := range rs {
-// 			px, py = MoveRobot(r, px, py, m.Width, m.Height)
-// 			m.Map[rsi] = slices.Delete(rs, ri, ri+1)
-// 			existingRobots, _ := m.Get(px, py)
-// 			_ = m.Put(px, py, append(existingRobots, r))
-// 		}
-// 	}
-// }
+func MoveRobots(rs []Robot, width, height int) {
+	for i := 0; i < len(rs); i++ {
+		rs[i].MoveRobot(width, height)
+	}
+}
+
+func PrintRobots(robots []Robot, width, height int) {
+	result := ""
+	for y := range height {
+		for x := range width {
+			total := 0
+			for _, r := range robots {
+				if r.PX == x && r.PY == y {
+					total += 1
+				}
+			}
+			if total > 0 {
+				result += fmt.Sprintf("%d ", total)
+			} else {
+				result += ". "
+			}
+			newLine := (x + 1) % width
+			if newLine == 0 {
+				result += "\n"
+			}
+		}
+	}
+	fmt.Printf("%v\n", result)
+}
 
 func (r *Robot) MoveRobot(width, height int) {
 	r.PX += r.VX
