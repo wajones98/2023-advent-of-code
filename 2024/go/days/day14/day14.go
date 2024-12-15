@@ -44,6 +44,8 @@ func Part1() (int, error) {
 		return 0, err
 	}
 
+	MoveRobots(robots, 100, width, height)
+
 	return SafetyScore(robots, width, height), nil
 }
 
