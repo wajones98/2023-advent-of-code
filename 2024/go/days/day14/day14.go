@@ -131,14 +131,14 @@ func MoveRobot(robot Robot, px, py, width, height int) (x int, y int) {
 	if px > width {
 		px = px - width
 	} else if px < 0 {
-		px = width - px
+		px = width + px
 	}
 
 	py += robot.Y
 	if py > height {
 		py = py - height
 	} else if py < 0 {
-		py = height - py
+		py = height + py
 	}
 
 	return px, py

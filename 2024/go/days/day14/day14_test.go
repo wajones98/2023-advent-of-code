@@ -77,6 +77,15 @@ func TestMoveRobot(t *testing.T) {
 			Width:  11,
 			Height: 7,
 		},
+		{
+			Robot:  Robot{2, -3},
+			PX:     4,
+			PY:     1,
+			EPX:    6,
+			EPY:    5,
+			Width:  11,
+			Height: 7,
+		},
 	}
 
 	for _, test := range tests {
