@@ -112,9 +112,11 @@ func LoadInput(s *bufio.Scanner) ([]Robot, error) {
 	return robots, nil
 }
 
-func MoveRobots(rs []Robot, width, height int) {
-	for i := 0; i < len(rs); i++ {
-		rs[i].MoveRobot(width, height)
+func MoveRobots(rs []Robot, times, width, height int) {
+	for range times {
+		for i := 0; i < len(rs); i++ {
+			rs[i].MoveRobot(width, height)
+		}
 	}
 }
 

@@ -100,9 +100,7 @@ func TestMoveRobots(t *testing.T) {
 	data := make([]Robot, len(Data))
 	copy(data, Data)
 	PrintRobots(data, 11, 7)
-	for range 100 {
-		MoveRobots(data, 11, 7)
-	}
+	MoveRobots(data, 100, 11, 7)
 	PrintRobots(data, 11, 7)
 }
 
@@ -133,9 +131,7 @@ func TestFindMiddle(t *testing.T) {
 func TestSafetyScore(t *testing.T) {
 	data := make([]Robot, len(Data))
 	copy(data, Data)
-	for range 100 {
-		MoveRobots(data, 11, 7)
-	}
+	MoveRobots(data, 100, 11, 7)
 	expected := 12
 	actual := SafetyScore(data, 11, 7)
 
