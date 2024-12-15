@@ -105,3 +105,32 @@ func TestMoveRobots(t *testing.T) {
 	}
 	PrintRobots(data, 11, 7)
 }
+
+func TestFindMiddle(t *testing.T) {
+	tests := []struct {
+		Input    int
+		Expected []int
+	}{
+		{
+			Input:    7,
+			Expected: []int{3},
+		},
+		{
+			Input:    11,
+			Expected: []int{5},
+		},
+		{
+			Input:    10,
+			Expected: []int{4, 5},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%d", test.Input), func(t *testing.T) {
+			actual := FindMiddle(test.Input)
+			if !reflect.DeepEqual(test.Expected, actual) {
+				t.Errorf("Expected: %v, Actual: %v\n", test.Expected, actual)
+			}
+		})
+	}
+}

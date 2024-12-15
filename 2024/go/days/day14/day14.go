@@ -149,3 +149,19 @@ func (r *Robot) MoveRobot(width, height int) {
 		r.PY += height
 	}
 }
+
+//	func SafetyScore(robots []Robot, width, height int) int {
+//		middleHeight := FindMiddle(height)
+//		middleWidth := FindMiddle(width)
+//	}
+func FindMiddle(length int) []int {
+	middleValues := []int{}
+	if length%2 == 0 {
+		half := length / 2
+		middleValues = append(middleValues, half-1, half)
+	} else {
+		half := (length - 1) / 2
+		middleValues = append(middleValues, half)
+	}
+	return middleValues
+}
