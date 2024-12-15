@@ -62,7 +62,20 @@ const (
 	Down       = 'V'
 )
 
-func LoadInput(s *bufio.Scanner) (*common.TwoDMap[Tile], string, error) {
+type Coords struct {
+	X, Y int
+}
+
+type Data struct {
+	Robot   *Coords
+	Moves   []Move
+	TwoDMap *common.TwoDMap[Tile]
+}
+
+func LoadInput(s *bufio.Scanner) (*Data, error) {
+	data := &Data{
+		Moves: []Move{},
+	}
 	lines := []string{}
 	for s.Scan() {
 		line := s.Text()
@@ -73,6 +86,10 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap[Tile], string, error) {
 	}
 
 	moves := lines[len(lines)-1]
+	for _, m := range moves {
+		data.Moves = append(data.Moves, Move(m))
+	}
+
 	lines = lines[:len(lines)-1]
 
 	width, height := len(lines[0]), len(lines)
@@ -80,12 +97,16 @@ func LoadInput(s *bufio.Scanner) (*common.TwoDMap[Tile], string, error) {
 
 	for y, line := range lines {
 		for x, char := range line {
-			err := twoDMap.Put(x, y, Tile(char))
+			tile := Tile(char)
+			err := twoDMap.Put(x, y, tile)
 			if err != nil {
-				return nil, "", err
+				return nil, err
+			}
+			if tile == Robot {
+				data.Robot = &Coords{x, y}
 			}
 		}
 	}
 
-	return twoDMap, moves, nil
+	return data, nil
 }
