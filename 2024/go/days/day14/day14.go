@@ -50,11 +50,27 @@ func Part1() (int, error) {
 }
 
 func Part2() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
+
+	width := 101
+	height := 103
+
+	robots, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	for i := range 10000 {
+		MoveRobots(robots, 1, width, height)
+		output := PrintRobots(robots, width, height, false)
+		if strings.Contains(output, "* * * * * * * * * * * * * * * *") {
+			fmt.Printf("\nSeconds %d\n%s", i+1, output)
+		}
+	}
 
 	return 0, nil
 }
