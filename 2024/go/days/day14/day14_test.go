@@ -129,3 +129,17 @@ func TestFindMiddle(t *testing.T) {
 		})
 	}
 }
+
+func TestSafetyScore(t *testing.T) {
+	data := make([]Robot, len(Data))
+	copy(data, Data)
+	for range 100 {
+		MoveRobots(data, 11, 7)
+	}
+	expected := 12
+	actual := SafetyScore(data, 11, 7)
+
+	if expected != actual {
+		t.Errorf("\nExpected: %v\nActual: %v\n", expected, actual)
+	}
+}

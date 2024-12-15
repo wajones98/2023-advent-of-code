@@ -150,11 +150,25 @@ func (r *Robot) MoveRobot(width, height int) {
 	}
 }
 
-// func SafetyScore(robots []Robot, width, height int) int {
-// 	hm := FindMiddle(height)
-// 	mw := FindMiddle(width)
-//
-// }
+func SafetyScore(robots []Robot, width, height int) int {
+	mw := FindMiddle(width)
+	mh := FindMiddle(height)
+	quadrants := map[int]int{1: 0, 2: 0, 3: 0, 4: 0}
+	for _, r := range robots {
+		switch {
+		case r.PX < mw && r.PY < mh:
+			quadrants[1] += 1
+		case r.PX > mw && r.PY < mh:
+			quadrants[2] += 1
+		case r.PX < mw && r.PY > mh:
+			quadrants[3] += 1
+		case r.PX > mw && r.PY > mh:
+			quadrants[4] += 1
+		}
+	}
+
+	return quadrants[1] * quadrants[2] * quadrants[3] * quadrants[4]
+}
 
 func FindMiddle(length int) int {
 	return (length - 1) / 2
