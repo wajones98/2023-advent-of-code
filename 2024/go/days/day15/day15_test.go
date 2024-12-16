@@ -35,7 +35,7 @@ var LoadedData = Data{
 			Wall, Wall, Wall, Wall, Wall, Wall, Wall, Wall,
 		},
 	},
-	Robot: &Coords{2, 1},
+	Robot: &Coords{2, 2},
 	Moves: []Move{Left, Up, Up, Right, Right, Right, Down, Down, Left, Down, Right, Right, Down, Left, Left},
 }
 
@@ -46,7 +46,15 @@ func TestLoadInput(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !reflect.DeepEqual(*LoadedData.TwoDMap, *actual) {
-		t.Errorf("\nExpected:\n%v\nActual:\n%v\n", LoadedData.TwoDMap, actual)
+	if !reflect.DeepEqual(*LoadedData.TwoDMap, *actual.TwoDMap) {
+		t.Errorf("\nExpected:\n%v\nActual:\n%v\n", *LoadedData.TwoDMap, *actual.TwoDMap)
+	}
+
+	if !reflect.DeepEqual(*LoadedData.Robot, *actual.Robot) {
+		t.Errorf("\nExpected:\n%v\nActual:\n%v\n", *LoadedData.Robot, *actual.Robot)
+	}
+
+	if !reflect.DeepEqual(LoadedData.Moves, actual.Moves) {
+		t.Errorf("\nExpected:\n%v\nActual:\n%v\n", LoadedData.Moves, actual.Moves)
 	}
 }

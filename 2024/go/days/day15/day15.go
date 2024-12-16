@@ -59,7 +59,7 @@ const (
 	Left  Move = '<'
 	Right      = '>'
 	Up         = '^'
-	Down       = 'V'
+	Down       = 'v'
 )
 
 type Coords struct {
@@ -107,6 +107,8 @@ func LoadInput(s *bufio.Scanner) (*Data, error) {
 			}
 		}
 	}
+
+	data.TwoDMap = twoDMap
 
 	return data, nil
 }
