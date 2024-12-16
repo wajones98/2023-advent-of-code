@@ -51,23 +51,23 @@ type Tile rune
 type Move rune
 
 const (
-	Wall  Tile = '#'
-	Robot      = '@'
-	Box        = 'O'
-	Empty      = '.'
+	TileWall  Tile = '#'
+	TileRobot      = '@'
+	TileBox        = 'O'
+	TileEmpty      = '.'
 
-	Left  Move = '<'
-	Right      = '>'
-	Up         = '^'
-	Down       = 'v'
+	MoveLeft  Move = '<'
+	MoveRight      = '>'
+	MoveUp         = '^'
+	MoveDown       = 'v'
 )
 
-type Coords struct {
+type Robot struct {
 	X, Y int
 }
 
 type Data struct {
-	Robot   *Coords
+	Robot   *Robot
 	Moves   []Move
 	TwoDMap *common.TwoDMap[Tile]
 }
@@ -102,8 +102,8 @@ func LoadInput(s *bufio.Scanner) (*Data, error) {
 			if err != nil {
 				return nil, err
 			}
-			if tile == Robot {
-				data.Robot = &Coords{x, y}
+			if tile == TileRobot {
+				data.Robot = &Robot{x, y}
 			}
 		}
 	}
