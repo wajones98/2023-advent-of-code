@@ -97,7 +97,35 @@ func (d *Data) MoveRobot(m Move) {
 		d.Robot.X = newX
 		d.Robot.Y = newY
 	case TileBox:
-		break
+		endCoords := Direction{}
+		canMove := false
+	BoxLoop:
+		for {
+			x, y := newX+dir.X, newY+dir.Y
+
+			t, _ := d.TwoDMap.Get(x, y)
+			switch t {
+			case TileWall:
+				canMove = false
+				break BoxLoop
+			case TileEmpty:
+				canMove = true
+				endCoords.X = x
+				endCoords.Y = y
+				break BoxLoop
+			}
+		}
+
+		if !canMove {
+			return
+		}
+
+		d.TwoDMap.Put(d.Robot.X, d.Robot.Y, TileEmpty)
+		d.TwoDMap.Put(newX, newY, TileRobot)
+		d.Robot.X = newX
+		d.Robot.Y = newY
+
+		d.TwoDMap.Put(endCoords.X, endCoords.Y, TileBox)
 	}
 }
 
