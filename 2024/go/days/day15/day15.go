@@ -163,7 +163,11 @@ func (d *Data) String() string {
 	result := ""
 
 	for i, c := range d.TwoDMap.Map {
-		result += fmt.Sprintf("%s", string(c))
+		if c == TileRobot {
+			result += fmt.Sprintf("\033[35m%s\033[0m", string(c))
+		} else {
+			result += fmt.Sprintf("%s", string(c))
+		}
 		x := (i + 1) % int(d.TwoDMap.Width)
 		if x == 0 {
 			result += "\n"
