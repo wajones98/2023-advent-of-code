@@ -3,6 +3,7 @@ package day15
 import (
 	"bufio"
 	"fmt"
+	"time"
 
 	"github.com/wajones98/advent-of-code/common"
 	"github.com/wajones98/advent-of-code/days"
@@ -29,13 +30,25 @@ func Run() (*days.Result[int, int], error) {
 }
 
 func Part1() (int, error) {
-	_, closeFile, err := input.GetInput(Day)
+	s, closeFile, err := input.GetInput(Day)
 	if err != nil {
 		return 0, err
 	}
 	defer closeFile()
 
-	return 0, nil
+	data, err := LoadInput(s)
+	if err != nil {
+		return 0, err
+	}
+
+	for _, m := range data.Moves {
+		data.MoveRobot(m)
+		fmt.Print("\033[H\033[2J")
+		fmt.Print(data)
+		time.Sleep(time.Millisecond * 100)
+	}
+
+	return data.Sum(), nil
 }
 
 func Part2() (int, error) {
@@ -132,6 +145,20 @@ func (d *Data) MoveRobot(m Move) {
 	}
 }
 
+func (d *Data) Sum() int {
+	sum := 0
+	for i, t := range d.TwoDMap.Map {
+		if t != TileBox {
+			continue
+		}
+		x, y := d.TwoDMap.FindPosition(i)
+
+		sum += 100*y + x
+	}
+
+	return sum
+}
+
 func (d *Data) String() string {
 	result := ""
 
@@ -152,20 +179,22 @@ func LoadInput(s *bufio.Scanner) (*Data, error) {
 		Moves: []Move{},
 	}
 	lines := []string{}
+	isMoves := false
 	for s.Scan() {
 		line := s.Text()
 		if line == "" {
+			isMoves = true
 			continue
 		}
-		lines = append(lines, line)
-	}
+		if isMoves {
+			for _, m := range line {
+				data.Moves = append(data.Moves, Move(m))
+			}
+		} else {
 
-	moves := lines[len(lines)-1]
-	for _, m := range moves {
-		data.Moves = append(data.Moves, Move(m))
+			lines = append(lines, line)
+		}
 	}
-
-	lines = lines[:len(lines)-1]
 
 	width, height := len(lines[0]), len(lines)
 	twoDMap := common.NewTwoDMap[Tile](width, height)
