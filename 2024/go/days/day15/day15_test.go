@@ -2,6 +2,7 @@ package day15
 
 import (
 	"bufio"
+	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -61,8 +62,13 @@ func TestLoadInput(t *testing.T) {
 
 func TestMoveRobot(t *testing.T) {
 	s := bufio.NewScanner(strings.NewReader(Input))
-	_, err := LoadInput(s)
+	data, err := LoadInput(s)
 	if err != nil {
 		t.Error(err)
+	}
+
+	for _, m := range data.Moves {
+		data.MoveRobot(m)
+		fmt.Printf("%s", data.String())
 	}
 }

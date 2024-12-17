@@ -2,6 +2,7 @@ package day15
 
 import (
 	"bufio"
+	"fmt"
 
 	"github.com/wajones98/advent-of-code/common"
 	"github.com/wajones98/advent-of-code/days"
@@ -49,6 +50,9 @@ func Part2() (int, error) {
 
 type Tile rune
 type Move rune
+type Direction struct {
+	X, Y int
+}
 
 const (
 	TileWall  Tile = '#'
@@ -62,6 +66,13 @@ const (
 	MoveDown       = 'v'
 )
 
+var Directions = map[Move]Direction{
+	MoveUp:    {0, -1},
+	MoveDown:  {0, 1},
+	MoveLeft:  {-1, 0},
+	MoveRight: {1, 0},
+}
+
 type Robot struct {
 	X, Y int
 }
@@ -70,6 +81,39 @@ type Data struct {
 	Robot   *Robot
 	Moves   []Move
 	TwoDMap *common.TwoDMap[Tile]
+}
+
+func (d *Data) MoveRobot(m Move) {
+	dir := Directions[m]
+
+	newX, newY := d.Robot.X+dir.X, d.Robot.Y+dir.Y
+	t, _ := d.TwoDMap.Get(newX, newY)
+	switch t {
+	case TileWall:
+		return
+	case TileEmpty:
+		d.TwoDMap.Put(d.Robot.X, d.Robot.Y, TileEmpty)
+		d.TwoDMap.Put(newX, newY, TileRobot)
+		d.Robot.X = newX
+		d.Robot.Y = newY
+	case TileBox:
+		break
+	}
+}
+
+func (d *Data) String() string {
+	result := ""
+
+	for i, c := range d.TwoDMap.Map {
+		result += fmt.Sprintf("%s", string(c))
+		x := (i + 1) % int(d.TwoDMap.Width)
+		if x == 0 {
+			result += "\n"
+		}
+	}
+	result += "\n"
+
+	return result
 }
 
 func LoadInput(s *bufio.Scanner) (*Data, error) {
