@@ -99,9 +99,12 @@ func (d *Data) MoveRobot(m Move) {
 	case TileBox:
 		endCoords := Direction{}
 		canMove := false
+
+		x, y := newX, newY
 	BoxLoop:
 		for {
-			x, y := newX+dir.X, newY+dir.Y
+			x += dir.X
+			y += dir.Y
 
 			t, _ := d.TwoDMap.Get(x, y)
 			switch t {
